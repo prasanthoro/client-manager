@@ -1,0 +1,163 @@
+.imagecontainerIcon {
+    align-self: stretch;
+    flex: 1;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+    object-fit: contain;
+    min-width: 43.75rem;
+}
+
+.labsquirelogoIcon {
+    width: 9.713rem;
+    position: relative;
+    height: 2rem;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.lable,
+.welcometext {
+    align-self: stretch;
+    position: relative;
+    font-family: Poppins;
+    text-align: left;
+
+}
+
+.welcometext {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.lable {
+    cursor: pointer;
+    flex: 1;
+    font-size: 0.75rem;
+    letter-spacing: 0.3px;
+    line-height: 0.75rem;
+    color: #333;
+}
+
+.inputfield {
+    border: 0;
+    background-color: #f2f2f2;
+    align-self: stretch;
+}
+
+.inputgroup {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.lable1 {
+    cursor: pointer;
+    align-self: stretch;
+    position: relative;
+    font-size: 0.75rem;
+    letter-spacing: 0.3px;
+    line-height: 0.75rem;
+    font-family: Poppins;
+    color: #333;
+    text-align: left;
+    display: inline-block;
+    height: 0.75rem;
+    flex-shrink: 0;
+}
+
+.passwordgroup {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.fieldgroups,
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.fieldgroups {
+    align-self: stretch;
+    gap: 1rem;
+}
+
+.form {
+    gap: 1.5rem;
+}
+
+.form,
+.signinbutton {
+    align-self: stretch;
+}
+
+.signin,
+.signinform {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.signinform {
+    margin: 0;
+    align-self: stretch;
+    border-radius: 8px;
+    gap: 2.5rem;
+}
+
+.signin {
+    width: 100%;
+    background-color: #fff;
+    gap: 3rem;
+    max-width: 28.125rem;
+}
+
+.signinpage,
+.signinsection {
+    align-self: stretch;
+    display: flex;
+}
+
+.signinsection {
+    flex: 1;
+    background-color: #fff;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    box-sizing: border-box;
+    max-width: 41.875rem;
+}
+
+.signinpage {
+    height: 58.125rem;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+@media screen and (max-width: 960px) {
+
+    .imagecontainerIcon,
+    .signinsection {
+        flex: unset;
+        align-self: stretch;
+    }
+
+    .signinpage {
+        flex-direction: column;
+    }
+}
