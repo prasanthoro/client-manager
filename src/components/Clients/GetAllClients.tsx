@@ -2,10 +2,7 @@
 
 import { apiPropTypes } from "@/lib/helpers/getQueryParams";
 import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
-import {
-  getAllClientsListAPI,
-  getClientsAPI,
-} from "@/services/clients/getAllClients";
+import { getAllClientsListAPI } from "@/services/clients/getAllClients";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
@@ -47,49 +44,16 @@ const Clients = () => {
   useEffect(() => {
     getAllClients({});
   }, []);
-  const actionColumns = [
-    {
-      accessorFn: (row: any) => row?.actions,
-      id: "acti",
-      header: () => <span>Actions</span>,
-      footer: (props: any) => props.columns.id,
-      cell: (info: any) => {
-        return (
-          <div className="actionIcons">
-            <ul className="actionList">
-              <li className="eachList">
-                <ViewButton row={info?.row?.original} />
-              </li>
-              <li className="eachList">
-                {/* <EditButton
-                   insurance_id={info?.row?.original?.id}
-                   lab_id={lab_id}
-                   getAllInsurances={getAllInsurances}
-                 /> */}
-              </li>
-              <li className="eachList">
-                {/* <DeleteButton
-                   getAllInsurances={getAllInsurances}
-                   lab_id={lab_id}
-                   insurance_id={info?.row?.original?.id}
-                   getAllLabs={getAllLabs}
-                 /> */}
-              </li>
-            </ul>
-          </div>
-        );
-      },
-    },
-  ];
+
   return (
     <div>
       <TanStackTableComponent
-        columns={clientColumns}
+        columns={clientColumns()}
         getData={getAllClients}
         data={clientsData}
         paginationDetails={paginationDetails}
         loading={loading}
-        removeSortingForColumnIds={[""]}
+        removeSortingForColumnIds={["name"]}
       />
     </div>
   );

@@ -9,36 +9,30 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material";
+import { deleteClientAPI } from "@/services/clients/getAllClients";
+import { Toast } from "../ui/toast";
 
-export const DeleteButton = ({
-  getAllInsurances,
-  lab_id,
-  insurance_id,
-  getAllLabs,
-}: any) => {
+export const DeleteButton = ({ getAllClients, clientId }: any) => {
   const [open, setOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  //   const insuranceDelete = async () => {
-  //     try {
-  //       setDeleteLoading(true);
-  //       const response = await deleteInsuranceAPI(lab_id, insurance_id);
-  //       if (response?.status == 200 || response?.status == 201) {
-  //         toast.success(response?.message || "Insurance Deleted Successfully");
-  //         getAllLabs({});
-  //         setTimeout(() => {
-  //           getAllInsurances({});
-  //         }, 50);
+  const clientDelete = async () => {
+    try {
+      setDeleteLoading(true);
+      const response = await deleteClientAPI(clientId);
+      if (response?.status == 200 || response?.status == 201) {
+        // Toast.success(response?.message || "Insurance Deleted Successfully");
+        getAllClients();
 
-  //         handleClose();
-  //       }
-  //     } catch (err: any) {
-  //       toast.error(err?.message || "Something went wrong");
-  //       console.log(err);
-  //     } finally {
-  //       setDeleteLoading(false);
-  //     }
-  //   };
+        handleClose();
+      }
+    } catch (err: any) {
+      // toast.error(err?.message || "Something went wrong");
+      console.log(err);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
   const handleOpen = () => {
     setOpen(true);
   };
@@ -50,7 +44,7 @@ export const DeleteButton = ({
       <Image
         title="Delete"
         onClick={handleOpen}
-        src={"/icons/listing_Actions/trash.svg"}
+        src={"/delete.svg"}
         height={16}
         width={16}
         alt="Image"
@@ -73,17 +67,12 @@ export const DeleteButton = ({
                 },
               }}
             >
-              <Image
-                alt="image"
-                width={24}
-                height={24}
-                src="/actions/close-icon.svg"
-              />
+              <Image alt="image" width={24} height={24} src="/close-icon.svg" />
             </IconButton>
           </DialogTitle>
           <DialogContent className="popupBody">
             <p style={{ margin: "0", fontSize: "14px" }}>
-              Are you sure? you want to delete Insurance?
+              Are you sure? you want to delete Client?
             </p>
           </DialogContent>
           <DialogActions className="popupFooter">
@@ -94,7 +83,7 @@ export const DeleteButton = ({
               className="defaultBtn addPlayor"
               onClick={() => {
                 if (!deleteLoading) {
-                  //   insuranceDelete();
+                  clientDelete();
                 }
               }}
               autoFocus
