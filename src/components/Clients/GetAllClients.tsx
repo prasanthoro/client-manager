@@ -3,8 +3,7 @@
 import { apiPropTypes } from "@/lib/helpers/getQueryParams";
 import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
 import {
-  getAllClientsListAPI,
-  getClientsAPI,
+  getAllClientsListAPI
 } from "@/services/clients/getAllClients";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";

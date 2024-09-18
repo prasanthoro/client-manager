@@ -1,7 +1,5 @@
 // import Image from "next/image";
 "use client";
-import MyTable from "@/components/Clients";
-import { columns, Payment } from "@/components/Clients/ClientColumns";
 import { Dashboard } from "@/components/Dashboard";
 import SignInPage from "@/components/Signin";
 import { useEffect, useState } from "react";
