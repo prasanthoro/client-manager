@@ -1,32 +1,3 @@
-// import { Card, CardContent } from "./ui/card";
-// export const MadeForYou = () => {
-//   const items = [
-//     {
-//       title: "Thinking Components",
-//       artist: "Functional Fury",
-//       imageUrl: "...",
-//     },
-//     { title: "React Rendezvous", artist: "Ethan Byte", imageUrl: "..." },
-//     // more items
-//   ];
-
-//   return (
-//     <div>
-//       <h3 className="text-2xl font-bold mb-4">Made for You</h3>
-//       <div className="grid grid-cols-4 gap-4">
-//         {items.map((item) => (
-//           <Card key={item.title}>
-//             {/* <CardImage src={item.imageUrl} alt={item.title} /> */}
-//             <CardContent>
-//               <h4 className="text-lg font-bold">{item.title}</h4>
-//               <p>{item.artist}</p>
-//             </CardContent>
-//           </Card>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
 import Image from "next/image";
 import Link from "next/link";
 import {

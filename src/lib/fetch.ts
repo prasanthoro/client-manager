@@ -63,7 +63,8 @@ class FetchService {
       this.configureAuthorization(config);
     }
     // request interceptor starts
-    let url = process.env.NEXT_PUBLIC_API_URL + path;
+    // let url = process.env.NEXT_PUBLIC_API_URL + path;
+    let url = `https://api-client-manager-com.onrender.com/v1.0` + path;
 
     const response: any = await fetch(url, config);
 

@@ -8,52 +8,90 @@ import {
 } from "@/services/clients/getAllClients";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import TanStackTableComponent from "../core/TanstackTable";
+import { clientColumns } from "./ClientColumns";
+import { ViewButton } from "./ViewButton";
 
 const Clients = () => {
-  const [clientsData, setClientsData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const params = useSearchParams();
-  const router = useRouter();
   const pathname = usePathname();
-
-  //   const getAllClients = async ({
-  //     page = params.get("page") as string,
-  //     limit = (params.get("limit") as string) || 10,
-  //   }: Partial<apiPropTypes>) => {
-  //     try {
-  //       if (loading) return;
-  //       setLoading(true);
-  //       let queryParams = {
-  //         page: page ? page : 1,
-  //         limit: limit ? limit : 25,
-  //       };
-  //       let queryString = prepareURLEncodedParams("", queryParams);
-  //       router.push(`${pathname}${queryString}`);
-  //       const response = await getClientsAPI();
-  //       if (response?.status == 200 || response?.status == 201) {
-  //         setClientsData(response?.data);
-  //         console.log(clientsData, "data");
-  //       } else {
-  //         throw response;
-  //       }
-  //     } catch (err: any) {
-  //       console.log(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  const fetchProperties = async () => {
+  const router = useRouter();
+  const [clientsData, setClientsData] = useState([]);
+  const [paginationDetails, setPaginationDetails] = useState({});
+  const [loading, setLoading] = useState(false);
+  console.log(clientsData, "client");
+  const getAllClients = async ({
+    page = params.get("page") as string,
+    limit = params.get("limit") as string,
+  }: Partial<apiPropTypes>) => {
     try {
-      const data = await getClientsAPI();
-      setClientsData(data.clients);
-    } catch (err) {
+      let queries = {
+        page,
+        limit,
+      };
+      setLoading(true);
+      let queryString = prepareURLEncodedParams("", queries);
+
+      router.push(`${pathname}${queryString}`);
+      const response = await getAllClientsListAPI(queries);
+      let { data, ...rest } = response?.data;
+      setClientsData(data);
+      setPaginationDetails(rest);
+    } catch (err: any) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
   useEffect(() => {
-    // getAllClients({});
-    fetchProperties();
+    getAllClients({});
   }, []);
+  const actionColumns = [
+    {
+      accessorFn: (row: any) => row?.actions,
+      id: "acti",
+      header: () => <span>Actions</span>,
+      footer: (props: any) => props.columns.id,
+      cell: (info: any) => {
+        return (
+          <div className="actionIcons">
+            <ul className="actionList">
+              <li className="eachList">
+                <ViewButton row={info?.row?.original} />
+              </li>
+              <li className="eachList">
+                {/* <EditButton
+                   insurance_id={info?.row?.original?.id}
+                   lab_id={lab_id}
+                   getAllInsurances={getAllInsurances}
+                 /> */}
+              </li>
+              <li className="eachList">
+                {/* <DeleteButton
+                   getAllInsurances={getAllInsurances}
+                   lab_id={lab_id}
+                   insurance_id={info?.row?.original?.id}
+                   getAllLabs={getAllLabs}
+                 /> */}
+              </li>
+            </ul>
+          </div>
+        );
+      },
+    },
+  ];
+  return (
+    <div>
+      <TanStackTableComponent
+        columns={clientColumns}
+        getData={getAllClients}
+        data={clientsData}
+        paginationDetails={paginationDetails}
+        loading={loading}
+        removeSortingForColumnIds={[""]}
+      />
+    </div>
+  );
 };
 export default Clients;
