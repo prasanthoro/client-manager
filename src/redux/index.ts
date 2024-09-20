@@ -13,7 +13,7 @@ import { combinedReducer } from "./Modules";
 import pesistStorage from "./persistateStore";
 
 const persistConfig = {
-  key: "insurances-labsquire",
+  key: "client-manager",
   version: 1,
   storage: pesistStorage,
   REHYDRATE: false,
