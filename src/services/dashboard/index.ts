@@ -1,9 +1,23 @@
 import { $fetch } from "@/lib/fetch";
 import { apiPropTypes } from "@/lib/helpers/getQueryParams";
 
-export const getAllCounts = async (params: Partial<apiPropTypes>) => {
+export const getAllClientsCountsAPI = async () => {
   try {
-    return await $fetch.get(`/clients`, params);
+    return await $fetch.get(`/clients/count`);
+  } catch (err) {
+    console.error();
+  }
+};
+export const getServicesCountsAPI = async () => {
+  try {
+    return await $fetch.get(`/services/count`);
+  } catch (err) {
+    console.error();
+  }
+};
+export const getInvoiceAmountAPI = async () => {
+  try {
+    return await $fetch.get(`/invoices/amount`);
   } catch (err) {
     console.error();
   }

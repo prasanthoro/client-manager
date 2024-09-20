@@ -76,7 +76,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
   };
 
   useEffect(() => {
-    setGotoPage(paginationDetails?.page.toString() || "1");
+    setGotoPage(paginationDetails?.page?.toString() || "1");
 
     if (paginationDetails?.count && !paginationDetails?.total_pages) {
       const pagesCount = Math.ceil(

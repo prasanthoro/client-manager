@@ -269,12 +269,7 @@ const SortItems = ({
       ) : removeSortingForColumnIds?.includes(header.id) ? (
         ""
       ) : (
-        <Image
-          src="/core/table/un-sort.svg"
-          height={25}
-          width={25}
-          alt="image"
-        />
+        <Image src="/unsorted.svg" height={10} width={10} alt="image" />
       )}
     </div>
   );

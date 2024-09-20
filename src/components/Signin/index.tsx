@@ -1,24 +1,18 @@
 "use client";
+import Image from "next/image";
+import Link from "next/link";
+import Cookies from "js-cookie";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { setSessionTimedOut, setUserDetails } from "@/redux/Modules/userlogin";
-
-import {
-  Button,
-  CircularProgress,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
-import Cookies from "js-cookie";
 import { loginAPI } from "@/services/auth";
+import { Spinner } from "../ui/spinner";
 
-export type SignInPageType = {
-  className?: string;
-};
-const SignInPage = ({ className = "" }) => {
+export const SignIn = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const isSessionTimedOut = useSelector(
@@ -38,14 +32,16 @@ const SignInPage = ({ className = "" }) => {
     setInvalidMessage("");
     try {
       const payload = {
-        user_name: email,
+        email: email,
         password: password,
       };
+      console.log(payload, "payload");
       const response: any = await loginAPI(payload);
       if (response.status == 200 || response.status == 201) {
         Cookies.set("user", response?.user_details_user_type);
         dispatch(setUserDetails(response));
         // toast.success("User logged in successfully");
+        router.replace("/dashboard");
       } else if (response?.status == 422) {
         setErrorMessages(response?.error_data);
       } else if (response?.status == 401) {
@@ -56,173 +52,104 @@ const SignInPage = ({ className = "" }) => {
       setLoading(false);
     }
   };
+
   return (
-    <section className="loginPage">
-      <div className="imageBlock"></div>
-      <div className="fromBlock">
-        <div className="signInCard">
-          <div className="companyLogo">
-            <img
-              src="/clients.svg"
-              alt="image"
-              style={{
-                alignSelf: "stretch",
-                flex: 1,
-                maxWidth: "70%",
-                overflow: "hidden",
-                maxHeight: "100%",
-                objectFit: "contain",
-                minWidth: "43.75rem",
-              }}
-            />
+    <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+      <div className="hidden bg-muted lg:block">
+        <Image
+          src="/clients.svg"
+          alt="Image"
+          width={1}
+          height={1}
+          className="w-full h-[80%] object-cover"
+        />
+      </div>
+      <div className="flex items-center justify-center py-12">
+        <div className="mx-auto grid w-[350px] gap-6">
+          <div className="grid gap-2 text-center">
+            <h1 className="text-3xl font-bold">Login</h1>
+            <p className="text-balance text-muted-foreground">
+              Enter your email below to login to your account
+            </p>
           </div>
-          <form>
-            <div className="form">
-              <div className="fieldgroups">
-                <div className="inputgroup">
-                  <label className="lable" style={{ fontSize: "1rem" }}>
-                    Username
-                  </label>
-                  <TextField
-                    className="inputfield"
-                    color="primary"
-                    placeholder="Enter Username"
-                    variant="outlined"
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        height: "47px",
-                        borderRadius: "6px",
-                      },
-                    }}
-                    onKeyDown={(e: any) => {
-                      if (e.key == "Enter") {
-                        signInEvent();
-                      }
-                    }}
-                    value={email}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setEmail(e.target.value)
-                    }
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start"></InputAdornment>
-                      ),
-                    }}
-                  />
-                  <Typography
-                    variant="subtitle1"
-                    color="error"
-                    fontSize="13px"
-                    sx={{
-                      color: "red !important",
-                      display: errorMessages?.password ? "" : "none",
-                    }}
-                  >
-                    {errorMessages?.user_name}
-                  </Typography>
-                </div>
-                <div className="inputgroup" id="mt-20">
-                  <label className="lable" style={{ fontSize: "1rem" }}>
-                    Password
-                  </label>
-                  <TextField
-                    onKeyDown={(e: any) => {
-                      if (e.key == "Enter") {
-                        signInEvent();
-                      }
-                    }}
-                    className="inputfield"
-                    color="primary"
-                    placeholder="Enter Password"
-                    variant="outlined"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setPassword(e.target.value)
-                    }
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start"></InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowPassword(!showPassword)}
-                            aria-label="toggle password visibility"
-                          >
-                            {/* {!showPassword ? (
-                              <VisibilityOffIcon />
-                            ) : (
-                              <VisibilityIcon style={{}} />
-                            )} */}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        height: "47px",
-                        borderRadius: "6px",
-                      },
-                    }}
-                  />
-
-                  <Typography
-                    variant="subtitle1"
-                    color="error"
-                    fontSize="13px"
-                    sx={{
-                      color: "red !important",
-                      display: errorMessages?.password ? "" : "none",
-                    }}
-                  >
-                    {errorMessages?.password}
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    color="error"
-                    fontSize="13px"
-                    sx={{
-                      color: "red !important",
-                      display: invalidMessage ? "" : "none",
-                    }}
-                  >
-                    {invalidMessage}
-                  </Typography>
-                </div>
-              </div>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter your Email"
+                onKeyDown={(e: any) => {
+                  if (e.key === "Enter") {
+                    signInEvent();
+                  }
+                }}
+                value={email}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setEmail(e.target.value)
+                }
+              />
+              <p
+                color="error"
+                style={{
+                  color: "red !important",
+                  display: errorMessages?.password ? "" : "none",
+                }}
+              >
+                {errorMessages?.user_name}
+              </p>
             </div>
-
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="password">Password</Label>
+              </div>
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter Your Password"
+                value={password}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setPassword(e.target.value)
+                }
+                onKeyDown={(e: any) => {
+                  if (e.key === "Enter") {
+                    signInEvent();
+                  }
+                }}
+              />
+              <p
+                color="error"
+                style={{
+                  color: "red !important",
+                  display: errorMessages?.password ? "" : "none",
+                }}
+              >
+                {errorMessages?.user_name}
+              </p>
+              <p
+                color="error"
+                style={{
+                  color: "red !important",
+                  display: errorMessages?.password ? "" : "none",
+                }}
+              >
+                {invalidMessage}
+              </p>
+            </div>
             <Button
-              className="submitButton"
-              disableElevation
-              color="primary"
-              variant="contained"
-              disabled={loading}
-              sx={{ borderRadius: "0px 0px 0px 0px" }}
-              onClick={() => {
-                signInEvent();
-              }}
+              type="submit"
+              className="w-full"
+              onClick={() => signInEvent()}
             >
               {loading ? (
-                <CircularProgress
-                  size="1.5rem"
-                  sx={{ size: "0.2rem", color: "#fff" }}
-                  onClick={() => router.push("/dashboard")}
-                />
+                <Spinner  />
               ) : (
                 "Log In"
-              )}
+               )} 
             </Button>
-          </form>
-          {isSessionTimedOut ? (
-            <p style={{ color: "red" }}>{"Session Timeout"}</p>
-          ) : (
-            ""
-          )}
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
-export default SignInPage;

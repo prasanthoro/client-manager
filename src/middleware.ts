@@ -7,7 +7,6 @@ const unProtectedRoutes = ["/"];
 function containSubstring(inputString: string, subStrings: Array<string>) {
   return subStrings.some((subString) => inputString?.includes(subString));
 }
-
 const isAunthenticated = (req: NextRequest) => {
   const loggedIn = req.cookies.get("user");
   if (loggedIn) return true;

@@ -8,3 +8,10 @@ export const getAllClientsListAPI = async (params: Partial<apiPropTypes>) => {
     console.error();
   }
 };
+export const deleteClientAPI = async (deleteId: string) => {
+  try {
+    return await $fetch.get(`/clients/${deleteId}`);
+  } catch (err) {
+    console.error();
+  }
+};

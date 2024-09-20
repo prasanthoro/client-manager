@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-
+// import LoadingComponent from "@/components/core/LoadingComponent";
 export const EditButton = ({ insurance_id }: any) => {
   const [loading, setLoading] = useState(false);
   const params = useSearchParams();
@@ -25,9 +25,9 @@ export const EditButton = ({ insurance_id }: any) => {
           setLoading(true);
           onEditClick();
         }}
-        src={"/icons/listing_Actions/edit_icon.svg"}
-        height={16}
-        width={16}
+        src={"/edit.svg"}
+        height={160}
+        width={160}
         alt="Image"
       ></Image>
       {/* <LoadingComponent loading={loading} /> */}

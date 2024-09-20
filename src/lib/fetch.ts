@@ -14,6 +14,7 @@ class FetchService {
     "/signin",
     "/forgot-password",
     "/forgot-password/update-password",
+    "/dashboard",
   ];
 
   private _fetchType: string;
@@ -25,7 +26,9 @@ class FetchService {
   }
   configureAuthorization(config: any) {
     const state = store.getState();
-    const accessToken = state?.userLogin?.userDetails?.access_token;
+    console.log(state, "state");
+    const accessToken = state?.userLogin?.userDetails?.data?.access_token;
+    console.log(accessToken, "token");
 
     // IMPLEMENT STORE/COOCIKES DATA HERE
     config.headers["Authorization"] = accessToken; // we need to
@@ -64,7 +67,7 @@ class FetchService {
     }
     // request interceptor starts
     // let url = process.env.NEXT_PUBLIC_API_URL + path;
-    let url = `https://api-client-manager-com.onrender.com/v1.0` + path;
+    let url = process.env.NEXT_PUBLIC_API_URL + path;
 
     const response: any = await fetch(url, config);
 
