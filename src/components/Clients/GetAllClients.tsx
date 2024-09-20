@@ -48,7 +48,7 @@ const Clients = () => {
   return (
     <div>
       <TanStackTableComponent
-        columns={clientColumns()}
+        columns={clientColumns(getAllClients)}
         getData={getAllClients}
         data={clientsData}
         paginationDetails={paginationDetails}
