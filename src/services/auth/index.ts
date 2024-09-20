@@ -3,7 +3,7 @@ import { handleAPIErrorResponse } from "@/lib/httpErrorHandler";
 
 export const loginAPI = async (payload: any) => {
   try {
-    const { data, success } = await $fetch.post("/user/signIn", payload);
+    const { data, success } = await $fetch.post("/users/signin", payload);
     if (!success) {
       return handleAPIErrorResponse(data);
     }
