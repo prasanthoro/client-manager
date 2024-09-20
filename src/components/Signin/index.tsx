@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { setSessionTimedOut, setUserDetails } from "@/redux/Modules/userlogin";
 import { loginAPI } from "@/services/auth";
+import { Spinner } from "../ui/spinner";
 
 export const SignIn = () => {
   const dispatch = useDispatch();
@@ -127,7 +128,7 @@ export const SignIn = () => {
               className="w-full"
               onClick={() => signInEvent()}
             >
-              {loading ? "" : "Log In"}
+              {loading ? <Spinner /> : "Log In"}
             </Button>
           </div>
         </div>
