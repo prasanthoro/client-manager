@@ -10,7 +10,8 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { setSessionTimedOut, setUserDetails } from "@/redux/Modules/userlogin";
 import { loginAPI } from "@/services/auth";
-import { CircularProgress } from "@mui/material";
+import { Spinner } from "../ui/spinner";
+
 export const SignIn = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -141,10 +142,10 @@ export const SignIn = () => {
               onClick={() => signInEvent()}
             >
               {loading ? (
-                <CircularProgress size="1.5rem" sx={{ color: "#fff" }} />
+                <Spinner  />
               ) : (
                 "Log In"
-              )}
+               )} 
             </Button>
           </div>
         </div>
