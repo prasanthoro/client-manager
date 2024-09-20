@@ -17,6 +17,7 @@ import {
   getInvoiceAmountAPI,
   getServicesCountsAPI,
 } from "@/services/dashboard";
+import { formatAmount } from "@/lib/helpers/core/formatAmount";
 
 export const Dashboard = () => {
   const router = useRouter();
@@ -126,7 +127,7 @@ export const Dashboard = () => {
                 <Boxes className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{invoiceAmount}</div>
+                <div className="text-2xl font-bold">{formatAmount(invoiceAmount)}</div>
               </CardContent>
             </Card>
           </div>
