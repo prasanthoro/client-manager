@@ -262,9 +262,9 @@ const SortItems = ({
     <div style={{ display: "flex", alignItems: "center" }}>
       {params.get("order_by") === header.id ? (
         params.get("order_type") === "asc" ? (
-          <Image src="/sort-asc.svg" height={25} width={25} alt="image" />
+          <Image src="/sort-asc.svg" height={10} width={10} alt="image" />
         ) : (
-          <Image src="/sort-desc.svg" height={25} width={25} alt="image" />
+          <Image src="/sort-desc.svg" height={10} width={10} alt="image" />
         )
       ) : removeSortingForColumnIds?.includes(header.id) ? (
         ""

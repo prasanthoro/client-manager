@@ -1,29 +1,28 @@
 "use client";
 
-import { apiPropTypes } from "@/lib/helpers/getQueryParams";
 import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
-import { getAllClientsListAPI } from "@/services/clients/getAllClients";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
 import TanStackTableComponent from "../core/TanstackTable";
-import { clientColumns } from "./ClientColumns";
-import { ViewButton } from "./ViewButton";
+import { invoicesColumns } from "./InvoicesColumns";
+import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
+import { getAllInvoicesListAPI } from "@/services/invoices";
 
-const Clients = () => {
+const InvoicesList = () => {
   const params = useSearchParams();
-
   const pathname = usePathname();
   const router = useRouter();
-  const [clientsData, setClientsData] = useState([]);
+
+  const [invoicesData, setInvoicesData] = useState([]);
   const [paginationDetails, setPaginationDetails] = useState({});
   const [loading, setLoading] = useState(true);
-  const getAllClients = async ({
+
+  const getAllIvoices = async ({
     page = (params.get("page") as string) || 1,
     limit = (params.get("limit") as string) || 25,
     order_by = params.get("order_by") as string,
     order_type = params.get("order_type") as string,
-  }: Partial<apiPropTypes>) => {
+  }: Partial<invoicesListPropTypes>) => {
     try {
       let queryParams: any = {
         page: page ? page : 1,
@@ -32,20 +31,13 @@ const Clients = () => {
         order_type: order_type,
       };
 
-      if (order_by) {
-        queryParams["order_by"] = order_by;
-      }
-      if (order_type) {
-        queryParams["order_type"] = order_type;
-      }
-
       setLoading(true);
-      let queryString = prepareURLEncodedParams("", queryParams);
+      let queryString: any = prepareURLEncodedParams("", queryParams);
 
       router.push(`${pathname}${queryString}`);
-      const response = await getAllClientsListAPI(queryParams);
+      const response = await getAllInvoicesListAPI(queryParams);
       let { data, ...rest } = response?.data;
-      setClientsData(data);
+      setInvoicesData(data);
       setPaginationDetails(rest);
     } catch (err: any) {
       console.error(err);
@@ -53,21 +45,22 @@ const Clients = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
-    getAllClients({});
+    getAllIvoices({});
   }, []);
 
   return (
     <div>
       <TanStackTableComponent
-        columns={clientColumns(getAllClients)}
-        getData={getAllClients}
-        data={clientsData}
+        columns={invoicesColumns()}
+        getData={getAllIvoices}
+        data={invoicesData}
         paginationDetails={paginationDetails}
         loading={loading}
-        removeSortingForColumnIds={[""]}
+        removeSortingForColumnIds={["actions"]}
       />
     </div>
   );
 };
-export default Clients;
+export default InvoicesList;

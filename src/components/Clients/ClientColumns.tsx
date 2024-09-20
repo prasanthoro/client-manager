@@ -1,3 +1,4 @@
+import { formatAmount } from "@/lib/helpers/core/formatAmount";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
 import { ViewButton } from "./ViewButton";
@@ -109,7 +110,7 @@ export const clientColumns = (getAllClients: Function) => {
       id: "total_invoice_amount",
       header: () => <span>Total Invoice Amount</span>,
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return <span className="eachCell">{formatAmount(info.getValue())}</span>;
       },
       footer: (props: any) => props.columns.id,
       width: "100px",

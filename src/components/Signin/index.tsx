@@ -37,7 +37,7 @@ export const SignIn = () => {
       };
       const response: any = await loginAPI(payload);
       if (response.status == 200 || response.status == 201) {
-        Cookies.set("user", response?.data?.user_details_user_type);
+        Cookies.set("user", response?.data?.user_details?.user_type);
         dispatch(setUserDetails(response));
         // toast.success("User logged in successfully");
         router.replace("/dashboard");
