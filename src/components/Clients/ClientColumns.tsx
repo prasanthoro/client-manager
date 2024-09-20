@@ -153,10 +153,10 @@ export const clientColumns = (getAllClients: Function) => {
                 <EditButton />
               </li>
               <li className="eachList">
-                <DeleteButton
+                {/* <DeleteButton
                   getAllClients={getAllClients}
                   clientId={info.row.original.id}
-                />
+                /> */}
               </li>
             </ul>
           </div>

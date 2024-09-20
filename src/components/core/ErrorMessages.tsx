@@ -1,5 +1,4 @@
 import { errorMessagesTypes } from "@/lib/interfaces/apiPayloads/coreTypes";
-import { Typography } from "@mui/material";
 
 const ErrorMessages = ({
   errorMessages,

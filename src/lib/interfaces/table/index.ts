@@ -10,8 +10,8 @@ export interface tanstackTablePropTypes {
   }: Partial<{
     page: string | number;
     limit: string | number;
-    sort_by?: string;
-    sort_type?: string;
+    order_by?: string;
+    order_type?: string;
   }>) => void;
   removeSortingForColumnIds?: string[];
 }

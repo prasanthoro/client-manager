@@ -8,7 +8,9 @@ export const ViewButton = ({ row }: any) => {
   const params = useSearchParams();
   const pathname = usePathname();
   const lab_id = params?.get("lab_id" as string);
-  const onViewClick = () => {};
+  const onViewClick = () => {
+    router.push(`/clients/${row?.id}/view`);
+  };
 
   return (
     <div className="eachAction">

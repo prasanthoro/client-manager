@@ -44,7 +44,7 @@ export const DeleteButton = ({ getAllClients, clientId }: any) => {
         alt="Image"
       ></Image>
       <div>
-        <Dialog open={open}>
+        {/* <Dialog open={open}>
           <DialogTitle className="popupHeader">
             <h3 className="heading">Warning</h3>
 
@@ -62,26 +62,26 @@ export const DeleteButton = ({ getAllClients, clientId }: any) => {
             </p>
           </DialogContent>
           {/* <DialogActions className="popupFooter"> */}
-          <Button className="defaultBtn " onClick={handleClose}>
-            NO
-          </Button>
-          <Button
-            className="defaultBtn addPlayor"
-            onClick={() => {
-              if (!deleteLoading) {
-                clientDelete();
-              }
-            }}
-            autoFocus
-          >
-            {deleteLoading
-              ? deleteLoading &&
-                // <CircularProgress size={"1.5rem"} sx={{ color: "#fff" }} />
-                ""
-              : "YES"}
-          </Button>
-          {/* </DialogActions> */}
-        </Dialog>
+        <Button className="defaultBtn " onClick={handleClose}>
+          NO
+        </Button>
+        <Button
+          className="defaultBtn addPlayor"
+          onClick={() => {
+            if (!deleteLoading) {
+              clientDelete();
+            }
+          }}
+          autoFocus
+        >
+          {deleteLoading
+            ? deleteLoading &&
+              // <CircularProgress size={"1.5rem"} sx={{ color: "#fff" }} />
+              ""
+            : "YES"}
+        </Button>
+        {/* </DialogActions> */}
+        {/* </Dialog> */}
       </div>
     </div>
   );

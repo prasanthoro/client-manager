@@ -32,8 +32,15 @@ const Clients = () => {
         order_type: order_type,
       };
 
+      if (order_by) {
+        queryParams["order_by"] = order_by;
+      }
+      if (order_type) {
+        queryParams["order_type"] = order_type;
+      }
+
       setLoading(true);
-      let queryString: any = prepareURLEncodedParams("", queryParams);
+      let queryString = prepareURLEncodedParams("", queryParams);
 
       router.push(`${pathname}${queryString}`);
       const response = await getAllClientsListAPI(queryParams);

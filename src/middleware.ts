@@ -27,7 +27,7 @@ export default function middleWare(req: NextRequest) {
     isAunthenticated(req) &&
     unProtectedRoutes?.includes(req.nextUrl.pathname)
   ) {
-    const absoluteURL = new URL("/insurances", req.nextUrl.origin);
+    const absoluteURL = new URL("/dashboard", req.nextUrl.origin);
     return NextResponse.redirect(absoluteURL.toString());
   }
 }

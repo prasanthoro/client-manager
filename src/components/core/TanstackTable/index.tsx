@@ -77,8 +77,8 @@ const TanStackTableComponent: FunctionComponent<tanstackTablePropTypes> = ({
 
     let orderBy = header.id;
     let orderType = "asc";
-    if (params.get("sort_by") === header.id) {
-      if (params.get("sort_type") === "asc") {
+    if (params.get("order_by") === header.id) {
+      if (params.get("order_type") === "asc") {
         orderType = "desc";
       } else {
         orderBy = "";
@@ -86,8 +86,8 @@ const TanStackTableComponent: FunctionComponent<tanstackTablePropTypes> = ({
       }
     }
     getData({
-      sort_by: orderBy,
-      sort_type: orderType,
+      order_by: orderBy,
+      order_type: orderType,
     });
   };
 
@@ -260,8 +260,8 @@ const SortItems = ({
   const params = useSearchParams();
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      {params.get("sort_by") === header.id ? (
-        params.get("sort_type") === "asc" ? (
+      {params.get("order_by") === header.id ? (
+        params.get("order_type") === "asc" ? (
           <Image src="/sort-asc.svg" height={25} width={25} alt="image" />
         ) : (
           <Image src="/sort-desc.svg" height={25} width={25} alt="image" />

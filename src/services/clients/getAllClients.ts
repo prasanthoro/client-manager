@@ -15,3 +15,10 @@ export const deleteClientAPI = async (deleteId: string) => {
     console.error();
   }
 };
+export const viewClientAPI = async (client_Id: any) => {
+  try {
+    return await $fetch.get(`/clients/${client_Id}`);
+  } catch (err) {
+    console.error();
+  }
+};

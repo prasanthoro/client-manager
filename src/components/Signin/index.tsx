@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { setSessionTimedOut, setUserDetails } from "@/redux/Modules/userlogin";
 import { loginAPI } from "@/services/auth";
-import { CircularProgress } from "@mui/material";
+
 export const SignIn = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -21,7 +21,7 @@ export const SignIn = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState<any>();
-  const [invalidMessage, setInvalidMessage] = useState("");
+  const [invalidMessage, setInvalidMessage] = useState<any>();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const signInEvent = async () => {
     if (loading) return;
@@ -34,16 +34,16 @@ export const SignIn = () => {
         email: email,
         password: password,
       };
-      console.log(payload, "payload");
       const response: any = await loginAPI(payload);
       if (response.status == 200 || response.status == 201) {
-        Cookies.set("user", response?.user_details_user_type);
+        Cookies.set("user", response?.data?.user_details_user_type);
         dispatch(setUserDetails(response));
         // toast.success("User logged in successfully");
         router.replace("/dashboard");
-      } else if (response?.status == 422) {
+      } else if (response?.type == "VALIDATION_ERROR") {
         setErrorMessages(response?.error_data);
-      } else if (response?.status == 401) {
+        // setInvalidMessage(response?.error_data);
+      } else if (response?.type == "Invalid_Credentials") {
         setInvalidMessage(response?.message);
       }
     } catch (err) {
@@ -88,15 +88,9 @@ export const SignIn = () => {
                   setEmail(e.target.value)
                 }
               />
-              <p
-                color="error"
-                style={{
-                  color: "red !important",
-                  display: errorMessages?.password ? "" : "none",
-                }}
-              >
-                {errorMessages?.user_name}
-              </p>
+              {errorMessages?.email && (
+                <p style={{ color: "red" }}>{errorMessages.email[0]}</p>
+              )}
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -116,20 +110,13 @@ export const SignIn = () => {
                   }
                 }}
               />
+              {errorMessages?.password && (
+                <p style={{ color: "red" }}>{errorMessages.password[0]}</p>
+              )}
               <p
                 color="error"
                 style={{
                   color: "red !important",
-                  display: errorMessages?.password ? "" : "none",
-                }}
-              >
-                {errorMessages?.user_name}
-              </p>
-              <p
-                color="error"
-                style={{
-                  color: "red !important",
-                  display: errorMessages?.password ? "" : "none",
                 }}
               >
                 {invalidMessage}
@@ -140,11 +127,7 @@ export const SignIn = () => {
               className="w-full"
               onClick={() => signInEvent()}
             >
-              {loading ? (
-                <CircularProgress size="1.5rem" sx={{ color: "#fff" }} />
-              ) : (
-                "Log In"
-              )}
+              {loading ? "" : "Log In"}
             </Button>
           </div>
         </div>
