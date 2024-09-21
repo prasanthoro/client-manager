@@ -18,6 +18,8 @@ import {
   getServicesCountsAPI,
 } from "@/services/dashboard";
 import { formatAmount } from "@/lib/helpers/core/formatAmount";
+import ClientWiseServicesList from "./ClientWiseServices";
+import ClientWiseInvoicesList from "./ClientWiseInvoices";
 
 export const Dashboard = () => {
   const router = useRouter();
@@ -76,7 +78,7 @@ export const Dashboard = () => {
   }, []);
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <Button onClick={() => router.push("/clients")}>Clients</Button>
+      {/* <Button onClick={() => router.push("/clients")}>Clients</Button> */}
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
           <Breadcrumb className="hidden md:flex">
@@ -132,6 +134,14 @@ export const Dashboard = () => {
             </Card>
           </div>
         </main>
+        <div className="flex justify-between gap-[20px] mt-6">
+            <div className="w-1/2 pl-4">
+              <ClientWiseServicesList />
+            </div>
+            <div className="w-1/2 pr-4">
+              <ClientWiseInvoicesList />
+            </div>
+          </div>
       </div>
     </div>
   );

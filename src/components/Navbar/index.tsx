@@ -1,14 +1,27 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import React from "react";
+import { Input } from "../ui/input";
+import { Search } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import { Button } from "../ui/button";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import Cookies from "js-cookie";
 import {
   deleteProfileDetails,
   removeUserDetails,
-} from "@/redux/Modules/userlogin";
-import { useDispatch, useSelector } from "react-redux";
-import Cookies from "js-cookie";
-// import { changeFirstCharToCap } from "@/help/insurances/changeFirstCharCap";
+} from "@/redux/Modules/userlogin/userlogin.slice";
+import { usePathname, useRouter } from "next/navigation";
+
 export const NavBarComponent = ({
   children,
 }: Readonly<{
@@ -17,104 +30,101 @@ export const NavBarComponent = ({
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
-  const userDetails = useSelector((state: any) => state.userLogin.userDetails);
-  const logout = async () => {
+  const userDetails = useSelector((state: any) => state.userLogin.userDetails?.data?.user_details);
+  console.log(userDetails,"userDetails");
+  
+  const handleLogout = async () => {
     dispatch(deleteProfileDetails());
     dispatch(removeUserDetails());
     router.push("/");
     Cookies.remove("user");
   };
-  const username = userDetails?.user_details?.username;
+  const username = userDetails?.user_details?.username
+
+
   if (pathname == "/") {
     return children;
   } else {
     return (
       <div>
-        <section id="navBar">
-          <div className="header">
-            <div className="container">
-              <div className="companyLogo">
-                {/* <Image
-                  src="/labSquire-logo.svg"
-                  alt="image"
-                  height={40}
-                  width={140}
-                />
-              </div>
-              <div className="rightBlock">
-                <Link
-                  className={
-                    pathname?.includes("dashboard")
-                      ? "active-link"
-                      : "inactive-link"
-                  }
-                  href="/dashboard"
-                >
-                  Dashboard
-                </Link> */}
-                {/* <Link
-                  className={
-                    pathname?.includes("insurances") ||
-                    pathname?.includes("add-payer") ||
-                    pathname?.includes("edit-payer")
-                      ? "active-link"
-                      : "inactive-link"
-                  }
-                  href="/insurances"
-                >
-                  Insurances
-                </Link> */}
-                {/* <Link
-                  className={
-                    pathname?.includes("state-license")
-                      ? "active-link"
-                      : "inactive-link"
-                  }
-                  href="/state-license"
-                >
-                  State License
-                </Link> */}
-                {/* <Link
-                  className={
-                    pathname?.includes("lab-documents")
-                      ? "active-link"
-                      : "inactive-link"
-                  }
-                  href="/lab-documents"
-                >
-                  <p>Lab Documents Directory</p>
-                </Link> */}
-                <div
-                  style={{
-                    display: "flex",
-                    columnGap: "5px",
-                    alignItems: "center",
-                  }}
-                >
-                  <Image
-                    src="/profile-icon.svg"
-                    width={16}
-                    height={16}
+        <div className="flex  w-full flex-col ">
+          <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-gray-700 px-4 md:px-6">
+            <Link
+              href="#"
+              className="text-white font-bold-200 transition-colors hover:text-foreground "
+            >
+             <Image
+                    src="/clients.svg"
+                    width={100}
+                    height={100}
                     alt=""
                   />
-                  {/* <span className="userName">
-                    {username ? changeFirstCharToCap(username) : ""}
-                  </span> */}
+            </Link>
+            {/* // search box */}
+            <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+              <form className="ml-auto flex-1 sm:flex-initial">
+                <div className="relative flex gap-4">
+                  {/* Conditionally active Dashboard */}
+                  <p
+                    className={`${
+                      pathname === "/dashboard"
+                        ? "font-bold text-white"
+                        : "text-gray-400"
+                    }`}
+                    style={{cursor:'pointer'}}
+                    onClick={() => {
+                      router.push('/dashboard')
+                    }}
+                  >
+                    Dashboard
+                  </p>
+                  {/* Conditionally active Client */}
+                  <p
+                    className={`${
+                      pathname === "/clients"
+                        ? "font-bold text-white"
+                        : "text-gray-400"
+                    }`}
+                    style={{cursor:'pointer'}}
+                    onClick={() => {
+                      router.push('/clients')
+                    }}
+                  >
+                    Clients
+                  </p>
                 </div>
-
-                <div className="logoutBtn" onClick={logout}>
-                  Logout
-                  <Image
-                    src={"/navbar/profile/logout.svg"}
-                    height={18}
-                    width={18}
-                    alt={"log-out"}
-                  />
-                </div>
-              </div>
+              </form>
             </div>
-          </div>
-        </section>
+            {/* // dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="overflow-hidden rounded-full bg-white"
+                >
+                  <Image
+                    src="/nav-avatar.svg"
+                    width={36}
+                    height={36}
+                    alt="Avatar"
+                    className="overflow-hidden rounded-full bg-white"
+                  />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {/* <DropdownMenuLabel>
+                {userDetails ? `Hello, ${userDetails.first_name}` : "Hello, Guest"}
+              </DropdownMenuLabel> */}
+                {/* <DropdownMenuSeparator /> */}
+                <DropdownMenuItem onClick={handleLogout}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <p className="text-white flex gap-4">{userDetails ? `Hello, ${userDetails.first_name}` : "Hello, Guest"}</p>
+          </header>
+        </div>
         <div>{children}</div>
       </div>
     );
