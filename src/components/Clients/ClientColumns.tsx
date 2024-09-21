@@ -63,7 +63,7 @@ export const clientColumns = (getAllClients: Function) => {
         return <span className="eachCell">{info.getValue()}</span>;
       },
       footer: (props: any) => props.columns.id,
-      width: "100px",
+      width: "200px",
     },
     {
       accessorFn: (row: any) => row?.country,
@@ -110,7 +110,9 @@ export const clientColumns = (getAllClients: Function) => {
       id: "total_invoice_amount",
       header: () => <span>Total Invoice Amount</span>,
       cell: (info: any) => {
-        return <span className="eachCell">{formatAmount(info.getValue())}</span>;
+        return (
+          <span className="eachCell">{formatAmount(info.getValue())}</span>
+        );
       },
       footer: (props: any) => props.columns.id,
       width: "100px",

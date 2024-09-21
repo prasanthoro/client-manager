@@ -1,90 +1,50 @@
-import React, { useState, useEffect } from "react";
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Pagination,
+  PaginationContent,
   PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
   PaginationLink,
 } from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import React, { useEffect, useState } from "react";
 
 interface PaginationProps {
-  page: number;
-  total_pages: number;
-  total: number;
-  onPageChange: (newPage: number) => void;
-  itemsPerPage: number;
-  onChangeItemsPerPage: (limit: number) => void;
-  values: string;
-  limitOptionsFromProps?: { title: string; value: number }[];
-  limitValue?: number;
   paginationDetails: any;
   capturePageNum: (value: number) => void;
   captureRowPerItems: (value: number) => void;
+  limitOptionsFromProps?: { title: string; value: number }[] | any;
+  limitValue?: number;
 }
 
 const PaginationComponent: React.FC<PaginationProps> = ({
-  page,
-  total_pages,
-  total,
-  onPageChange,
-  itemsPerPage,
-  onChangeItemsPerPage,
-  values,
-  limitOptionsFromProps,
-  limitValue,
   paginationDetails,
   capturePageNum,
   captureRowPerItems,
+  limitOptionsFromProps,
+  limitValue,
 }) => {
-  const [gotoPage, setGotoPage] = useState<string>(page?.toString());
-  const [totalPages, setTotalPages] = useState<number>(total_pages);
+  const [pageValue, setPageValue] = useState<number>(
+    paginationDetails?.page || 1
+  );
   const [limitOptions, setLimitOptions] = useState<
     { title: string; value: number }[]
-  >([
-    { title: "25/page", value: 25 },
-    { title: "50/page", value: 50 },
-    { title: "75/page", value: 75 },
-    { title: "100/page", value: 100 },
-  ]);
+  >([]);
+  const [totalPages, setTotalPages] = useState<number>(
+    paginationDetails?.total_pages || 1
+  );
 
-  const handleGotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setGotoPage(event.target.value);
-  };
-
-  const handleGotoSubmit = () => {
-    const pageNumber = parseInt(gotoPage, 10);
-    if (pageNumber >= 1 && pageNumber <= totalPages) {
-      capturePageNum(pageNumber);
-    }
-  };
-
-  const onKeyDownInPageChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      const pageNumber = parseInt(gotoPage, 10);
-      if (pageNumber <= 0) {
-        capturePageNum(1);
-      } else if (
-        paginationDetails?.total_pages &&
-        pageNumber >= paginationDetails?.total_pages
-      ) {
-        capturePageNum(paginationDetails?.total_pages);
-      } else if (totalPages && pageNumber >= totalPages) {
-        capturePageNum(totalPages);
-      } else {
-        capturePageNum(pageNumber);
-      }
-    }
-  };
-
-  useEffect(() => {
-    setGotoPage(paginationDetails?.page?.toString() || "1");
-
-    if (paginationDetails?.count && !paginationDetails?.total_pages) {
-      const pagesCount = Math.ceil(
-        paginationDetails?.count / paginationDetails?.limit
-      );
-      setTotalPages(pagesCount);
-    }
-  }, [paginationDetails]);
+  const selectedValue = paginationDetails?.limit || limitValue || 25;
 
   useEffect(() => {
     setLimitOptions(
@@ -99,97 +59,104 @@ const PaginationComponent: React.FC<PaginationProps> = ({
     );
   }, [limitOptionsFromProps]);
 
-  const renderPageNumbers = () => {
-    const range = 2;
-    let start = Math.max(1, page - range);
-    let end = Math.min(totalPages, page + range);
-
-    if (end - start < 2 * range) {
-      if (start === 1) {
-        end = Math.min(totalPages, start + 2 * range);
-      } else if (end === totalPages) {
-        start = Math.max(1, end - 2 * range);
-      }
-    }
-
-    const pages = [];
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-
-    return pages;
+  const handlePageChange = (page: number) => {
+    setPageValue(page);
+    capturePageNum(page);
   };
 
-  const pages = renderPageNumbers();
+  const handleRowChange = (newLimit: string) => {
+    captureRowPerItems(Number(newLimit));
+  };
+
+  const onKeyDownInPageChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const page = Math.max(1, Math.min(Number(pageValue) || 1, totalPages));
+      handlePageChange(page);
+    }
+  };
+
+  useEffect(() => {
+    if (paginationDetails?.count && !paginationDetails?.total_pages) {
+      const pagesCount = Math.ceil(
+        paginationDetails?.count / paginationDetails?.limit
+      );
+      setTotalPages(pagesCount);
+    }
+  }, [paginationDetails]);
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <div
-        style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}
+    <Card>
+      <Pagination
+        className="tablePagination"
+        style={{ position: "sticky", bottom: "0", left: "0" }}
       >
-        <span>GoTo</span>
-        <Input
-          type="text"
-          value={gotoPage}
-          onChange={handleGotoChange}
-          onKeyDown={onKeyDownInPageChange}
-          style={{
-            marginLeft: "10px",
-            width: "60px",
-            textAlign: "center",
-            maxHeight: "28px",
-          }}
-          placeholder="Page"
-        />
-      </div>
-      <Pagination>
-        {page > 1 && (
-          <PaginationItem>
-            <PaginationLink
-              onClick={() => onPageChange(page - 1)}
-              style={{ cursor: "pointer" }}
-            >
-              Previous
-            </PaginationLink>
-          </PaginationItem>
-        )}
-        {pages.map((number) => (
-          <PaginationItem key={number}>
-            <PaginationLink
-              onClick={() => onPageChange(number)}
-              style={{ fontWeight: page === number ? "bold" : "normal" }}
-            >
-              {number}
-            </PaginationLink>
-          </PaginationItem>
-        ))}
-        {page < totalPages && (
-          <PaginationItem>
-            <PaginationLink
-              onClick={() => onPageChange(page + 1)}
-              style={{ cursor: "pointer" }}
-            >
-              Next
-            </PaginationLink>
-          </PaginationItem>
-        )}
-      </Pagination>
-      <div>Total {total}</div>
-      <div>
-        Items per page:
-        {limitOptions.map((option) => (
-          <button
-            key={option.value}
-            onClick={() => captureRowPerItems(option.value)}
-            style={{ marginLeft: "5px" }}
+        <PaginationContent>
+          Total {paginationDetails?.total || paginationDetails?.count || "0"}
+        </PaginationContent>
+
+        <PaginationContent>
+          <Select
+            value={selectedValue.toString()}
+            onValueChange={handleRowChange}
           >
-            {option.title}
-          </button>
-        ))}
-      </div>
-    </div>
+            <SelectTrigger>
+              <SelectValue placeholder="Items per page" />
+            </SelectTrigger>
+            <SelectContent>
+              {limitOptions.map((item, index) => (
+                <SelectItem value={item.value.toString()} key={index}>
+                  {item.title}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </PaginationContent>
+        <PaginationContent>
+          {pageValue > 1 && (
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => handlePageChange(pageValue - 1)}
+              />
+            </PaginationItem>
+          )}
+          {/* Replace the previous array mapping with your logic for pagination */}
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+            <PaginationItem key={number}>
+              <PaginationLink
+                onClick={() => handlePageChange(number)}
+                style={{ fontWeight: pageValue === number ? "bold" : "normal" }}
+              >
+                {number}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+          {pageValue < totalPages && (
+            <PaginationItem>
+              <PaginationNext onClick={() => handlePageChange(pageValue + 1)} />
+            </PaginationItem>
+          )}
+        </PaginationContent>
+
+        <PaginationContent>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            GoTo
+            <Input
+              type="number"
+              value={pageValue}
+              onChange={(e) => setPageValue(Number(e.target.value))}
+              onKeyDown={onKeyDownInPageChange}
+              style={{
+                marginLeft: "10px",
+                width: "60px",
+                textAlign: "center",
+                fontSize: "14px",
+              }}
+              placeholder="Page"
+            />
+          </div>
+        </PaginationContent>
+      </Pagination>
+    </Card>
   );
 };
 

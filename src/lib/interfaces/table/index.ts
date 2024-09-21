@@ -10,6 +10,7 @@ export interface tanstackTablePropTypes {
   }: Partial<{
     page: string | number;
     limit: string | number;
+    pageSize: string | number;
     order_by?: string;
     order_type?: string;
   }>) => void;

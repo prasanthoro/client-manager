@@ -46,25 +46,49 @@ const TanStackTableComponent: FunctionComponent<tanstackTablePropTypes> = ({
     },
     onRowSelectionChange: setRowSelection,
   });
-
+  const useParams = useSearchParams();
+  const [searchParams, setSearchParams] = useState(
+    Object.fromEntries(new URLSearchParams(Array.from(useParams.entries())))
+  );
+  useEffect(() => {
+    setSearchParams(
+      Object.fromEntries(new URLSearchParams(Array.from(useParams.entries())))
+    );
+  }, [useParams]);
   const getWidth = (id: string) => {
     const widthObj = columns.find((item: any) => item.id === id);
     return widthObj?.width;
   };
 
+  // const capturePageNum = (value: number) => {
+  //   getData({
+  //     limit: params.get("limit") as string,
+  //     page: value,
+  //   });
+  // };
   const capturePageNum = (value: number) => {
     getData({
-      limit: params.get("limit") as string,
+      ...searchParams,
+      limit: searchParams.limit as string,
+      pageSize: searchParams.pageSize as string,
       page: value,
     });
   };
-
   const captureRowPerItems = (value: number) => {
     getData({
-      limit: value,
+      ...searchParams,
+      limit: searchParams.limit as string,
+      pageSize: searchParams.pageSize as string,
       page: 1,
     });
   };
+
+  // const captureRowPerItems = (value: number) => {
+  //   getData({
+  //     limit: value,
+  //     page: 1,
+  //   });
+  // };
 
   const sortAndGetData = (header: any) => {
     if (
@@ -86,156 +110,148 @@ const TanStackTableComponent: FunctionComponent<tanstackTablePropTypes> = ({
       }
     }
     getData({
+      ...searchParams,
       order_by: orderBy,
       order_type: orderType,
     });
   };
-
-  const getHasSortOrNot = (id: string) => {
-    return !(
-      removeSortingForColumnIds &&
-      removeSortingForColumnIds.length &&
-      removeSortingForColumnIds.includes(id)
-    );
-  };
-
-  const onRowClick = (dataObj: any) => {
-    if (pathname === "/mtp") {
-      setNavigationLoading(true);
-      const { month, salesRepId } = dataObj;
-
-      const queryObj = {
-        month: month,
-        salesRepId: salesRepId,
-      };
-      const urlString = prepareURLEncodedParams("/mtp/view", queryObj);
-      router.push(urlString);
-    }
-  };
-
   return (
-    <div className="defaultTable">
-      <div>
-        <Table>
-          <TableHeader>
-            {table
-              .getHeaderGroups()
-              .map((headerGroup: any, mainIndex: number) => (
-                <TableRow className="table-row" key={mainIndex}>
-                  {headerGroup.headers.map((header: any, index: number) => (
-                    <TableHead key={index}>
-                      {header.isPlaceholder ? null : (
-                        <div
-                          className={`cell ${
-                            getHasSortOrNot(header.id) ? "sortHeader" : ""
-                          }`}
-                          style={{
-                            display: "flex",
-                            gap: "4px",
-                            cursor: "pointer",
-                            alignItems: "center",
-                          }}
-                          onClick={() => sortAndGetData(header)}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-
-                          <SortItems
-                            header={header}
-                            removeSortingForColumnIds={
-                              removeSortingForColumnIds
-                            }
-                          />
-                        </div>
-                      )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-          </TableHeader>
-          <TableBody className="tbody">
-            {data?.length ? (
-              table
-                .getFilteredRowModel()
-                .rows.map((row: any, mainIndex: number) => (
-                  <TableRow
-                    style={{
-                      cursor: pathname === "/mtp" ? "pointer" : "default",
-                    }}
-                    className="table-row"
-                    key={mainIndex}
-                    onClick={() => onRowClick(row?.original)}
-                  >
-                    {row.getVisibleCells().map((cell: any, index: number) => (
-                      <TableCell
-                        className="cell"
+    <>
+      <div className="defaultTable">
+        <div className="tableContainer">
+          <Table
+            className="table"
+            style={{
+              borderSpacing: " 0 1px",
+              borderCollapse: "separate",
+              width: "100%",
+            }}
+          >
+            <TableHeader
+              className="thead"
+              style={{
+                height: "32px",
+                position: "sticky",
+                top: "-1px",
+                zIndex: "9",
+                color: "white",
+              }}
+            >
+              {table
+                .getHeaderGroups()
+                .map((headerGroup: any, mainIndex: number) => (
+                  <TableRow className="table-row" key={mainIndex}>
+                    {headerGroup.headers.map((header: any, index: number) => (
+                      <TableHead
                         key={index}
+                        className="tableHeaderRow"
+                        colSpan={header.colSpan}
                         style={{
-                          verticalAlign: "top",
+                          minWidth: getWidth(header.id),
                         }}
                       >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
+                        {header.isPlaceholder ? null : (
+                          <div
+                            className="cell"
+                            style={{
+                              display: "flex",
+                              gap: "4px",
+                              color: "grey",
+                              cursor: "pointer",
+                              alignItems: "center",
+                            }}
+                            onClick={() => sortAndGetData(header)}
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+
+                            <SortItems
+                              header={header}
+                              removeSortingForColumnIds={
+                                removeSortingForColumnIds
+                              }
+                            />
+                          </div>
                         )}
-                      </TableCell>
+                      </TableHead>
                     ))}
                   </TableRow>
-                ))
-            ) : !loading ? (
-              <TableRow>
-                <TableCell colSpan={columns?.length}>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: "50vh",
-                    }}
-                  >
-                    <Image
-                      alt="no-data"
-                      src={"/core/table/no-data.svg"}
-                      width={250}
-                      height={250}
-                    />
+                ))}
+            </TableHeader>
+            <TableBody className="tbody">
+              {data?.length ? (
+                table
+                  .getFilteredRowModel()
+                  .rows.map((row: any, mainIndex: number) => (
+                    <TableRow
+                      style={{
+                        cursor: pathname === "/mtp" ? "pointer" : "default",
+                      }}
+                      className="table-row"
+                      key={mainIndex}
+                    >
+                      {row.getVisibleCells().map((cell: any, index: number) => (
+                        <TableCell
+                          className="cell"
+                          key={index}
+                          style={{
+                            verticalAlign: "top",
+                          }}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+              ) : !loading ? (
+                <TableRow>
+                  <TableCell colSpan={24}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "50vh",
+                      }}
+                    >
+                      <Image
+                        alt="no-data"
+                        src={"/core/table/no-data.svg"}
+                        width={250}
+                        height={250}
+                      />
 
-                    <p style={{ fontSize: "clamp(20px, 1.04vw, 22px)" }}>
-                      No Data
-                    </p>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ) : (
-              ""
-            )}
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={columns?.length}>
-                  {/* <LoadingComponent loading={loading} label={label} /> */}
-                </TableCell>
-              </TableRow>
-            ) : (
-              ""
-            )}
-          </TableBody>
-        </Table>
+                      <p style={{ fontSize: "clamp(20px, 1.04vw, 22px)" }}>
+                        No Data
+                      </p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                ""
+              )}
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={columns?.length}>
+                    {/* <LoadingComponent loading={loading} label={label} /> */}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                ""
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
       <div className="listingPagination">
         {!loading && paginationDetails ? (
           <PaginationComponent
-            page={paginationDetails.page}
-            total_pages={paginationDetails.total_pages}
-            total={paginationDetails.total}
-            onPageChange={capturePageNum}
-            itemsPerPage={paginationDetails.itemsPerPage}
-            onChangeItemsPerPage={captureRowPerItems}
-            values={paginationDetails.values}
-            limitOptionsFromProps={paginationDetails.limitOptionsFromProps}
-            limitValue={paginationDetails.limitValue}
             paginationDetails={paginationDetails}
             capturePageNum={capturePageNum}
             captureRowPerItems={captureRowPerItems}
@@ -244,7 +260,7 @@ const TanStackTableComponent: FunctionComponent<tanstackTablePropTypes> = ({
           ""
         )}
       </div>
-    </div>
+    </>
   );
 };
 
