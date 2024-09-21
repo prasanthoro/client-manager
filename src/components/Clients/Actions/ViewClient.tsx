@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { viewClientAPI } from "@/services/clients/getAllClients";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import ServicesList from "../Services";
+import InvoicesList from "../Invoices";
 
 const ViewClient = () => {
   const { client_Id } = useParams();
@@ -72,8 +74,17 @@ const ViewClient = () => {
             </div>
           </div>
         </CardContent>
+        <div className="flex justify-between gap-[20px] mt-6">
+          <div className="w-1/2 pl-4">
+            <ServicesList />
+          </div>
+          <div className="w-1/2 pr-4">
+            <InvoicesList />
+          </div>
+        </div>
       </Card>
     </div>
   );
 };
+
 export default ViewClient;
