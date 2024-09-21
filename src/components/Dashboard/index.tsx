@@ -18,6 +18,8 @@ import {
   getServicesCountsAPI,
 } from "@/services/dashboard";
 import { formatAmount } from "@/lib/helpers/core/formatAmount";
+import ClientWiseServicesList from "./ClientWiseServices";
+import ClientWiseInvoicesList from "./ClientWiseInvoices";
 
 export const Dashboard = () => {
   const router = useRouter();
@@ -133,6 +135,14 @@ export const Dashboard = () => {
             </Card>
           </div>
         </main>
+        <div className="flex justify-between gap-[20px] mt-6">
+          <div className="w-1/2 pl-4">
+            <ClientWiseServicesList />
+          </div>
+          <div className="w-1/2 pr-4">
+            <ClientWiseInvoicesList />
+          </div>
+        </div>
       </div>
     </div>
   );
