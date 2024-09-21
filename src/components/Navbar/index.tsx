@@ -8,8 +8,9 @@ import {
 } from "@/redux/Modules/userlogin";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-// import { changeFirstCharToCap } from "@/help/insurances/changeFirstCharCap";
-export const NavBarComponent = ({
+import { changeFirstCharToCap } from "@/lib/helpers/core/changeFirstLetterToCap";
+
+const NavBarComponent = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -24,99 +25,48 @@ export const NavBarComponent = ({
     router.push("/");
     Cookies.remove("user");
   };
-  const username = userDetails?.user_details?.username;
-  if (pathname == "/") {
+  const firstName = userDetails?.data?.user_details?.first_name;
+  const lastName = userDetails?.data?.user_details?.last_name;
+  const fullName = `${changeFirstCharToCap(firstName)} ${changeFirstCharToCap(
+    lastName
+  )}`;
+
+  if (pathname === "/") {
     return children;
   } else {
     return (
       <div>
-        <section id="navBar">
-          <div className="header">
-            <div className="container">
-              <div className="companyLogo">
-                {/* <Image
-                  src="/labSquire-logo.svg"
-                  alt="image"
-                  height={40}
-                  width={140}
-                />
+        <section className="sticky top-0 z-50 bg-white shadow-sm">
+          <div className="flex items-center justify-between p-2 max-w-7xl mx-auto">
+            <div className="companyLogo">
+              <Image src="/clients.svg" alt="image" height={40} width={140} />
+            </div>
+            <div className="flex items-center space-x-5">
+              <div className="flex items-center space-x-2">
+                <Image src="/avatar-boy.svg" width={35} height={35} alt="" />
+                <span className="text-sm">
+                  {fullName ? changeFirstCharToCap(fullName) : ""}
+                </span>
               </div>
-              <div className="rightBlock">
-                <Link
-                  className={
-                    pathname?.includes("dashboard")
-                      ? "active-link"
-                      : "inactive-link"
-                  }
-                  href="/dashboard"
-                >
-                  Dashboard
-                </Link> */}
-                {/* <Link
-                  className={
-                    pathname?.includes("insurances") ||
-                    pathname?.includes("add-payer") ||
-                    pathname?.includes("edit-payer")
-                      ? "active-link"
-                      : "inactive-link"
-                  }
-                  href="/insurances"
-                >
-                  Insurances
-                </Link> */}
-                {/* <Link
-                  className={
-                    pathname?.includes("state-license")
-                      ? "active-link"
-                      : "inactive-link"
-                  }
-                  href="/state-license"
-                >
-                  State License
-                </Link> */}
-                {/* <Link
-                  className={
-                    pathname?.includes("lab-documents")
-                      ? "active-link"
-                      : "inactive-link"
-                  }
-                  href="/lab-documents"
-                >
-                  <p>Lab Documents Directory</p>
-                </Link> */}
-                <div
-                  style={{
-                    display: "flex",
-                    columnGap: "5px",
-                    alignItems: "center",
-                  }}
-                >
-                  <Image
-                    src="/profile-icon.svg"
-                    width={16}
-                    height={16}
-                    alt=""
-                  />
-                  {/* <span className="userName">
-                    {username ? changeFirstCharToCap(username) : ""}
-                  </span> */}
-                </div>
 
-                <div className="logoutBtn" onClick={logout}>
-                  Logout
-                  <Image
-                    src={"/navbar/profile/logout.svg"}
-                    height={18}
-                    width={18}
-                    alt={"log-out"}
-                  />
-                </div>
+              <div
+                className="flex items-center space-x-1 border border-blue-800 rounded-lg cursor-pointer p-1 bg-transparent"
+                onClick={logout}
+              >
+                <span className="text-sm">Logout</span>
+                <Image
+                  src="/logout.svg"
+                  height={25}
+                  width={25}
+                  alt={"log-out"}
+                />
               </div>
             </div>
           </div>
         </section>
-        <div>{children}</div>
+        {/* <div>{children}</div> */}
       </div>
     );
   }
 };
+export default NavBarComponent;
