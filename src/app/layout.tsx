@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "@/redux/Provider";
-import { NavBarComponent } from "@/components/Navbar";
+// import { NavBarComponent } from "@/components/Navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,9 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>
+        {/* <Providers>
           <NavBarComponent>{children}</NavBarComponent>
-        </Providers>
+        </Providers> */}
       </body>
       {/* <Toaster richColors closeButton position="top-right" /> */}
     </html>
