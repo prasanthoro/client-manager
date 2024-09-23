@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import { deleteClientAPI } from "@/services/clients/getAllClients";
 import { Toast } from "../ui/toast";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
+import { deleteClientAPI } from "@/services/clients";
 
 export const DeleteButton = ({ getAllClients, clientId }: any) => {
   const [open, setOpen] = useState(false);

@@ -77,7 +77,7 @@ const TanStackTableComponent: FunctionComponent<tanstackTablePropTypes> = ({
   const captureRowPerItems = (value: number) => {
     getData({
       ...searchParams,
-      limit: searchParams.limit as string,
+      limit: value,
       pageSize: searchParams.pageSize as string,
       page: 1,
     });
