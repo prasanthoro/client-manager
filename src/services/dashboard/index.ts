@@ -22,3 +22,19 @@ export const getInvoiceAmountAPI = async () => {
     console.error();
   }
 };
+
+export const getServicesWiseInvoicesAmountAPI = async () => {
+  try {
+    return await $fetch.get(`/services/dashboard/invoice-amount`);
+  } catch (err) {
+    console.error();
+  }
+};
+
+export const getClientWiseTotalInvoiceAmountAPI = async () => {
+  try {
+    return await $fetch.get(`/clients/dashboard/invoice-amount`);
+  } catch (err) {
+    console.error();
+  }
+};

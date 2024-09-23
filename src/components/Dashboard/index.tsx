@@ -14,19 +14,25 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   getAllClientsCountsAPI,
+  getClientWiseTotalInvoiceAmountAPI,
   getInvoiceAmountAPI,
   getServicesCountsAPI,
+  getServicesWiseInvoicesAmountAPI,
 } from "@/services/dashboard";
 import { formatAmount } from "@/lib/helpers/core/formatAmount";
 import ClientWiseServicesList from "./ClientWiseServices";
 import ClientWiseInvoicesList from "./ClientWiseInvoices";
+import { LoadingComponent } from "../core/LoadingComponent";
 
 export const Dashboard = () => {
   const router = useRouter();
   const [clientsCount, setClientsCount] = useState([]);
   const [serviceCount, setServicesCount] = useState([]);
+  const [clientWiseTotallInvoices, setClientWiseTotalInvoices] = useState([]);
+  const [serviceWiseInvoices, setServiceWiseInvoices] = useState([]);
   const [invoiceAmount, setInvoiceAmount] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const getAllClientsCount = async () => {
     try {
       setLoading(true);
@@ -43,7 +49,9 @@ export const Dashboard = () => {
       setLoading(false);
     }
   };
+
   const getServicesCount = async () => {
+    setLoading(true);
     try {
       const response = await getServicesCountsAPI();
       if (response?.status == 200 || response?.status == 201) {
@@ -55,9 +63,12 @@ export const Dashboard = () => {
     } catch (err: any) {
       console.error(err);
     } finally {
+      setLoading(false);
     }
   };
+
   const getInvoiceAmount = async () => {
+    setLoading(true);
     try {
       const response = await getInvoiceAmountAPI();
       if (response?.status == 200 || response?.status == 201) {
@@ -69,12 +80,50 @@ export const Dashboard = () => {
     } catch (err: any) {
       console.error(err);
     } finally {
+      setLoading(false);
     }
   };
+
+  const getServicesWiseInvoicesAmount = async () => {
+    try {
+      setLoading(true);
+      const response = await getServicesWiseInvoicesAmountAPI();
+      if (response?.status == 200 || response?.status == 201) {
+        let { data } = response?.data;
+        setServiceWiseInvoices(data);
+      } else {
+        throw response;
+      }
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getClientWiseTotalInvoiceAmount = async () => {
+    try {
+      setLoading(true);
+      const response = await getClientWiseTotalInvoiceAmountAPI();
+      if (response?.status == 200 || response?.status == 201) {
+        let { data } = response?.data;
+        setClientWiseTotalInvoices(data);
+      } else {
+        throw response;
+      }
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getAllClientsCount();
     getServicesCount();
     getInvoiceAmount();
+    getServicesWiseInvoicesAmount();
+    getClientWiseTotalInvoiceAmount();
   }, []);
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -144,6 +193,7 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
+      <LoadingComponent loading={loading} label={'Dashboard'}/>
     </div>
   );
 };

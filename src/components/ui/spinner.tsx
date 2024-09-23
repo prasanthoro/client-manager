@@ -46,7 +46,7 @@ export function Spinner({
       <div className="absolute inset-0 bg-black opacity-10 z-10" />{" "}
       {/* Overlay */}
       <div className="relative z-20">
-        <Loader2 className={cn(loaderVariants({ size }), className)} />
+        <Loader2 className={cn(loaderVariants({ size }))} />
         {children}
       </div>
     </div>
