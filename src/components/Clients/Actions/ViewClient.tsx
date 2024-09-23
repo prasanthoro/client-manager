@@ -64,17 +64,19 @@ const ViewClient = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
-          <div className="flex flex-col">
-            <span className="font-bold">Client Name</span>
-            <span>{clientData?.name}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold">Poc</span>
-            <span>{clientData?.poc}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold">Role</span>
-            <span>{clientData?.role}</span>
+          <div className="grid grid-cols-3 gap-4 text-gray-600">
+            <div className="flex flex-col">
+              <span className="font-bold">Client Name </span>
+              <span>{clientData?.name}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">Poc</span>
+              <span>{clientData?.poc}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">Role</span>
+              <span>{clientData?.role}</span>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -86,21 +88,23 @@ const ViewClient = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
-          <div className="flex flex-col">
-            <span className="font-bold">Address</span>
-            <span>{clientData?.address}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold">Country</span>
-            <span>{clientData?.country}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold">State</span>
-            <span>{clientData?.state}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold">City</span>
-            <span>{clientData?.city}</span>
+          <div className="grid grid-cols-3 gap-4 text-gray-600">
+            <div className="flex flex-col">
+              <span className="font-bold">Address</span>
+              <span>{clientData?.address}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">Country</span>
+              <span>{clientData?.country}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">State</span>
+              <span>{clientData?.state}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">City</span>
+              <span>{clientData?.city}</span>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -112,24 +116,34 @@ const ViewClient = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
-          <div className="flex flex-col">
-            <span className="font-bold">Phone No</span>
-            <span>{clientData?.phone}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold">Secondary Phone</span>{" "}
-            <span>{clientData?.secondary_phone}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold">Email</span>
-            <span>{clientData?.email}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold">Remarks</span>
-            <span>{clientData?.remarks}</span>
+          <div className="grid grid-cols-3 gap-4 text-gray-600">
+            <div className="flex flex-col">
+              <span className="font-bold">Phone No</span>
+              <span>{clientData?.phone}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">Secondary Phone</span>{" "}
+              <span>{clientData?.secondary_phone}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">Email</span>
+              <span>{clientData?.email}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">Remarks</span>
+              <span>{clientData?.remarks}</span>
+            </div>
           </div>
         </CardContent>
       </Card>
+      <div className="flex justify-between gap-[20px] mt-6">
+        <div className="w-1/2 pl-4">
+          <ServicesList />
+        </div>
+        <div className="w-1/2 pr-4">
+          <InvoicesList />
+        </div>
+      </div>
     </div>
   );
 };
