@@ -21,7 +21,7 @@ const ClientWiseInvoicesList = () => {
   return (
     <Card>
       <CardHeader className="px-7">
-        <CardTitle>Client Wise Invoices</CardTitle>
+        <CardTitle>Client Wise Invoices Amount</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>

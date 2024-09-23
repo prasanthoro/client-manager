@@ -21,7 +21,7 @@ const ClientWiseServicesList = () => {
   return (
     <Card>
       <CardHeader className="px-7">
-        <CardTitle>Client Wise Services</CardTitle>
+        <CardTitle>Client Wise Services Amount</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
