@@ -9,6 +9,7 @@ import {
   PaginationPrevious,
   PaginationNext,
   PaginationLink,
+  PaginationEllipsis,
 } from "@/components/ui/pagination";
 import {
   Select,
@@ -38,7 +39,10 @@ const PaginationComponent: React.FC<PaginationProps> = ({
     paginationDetails?.page || 1
   );
   const [limitOptions, setLimitOptions] = useState<
-    { title: string; value: number }[]
+    {
+      title: string;
+      value: number;
+    }[]
   >([]);
   const [totalPages, setTotalPages] = useState<number>(
     paginationDetails?.total_pages || 1
@@ -111,6 +115,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
             </SelectContent>
           </Select>
         </PaginationContent>
+
         <PaginationContent>
           {pageValue > 1 && (
             <PaginationItem>
@@ -119,17 +124,42 @@ const PaginationComponent: React.FC<PaginationProps> = ({
               />
             </PaginationItem>
           )}
-          {/* Replace the previous array mapping with your logic for pagination */}
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
-            <PaginationItem key={number}>
-              <PaginationLink
-                onClick={() => handlePageChange(number)}
-                style={{ fontWeight: pageValue === number ? "bold" : "normal" }}
-              >
-                {number}
+          {pageValue > 2 && (
+            <PaginationItem>
+              <PaginationLink onClick={() => handlePageChange(1)}>
+                1
               </PaginationLink>
             </PaginationItem>
-          ))}
+          )}
+
+          {pageValue > 2 && <PaginationEllipsis />}
+          {pageValue > 1 && (
+            <PaginationItem>
+              <PaginationLink onClick={() => handlePageChange(pageValue - 1)}>
+                {pageValue - 1}
+              </PaginationLink>
+            </PaginationItem>
+          )}
+
+          <PaginationItem>
+            <PaginationLink isActive>{pageValue}</PaginationLink>
+          </PaginationItem>
+
+          {pageValue < totalPages && (
+            <PaginationItem>
+              <PaginationLink onClick={() => handlePageChange(pageValue + 1)}>
+                {pageValue + 1}
+              </PaginationLink>
+            </PaginationItem>
+          )}
+          {pageValue < totalPages - 1 && <PaginationEllipsis />}
+          {pageValue < totalPages && (
+            <PaginationItem>
+              <PaginationLink onClick={() => handlePageChange(totalPages)}>
+                {totalPages}
+              </PaginationLink>
+            </PaginationItem>
+          )}
           {pageValue < totalPages && (
             <PaginationItem>
               <PaginationNext onClick={() => handlePageChange(pageValue + 1)} />
