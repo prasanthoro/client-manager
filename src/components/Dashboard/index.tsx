@@ -29,7 +29,9 @@ export const Dashboard = () => {
   const [clientsCount, setClientsCount] = useState([]);
   const [serviceCount, setServicesCount] = useState([]);
   const [clientWiseTotallInvoices, setClientWiseTotalInvoices] = useState([]);
+
   const [serviceWiseInvoices, setServiceWiseInvoices] = useState([]);
+  console.log(serviceWiseInvoices, "service");
   const [invoiceAmount, setInvoiceAmount] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -186,14 +188,16 @@ export const Dashboard = () => {
         </main>
         <div className="flex justify-between gap-[20px] mt-6">
           <div className="w-1/2 pl-4">
-            <ClientWiseServicesList />
+            <ClientWiseServicesList serviceWiseInvoices={serviceWiseInvoices} />
           </div>
           <div className="w-1/2 pr-4">
-            <ClientWiseInvoicesList />
+            <ClientWiseInvoicesList
+              clientWiseTotallInvoices={clientWiseTotallInvoices}
+            />
           </div>
         </div>
       </div>
-      <LoadingComponent loading={loading} label={'Dashboard'}/>
+      <LoadingComponent loading={loading} label={"Dashboard"} />
     </div>
   );
 };

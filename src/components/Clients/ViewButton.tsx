@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { LoadingComponent } from "../core/LoadingComponent";
 
 export const ViewButton = ({ row }: any) => {
   const [loading, setLoading] = useState(false);
@@ -21,12 +22,12 @@ export const ViewButton = ({ row }: any) => {
           onViewClick();
         }}
         src={"/view.svg"}
-        height={30}
-        width={30}
+        height={40}
+        width={40}
         alt="Image"
       />
 
-      {/* <LoadingComponent loading={loading} /> */}
+      <LoadingComponent loading={loading} />
     </div>
   );
 };
