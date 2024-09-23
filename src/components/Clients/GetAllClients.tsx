@@ -10,6 +10,7 @@ import TanStackTableComponent from "../core/TanstackTable";
 import { clientColumns } from "./ClientColumns";
 import { ViewButton } from "./ViewButton";
 import { getAllClientsListAPI } from "@/services/clients";
+import { LoadingComponent } from "../core/LoadingComponent";
 
 const Clients = () => {
   const params = useSearchParams();
@@ -72,6 +73,7 @@ const Clients = () => {
           loading={loading}
           removeSortingForColumnIds={[""]}
         />
+        <LoadingComponent loading={loading} label={'Clients'}/>
       </div>
     </>
   );

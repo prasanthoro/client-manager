@@ -20,6 +20,7 @@ import {
 import { formatAmount } from "@/lib/helpers/core/formatAmount";
 import ClientWiseServicesList from "./ClientWiseServices";
 import ClientWiseInvoicesList from "./ClientWiseInvoices";
+import { LoadingComponent } from "../core/LoadingComponent";
 
 export const Dashboard = () => {
   const router = useRouter();
@@ -44,6 +45,7 @@ export const Dashboard = () => {
     }
   };
   const getServicesCount = async () => {
+    setLoading(true);
     try {
       const response = await getServicesCountsAPI();
       if (response?.status == 200 || response?.status == 201) {
@@ -55,9 +57,11 @@ export const Dashboard = () => {
     } catch (err: any) {
       console.error(err);
     } finally {
+      setLoading(false);
     }
   };
   const getInvoiceAmount = async () => {
+    setLoading(true);
     try {
       const response = await getInvoiceAmountAPI();
       if (response?.status == 200 || response?.status == 201) {
@@ -69,6 +73,7 @@ export const Dashboard = () => {
     } catch (err: any) {
       console.error(err);
     } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -144,6 +149,7 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
+      <LoadingComponent loading={loading} label={'Dashboard'}/>
     </div>
   );
 };
