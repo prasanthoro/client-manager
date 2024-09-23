@@ -60,9 +60,15 @@ const Clients = () => {
 
   return (
     <>
-      <Button onClick={() => router.push("/clients/addclient")}>
-        Add client
-      </Button>
+      <div className="flex">
+        <Button
+          className="ml-auto bg-blue-500 hover:bg-blue-600 text-white"
+          onClick={() => router.push("/clients/addclient")}
+        >
+          Add client
+        </Button>
+      </div>
+
       <div>
         <TanStackTableComponent
           columns={clientColumns(getAllClients)}

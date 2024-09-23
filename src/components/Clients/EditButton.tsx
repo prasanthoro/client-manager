@@ -26,8 +26,8 @@ export const EditButton = ({ insurance_id }: any) => {
           onEditClick();
         }}
         src={"/edit.svg"}
-        height={160}
-        width={160}
+        height={30}
+        width={30}
         alt="Image"
       ></Image>
       {/* <LoadingComponent loading={loading} /> */}

@@ -39,7 +39,7 @@ const SideBar = ({
         </div>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full overflow-x-auto">
         <div>{children}</div>
       </div>
     </div>

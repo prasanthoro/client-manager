@@ -149,7 +149,7 @@ export const clientColumns = (getAllClients: Function) => {
               className="actionList"
               style={{ display: "flex", listStyle: "none", padding: 0 }}
             >
-              <li className="eachList" style={{ marginRight: "10px" }}>
+              <li className="eachList" style={{ marginRight: "1px" }}>
                 <ViewButton row={info?.row?.original} />
               </li>
               <li className="eachList" style={{ marginRight: "10px" }}>

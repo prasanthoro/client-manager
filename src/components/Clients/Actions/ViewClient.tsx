@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -38,71 +38,99 @@ const ViewClient = () => {
   }, []);
 
   return (
-    <Card className="shadow-lg rounded-lg p-6 bg-white border border-gray-200">
-      {/* // <div className="h-screen flex flex-col"> */}
-      {/* <div className="sticky top-0 z-10 bg-white shadow-md"> */}
-      <div className="flex items-center p-4">
-        <Button
-          onClick={handleBackClick}
-          variant="default"
-          className="text-orange-500"
-        >
-          Back
+    <div className="p-8 bg-gray-50 min-h-screen">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <Button
+            onClick={() => router.back()}
+            className="p-2 -full hover:bg-gray-200"
+          >
+            <span className="material-icons">Back</span>
+          </Button>
+          <h1 className="text-3xl font-bold text-red-600 ml-2">
+            Client Details
+          </h1>
+        </div>
+        <Button className="bg-purple-500 hover:bg-purple-600 text-white">
+          Edit
         </Button>
       </div>
-      {/* </div> */}
-      {/* <div className="flex-grow overflow-y-auto p-6"> */}
-      {/* <Card className="shadow-lg rounded-lg p-6 bg-white border border-gray-200"></Card> */}
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-primary">
-            Primary Information
-          </h2>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <span className="text-sm text-gray-500">Client Name</span>
-            <p className="text-lg font-medium text-textColor">Sundhar</p>
+
+      {/* Client Information */}
+      <Card className="mb-4">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold text-blue-800">
+            Client Information
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
+          <div className="flex flex-col">
+            <span className="font-bold">Client Name</span>
+            <span>{clientData?.name}</span>
           </div>
-          <div className="space-y-1">
-            <span className="text-sm text-gray-500">Contact Number</span>
-            <p className="text-lg font-medium text-textColor">97257123678</p>
+          <div className="flex flex-col">
+            <span className="font-bold">Poc</span>
+            <span>{clientData?.poc}</span>
           </div>
-          <div className="space-y-1">
-            <span className="text-sm text-gray-500">Company Name</span>
-            <p className="text-lg font-medium text-textColor">India Times</p>
+          <div className="flex flex-col">
+            <span className="font-bold">Role</span>
+            <span>{clientData?.role}</span>
           </div>
-          <div className="space-y-1">
-            <span className="text-sm text-gray-500">Designation</span>
-            <p className="text-lg font-medium text-textColor">
-              Backend Developer
-            </p>
+        </CardContent>
+      </Card>
+
+      <Card className="mb-4">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold text-blue-800">
+            Address Information
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
+          <div className="flex flex-col">
+            <span className="font-bold">Address</span>
+            <span>{clientData?.address}</span>
           </div>
-          <div className="space-y-1">
-            <span className="text-sm text-gray-500">Secondary Number</span>
-            <p className="text-lg font-medium text-textColor">+91 9010614734</p>
+          <div className="flex flex-col">
+            <span className="font-bold">Country</span>
+            <span>{clientData?.country}</span>
           </div>
-          <div className="space-y-1">
-            <span className="text-sm text-gray-500">Email Address</span>
-            <p className="text-lg font-medium text-textColor">
-              sundar.p@gmail.com
-            </p>
+          <div className="flex flex-col">
+            <span className="font-bold">State</span>
+            <span>{clientData?.state}</span>
           </div>
-        </div>
-      </CardContent>
-      <div className="flex justify-between gap-[20px] mt-6">
-        <div className="w-1/2 pl-4">
-          <ServicesList />
-        </div>
-        <div className="w-1/2 pr-4">
-          <InvoicesList />
-        </div>
-      </div>
-    </Card>
-    // {/* </div> */}
-    // </div>
+          <div className="flex flex-col">
+            <span className="font-bold">City</span>
+            <span>{clientData?.city}</span>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="mb-4">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold text-blue-800">
+            Contact Information
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
+          <div className="flex flex-col">
+            <span className="font-bold">Phone No</span>
+            <span>{clientData?.phone}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold">Secondary Phone</span>{" "}
+            <span>{clientData?.secondary_phone}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold">Email</span>
+            <span>{clientData?.email}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold">Remarks</span>
+            <span>{clientData?.remarks}</span>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 export default ViewClient;
