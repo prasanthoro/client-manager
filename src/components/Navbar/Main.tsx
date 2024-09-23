@@ -10,8 +10,8 @@ const MainComponent = ({
 }>) => {
   return (
     <div>
-      <NavBarComponent>{children}</NavBarComponent>
-      <SideBar>{children}</SideBar>
+      <NavBarComponent />
+      <SideBar children={children} />
     </div>
   );
 };

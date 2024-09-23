@@ -10,11 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { changeFirstCharToCap } from "@/lib/helpers/core/changeFirstLetterToCap";
 
-const NavBarComponent = ({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) => {
+const NavBarComponent = () => {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -31,42 +27,33 @@ const NavBarComponent = ({
     lastName
   )}`;
 
-  if (pathname === "/") {
-    return children;
-  } else {
-    return (
-      <div>
-        <section className="sticky top-0 z-50 bg-white shadow-sm">
-          <div className="flex items-center justify-between p-2 max-w-7xl mx-auto">
-            <div className="companyLogo">
-              <Image src="/clients.svg" alt="image" height={40} width={140} />
+  return (
+    <div>
+      <section className="sticky top-0 z-50 bg-white shadow-sm">
+        <div className="flex items-center justify-between p-2 max-w-7xl mx-auto">
+          <div className="companyLogo">
+            <Image src="/clients.svg" alt="image" height={40} width={140} />
+          </div>
+          <div className="flex items-center space-x-5">
+            <div className="flex items-center space-x-2">
+              <Image src="/avatar-boy.svg" width={35} height={35} alt="" />
+              <span className="text-sm">
+                {fullName ? changeFirstCharToCap(fullName) : ""}
+              </span>
             </div>
-            <div className="flex items-center space-x-5">
-              <div className="flex items-center space-x-2">
-                <Image src="/avatar-boy.svg" width={35} height={35} alt="" />
-                <span className="text-sm">
-                  {fullName ? changeFirstCharToCap(fullName) : ""}
-                </span>
-              </div>
 
-              <div
-                className="flex items-center space-x-1 border border-blue-800 rounded-lg cursor-pointer p-1 bg-transparent"
-                onClick={logout}
-              >
-                <span className="text-sm">Logout</span>
-                <Image
-                  src="/logout.svg"
-                  height={25}
-                  width={25}
-                  alt={"log-out"}
-                />
-              </div>
+            <div
+              className="flex items-center space-x-1 border border-blue-800 rounded-lg cursor-pointer p-1 bg-transparent"
+              onClick={logout}
+            >
+              <span className="text-sm">Logout</span>
+              <Image src="/logout.svg" height={25} width={25} alt={"log-out"} />
             </div>
           </div>
-        </section>
-        {/* <div>{children}</div> */}
-      </div>
-    );
-  }
+        </div>
+      </section>
+      {/* <div>{children}</div> */}
+    </div>
+  );
 };
 export default NavBarComponent;
