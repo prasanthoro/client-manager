@@ -2,13 +2,14 @@
 
 import { apiPropTypes } from "@/lib/helpers/getQueryParams";
 import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
-import { getAllClientsListAPI } from "@/services/clients/getAllClients";
+
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import TanStackTableComponent from "../core/TanstackTable";
 import { clientColumns } from "./ClientColumns";
 import { ViewButton } from "./ViewButton";
+import { getAllClientsListAPI } from "@/services/clients";
 
 const Clients = () => {
   const params = useSearchParams();
@@ -58,16 +59,21 @@ const Clients = () => {
   }, []);
 
   return (
-    <div>
-      <TanStackTableComponent
-        columns={clientColumns(getAllClients)}
-        getData={getAllClients}
-        data={clientsData}
-        paginationDetails={paginationDetails}
-        loading={loading}
-        removeSortingForColumnIds={[""]}
-      />
-    </div>
+    <>
+      <Button onClick={() => router.push("/clients/addclient")}>
+        Add client
+      </Button>
+      <div>
+        <TanStackTableComponent
+          columns={clientColumns(getAllClients)}
+          getData={getAllClients}
+          data={clientsData}
+          paginationDetails={paginationDetails}
+          loading={loading}
+          removeSortingForColumnIds={[""]}
+        />
+      </div>
+    </>
   );
 };
 export default Clients;
