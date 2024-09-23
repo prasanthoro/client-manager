@@ -8,10 +8,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"; // Assuming the ShadCN dialog is here
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { deleteClientAPI } from "@/services/clients";
 import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 
 export const DeleteButton = ({ getAllClients, clientId }: any) => {
   const [open, setOpen] = useState(false);
@@ -22,10 +23,12 @@ export const DeleteButton = ({ getAllClients, clientId }: any) => {
       setDeleteLoading(true);
       const response = await deleteClientAPI(clientId);
       if (response?.status == 200 || response?.status == 201) {
+        toast.success("Client Deleted Successfully");
         getAllClients();
         handleClose();
       }
     } catch (err: any) {
+      toast.error(err?.message || "Something went wrong");
       console.log(err);
     } finally {
       setDeleteLoading(false);

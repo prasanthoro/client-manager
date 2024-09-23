@@ -1,10 +1,12 @@
 "use client";
 
+import { LoadingComponent } from "@/components/core/LoadingComponent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { addClientAPI, updateClientAPI } from "@/services/clients";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const AddClient = () => {
   const router = useRouter();
@@ -52,7 +54,7 @@ const AddClient = () => {
       });
 
       if (response?.status == 200 || response?.status == 201) {
-        //  toast.success(response?.data?.message);
+        toast.success(response?.data?.message);
         router.back();
       } else if (response?.status == 422) {
         setErrorMessages(response?.data?.errors);
@@ -258,6 +260,7 @@ const AddClient = () => {
           Submit
         </Button>
       </div>
+      <LoadingComponent loading={loading} />
     </div>
   );
 };
