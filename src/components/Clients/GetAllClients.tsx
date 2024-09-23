@@ -79,7 +79,7 @@ const Clients = () => {
           loading={loading}
           removeSortingForColumnIds={[""]}
         />
-        <LoadingComponent loading={loading} label={'Clients'}/>
+        <LoadingComponent loading={loading} label={"Clients"} />
       </div>
     </>
   );
