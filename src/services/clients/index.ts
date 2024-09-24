@@ -10,7 +10,7 @@ export const getAllClientsListAPI = async (params: Partial<apiPropTypes>) => {
 };
 export const deleteClientAPI = async (deleteId: string) => {
   try {
-    return await $fetch.get(`/clients/${deleteId}`);
+    return await $fetch.delete(`/clients/${deleteId}`);
   } catch (err) {
     console.error(err);
   }
