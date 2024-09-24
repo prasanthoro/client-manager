@@ -6,5 +6,8 @@ export type invoicesListPropTypes = {
     SearchName: string;
     sort_by: string;
     sort_type: string;
+    from_date: string;
+    to_date: string;
+    invoice_status: string;
   };
   
