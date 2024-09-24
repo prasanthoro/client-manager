@@ -10,7 +10,7 @@ export const getAllClientsListAPI = async (params: Partial<apiPropTypes>) => {
 };
 export const deleteClientAPI = async (deleteId: string) => {
   try {
-    return await $fetch.get(`/clients/${deleteId}`);
+    return await $fetch.delete(`/clients/${deleteId}`);
   } catch (err) {
     console.error(err);
   }
@@ -32,6 +32,20 @@ export const addClientAPI = async (payload: any) => {
 export const updateClientAPI = async (clientId: any) => {
   try {
     return await $fetch.patch(`/clients`, clientId);
+  } catch (err) {
+    console.error(err);
+  }
+};
+export const clientWiseServicesAPI = async (client_Id: any) => {
+  try {
+    return await $fetch.get(`/clients/${client_Id}/services`);
+  } catch (err) {
+    console.error(err);
+  }
+};
+export const clientWiseInvoicesAPI = async (client_Id: any) => {
+  try {
+    return await $fetch.get(`/clients/${client_Id}/invoices`);
   } catch (err) {
     console.error(err);
   }

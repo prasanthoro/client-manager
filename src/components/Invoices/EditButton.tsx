@@ -1,33 +1,32 @@
+"use client";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { LoadingComponent } from "../core/LoadingComponent";
-
-export const ViewButton = ({ row }: any) => {
+// import LoadingComponent from "@/components/core/LoadingComponent";
+export const EditButton = ({ insurance_id }: any) => {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const params = useSearchParams();
   const pathname = usePathname();
   const lab_id = params?.get("lab_id" as string);
-  const onViewClick = () => {
-    router.push(`/clients/${row?.id}/view`);
+  const router = useRouter();
+  const onEditClick = () => {
+   
   };
 
   return (
     <div className="eachAction">
       <Image
-        title="View"
+        title="Edit"
         onClick={() => {
           setLoading(true);
-          onViewClick();
+          onEditClick();
         }}
-        src={"/view.svg"}
-        height={40}
-        width={40}
+        src={"/edit.svg"}
+        height={30}
+        width={30}
         alt="Image"
-      />
-
-      <LoadingComponent loading={loading} />
+      ></Image>
+      {/* <LoadingComponent loading={loading} /> */}
     </div>
   );
 };

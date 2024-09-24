@@ -6,4 +6,6 @@ export type apiPropTypes = {
   SearchName: string;
   sort_by: string;
   sort_type: string;
+  from_date: any;
+  to_date: any;
 };

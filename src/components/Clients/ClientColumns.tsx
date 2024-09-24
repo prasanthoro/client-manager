@@ -6,6 +6,7 @@ import { ViewButton } from "./ViewButton";
 export const clientColumns = (getAllClients: any) => {
   return [
     {
+<<<<<<< HEAD
       accessorFn: (row: any) => row,
       header: () => (
         <span style={{ whiteSpace: "nowrap" }}>Client Details</span>
@@ -51,6 +52,16 @@ export const clientColumns = (getAllClients: any) => {
           width: "220px",
         },
       ],
+=======
+      accessorFn: (row: any) => row?.client_name,
+      id: "client_name",
+      header: () => <span>Name</span>,
+      cell: (info: any) => {
+        return <span className="eachCell">{info.getValue()}</span>;
+      },
+      footer: (props: any) => props.columns.id,
+      width: "100px",
+>>>>>>> 527134b4a2de046832e9431801399102f75091a4
     },
 
     {
@@ -149,10 +160,10 @@ export const clientColumns = (getAllClients: any) => {
                 <EditButton />
               </li>
               <li className="eachList">
-                {/* <DeleteButton
+                <DeleteButton
                   getAllClients={getAllClients}
                   clientId={info.row.original.id}
-                /> */}
+                />
               </li>
             </ul>
           </div>

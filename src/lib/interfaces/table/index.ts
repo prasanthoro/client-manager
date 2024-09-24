@@ -11,8 +11,8 @@ export interface tanstackTablePropTypes {
     page: string | number;
     limit: string | number;
     pageSize: string | number;
-    order_by?: string;
-    order_type?: string;
+    sort_by?: string;
+    sort_type?: string;
   }>) => void;
   removeSortingForColumnIds?: string[];
 }
@@ -35,15 +35,15 @@ export interface allTasksDataPageProps {
   getData: ({
     page,
     limit,
-    order_by,
-    order_type,
+    sort_by,
+    sort_type,
     hospital,
   }: Partial<{
     page: string | number;
     limit: string | number;
     pageSize: string | number;
-    order_by: string;
-    order_type: string;
+    sort_by: string;
+    sort_type: string;
     hospital: string;
   }>) => void;
   searchParams?: any;

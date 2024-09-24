@@ -1,11 +1,12 @@
 import { formatAmount } from "@/lib/helpers/core/formatAmount";
+import { EditButton } from "./EditButton";
 
 export const invoicesColumns = () => {
   return [
     {
-      accessorFn: (row: any) => row?.title,
-      id: "title",
-      header: () => <span>Title</span>,
+      accessorFn: (row: any) => row?.client_name,
+      id: "client_name",
+      header: () => <span>Client Name</span>,
       cell: (info: any) => {
         return <span className="eachCell">{info.getValue()}</span>;
       },
@@ -15,7 +16,7 @@ export const invoicesColumns = () => {
     {
       accessorFn: (row: any) => row?.type,
       id: "type",
-      header: () => <span>Type</span>,
+      header: () => <span>Service Type</span>,
       cell: (info: any) => {
         return <span className="eachCell">{info.getValue()}</span>;
       },
@@ -33,8 +34,8 @@ export const invoicesColumns = () => {
       width: "100px",
     },
     {
-      accessorFn: (row: any) => row?.status,
-      id: "status",
+      accessorFn: (row: any) => row?.invoice_status,
+      id: "invoice_status",
       header: () => <span>Status</span>,
       cell: (info: any) => {
         return <span className="eachCell">{info.getValue()}</span>;
@@ -48,7 +49,22 @@ export const invoicesColumns = () => {
       header: () => <span>Actions</span>,
       footer: (props: any) => props.columns.id,
       cell: (info: any) => {
-        return <div className="actionIcons"></div>;
+        return <div className="actionIcons">
+        <ul
+          className="actionList"
+          style={{ display: "flex", listStyle: "none", padding: 0 }}
+        >
+          <li className="eachList" style={{ marginRight: "10px",cursor:'pointer' }}>
+            <EditButton />
+          </li>
+          <li className="eachList">
+            {/* <DeleteButton
+              getAllClients={getAllClients}
+              clientId={info.row.original.id}
+            /> */}
+          </li>
+        </ul>
+      </div>
       },
     },
   ];
