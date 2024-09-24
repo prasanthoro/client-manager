@@ -4,8 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import ServicesList from "../Services";
-import InvoicesList from "../Invoices";
 import {
   clientWiseInvoicesAPI,
   clientWiseServicesAPI,

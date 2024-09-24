@@ -15,6 +15,7 @@ import { Input } from "../ui/input";
 import { on } from "stream";
 import dayjs from "dayjs";
 import Image from "next/image";
+import ClientFilters from "./ClientFilters";
 
 const Clients = () => {
   const params = useSearchParams();
@@ -88,34 +89,20 @@ const Clients = () => {
     }
     return [];
   };
-  const onSerachChange = async (event: any) => {
-    const client = event?.target.value;
-    setSearchString(client);
-    await getAllClients({ search_string: client });
-  };
-  const handleDateChange = async (value: any) => {
-    if (value) {
-      await setDateInformation(value);
-      let date1 = dayjs(value[0])?.format("YYYY-MM-DD");
-      let date2 = dayjs(value[1])?.format("YYYY-MM-DD");
-      await getAllClients({
-        from_date: date1,
-        to_date: date2,
-      });
-    } else {
-      setDateInformation([]);
-      await getAllClients({
-        from_date: "",
-        to_date: "",
-      });
-    }
-  };
+
   useEffect(() => {
     getAllClients({});
   }, []);
 
   return (
     <>
+      <ClientFilters
+        getAllClients={getAllClients}
+        searchString={searchString}
+        setSearchString={setSearchString}
+        dateinfo={dateInformation}
+        setDateInformation={setDateInformation}
+      />
       <div className="flex">
         <Button
           className="ml-auto bg-blue-500 hover:bg-blue-600 text-white"
@@ -124,7 +111,7 @@ const Clients = () => {
           Add client
         </Button>
       </div>
-      <div className="relative w-medium max-w-sm">
+      {/* <div className="relative w-medium max-w-sm">
         {" "}
         <Input
           type="search"
@@ -136,7 +123,7 @@ const Clients = () => {
         <span className="absolute inset-y-0 right-0 flex items-center pr-3">
           <Image src="/search.svg" height={20} width={20} alt="search" />
         </span>
-      </div>
+      </div> */}
 
       <div>
         <TanStackTableComponent
