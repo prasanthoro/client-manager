@@ -8,6 +8,7 @@ import { invoicesColumns } from "./InvoicesColumns";
 import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
 import { getAllInvoicesListAPI } from "@/services/invoices";
 import { LoadingComponent } from "../core/LoadingComponent";
+import InvoicesFilters from "./InvoicesFilters";
 
 const InvoicesList = () => {
   const params = useSearchParams();
@@ -16,6 +17,12 @@ const InvoicesList = () => {
 
   const [invoicesData, setInvoicesData] = useState([]);
   const [paginationDetails, setPaginationDetails] = useState({});
+  const [searchString, setSearchString] = useState(
+    params.get("search_string") ? params.get("search_string") : ''
+  );
+  const [selectStatus, setSelectStatus] = useState(
+    params.get("invoice_status") ? params.get("invoice_status") : 'ALL'
+  );
   const [loading, setLoading] = useState(true);
 
   const getAllIvoices = async ({
@@ -23,6 +30,10 @@ const InvoicesList = () => {
     limit = (params.get("limit") as string) || 25,
     sort_by = params.get("sort_by") as string,
     sort_type = params.get("sort_type") as string,
+    from_date = params.get("from_date") as string,
+    to_date = params.get("to_date") as string,
+    search_string = params.get("search_string") as string,
+    invoice_status = params.get("invoice_status") as string
   }: Partial<invoicesListPropTypes>) => {
     try {
       let queryParams: any = {
@@ -30,6 +41,10 @@ const InvoicesList = () => {
         limit: limit ? limit : 25,
         sort_by: sort_by,
         sort_type: sort_type,
+        from_date: from_date,
+        to_date: to_date,
+        search_string: search_string,
+        status: invoice_status,
       };
 
       setLoading(true);
@@ -48,11 +63,18 @@ const InvoicesList = () => {
   };
 
   useEffect(() => {
-    getAllIvoices({});
+      getAllIvoices({});
   }, []);
 
   return (
     <div>
+      <InvoicesFilters
+        getAllIvoices={getAllIvoices}
+        searchString={searchString}
+        setSearchString={setSearchString}
+        selectStatus={selectStatus}
+        setSelectStatus={setSelectStatus}
+      />
       <TanStackTableComponent
         columns={invoicesColumns()}
         getData={getAllIvoices}
