@@ -6,8 +6,8 @@ import { ViewButton } from "./ViewButton";
 export const clientColumns = (getAllClients: Function) => {
   return [
     {
-      accessorFn: (row: any) => row?.name,
-      id: "name",
+      accessorFn: (row: any) => row?.client_name,
+      id: "client_name",
       header: () => <span>Name</span>,
       cell: (info: any) => {
         return <span className="eachCell">{info.getValue()}</span>;
