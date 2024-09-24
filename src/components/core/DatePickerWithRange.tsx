@@ -34,13 +34,14 @@ const DatePickerWithRange = ({ onDataChange }: any) => {
       <div className="flex items-center gap-2">
         <DateRangePicker
           block
-          placeholder="Select Form Date and To Date"
+          placeholder="Select From Date and To Date"
           editable={false}
           value={date}
           onChange={handleSelect}
           format="yyyy-MM-dd"
           style={{ width: "300px" }}
           disabledDate={disableFutureDates}
+          cleanable={date && date[0] && date[1] ? true : false}
         />
       </div>
     </div>
