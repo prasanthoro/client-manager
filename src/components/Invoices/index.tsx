@@ -8,6 +8,7 @@ import { invoicesColumns } from "./InvoicesColumns";
 import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
 import { getAllInvoicesListAPI } from "@/services/invoices";
 import { LoadingComponent } from "../core/LoadingComponent";
+import InvoicesFilters from "./InvoicesFilters";
 
 const InvoicesList = () => {
   const params = useSearchParams();
@@ -23,6 +24,8 @@ const InvoicesList = () => {
     limit = (params.get("limit") as string) || 25,
     sort_by = params.get("sort_by") as string,
     sort_type = params.get("sort_type") as string,
+    from_date = params.get("from_date") as string,
+    to_date = params.get("to_date") as string
   }: Partial<invoicesListPropTypes>) => {
     try {
       let queryParams: any = {
@@ -30,6 +33,8 @@ const InvoicesList = () => {
         limit: limit ? limit : 25,
         sort_by: sort_by,
         sort_type: sort_type,
+        from_date: from_date,
+        to_date: to_date,
       };
 
       setLoading(true);
@@ -53,6 +58,7 @@ const InvoicesList = () => {
 
   return (
     <div>
+      <InvoicesFilters getAllIvoices={getAllIvoices}/>
       <TanStackTableComponent
         columns={invoicesColumns()}
         getData={getAllIvoices}
