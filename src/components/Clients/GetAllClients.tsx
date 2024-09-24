@@ -33,22 +33,22 @@ const Clients = () => {
     from_date = params.get("from_date") as any,
     to_date = params.get("to_date") as any,
 
-    order_by = params.get("order_by") as string,
-    order_type = params.get("order_type") as string,
+    sort_by = params.get("sort_by") as string,
+    sort_type = params.get("sort_type") as string,
   }: Partial<apiPropTypes>) => {
     try {
       let queryParams: any = {
         page: page ? page : 1,
         limit: limit ? limit : 25,
-        order_by: order_by,
-        order_type: order_type,
+        sort_by: sort_by,
+        sort_type: sort_type,
       };
 
-      if (order_by) {
-        queryParams["order_by"] = order_by;
+      if (sort_by) {
+        queryParams["sort_by"] = sort_by;
       }
-      if (order_type) {
-        queryParams["order_type"] = order_type;
+      if (sort_type) {
+        queryParams["sort_type"] = sort_type;
       }
       if (search_string) {
         queryParams["search_string"] = search_string;

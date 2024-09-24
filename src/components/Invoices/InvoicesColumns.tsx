@@ -14,8 +14,8 @@ export const invoicesColumns = () => {
       width: "100px",
     },
     {
-      accessorFn: (row: any) => row?.service_name,
-      id: "service_name",
+      accessorFn: (row: any) => row?.type,
+      id: "type",
       header: () => <span>Service Type</span>,
       cell: (info: any) => {
         return <span className="eachCell">{info.getValue()}</span>;

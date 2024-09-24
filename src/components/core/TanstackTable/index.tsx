@@ -99,20 +99,20 @@ const TanStackTableComponent: FunctionComponent<tanstackTablePropTypes> = ({
       return;
     }
 
-    let orderBy = header.id;
-    let orderType = "asc";
-    if (params.get("order_by") === header.id) {
-      if (params.get("order_type") === "asc") {
-        orderType = "desc";
+    let sortBy = header.id;
+    let sortType = "asc";
+    if (params.get("sort_by") === header.id) {
+      if (params.get("sort_type") === "asc") {
+        sortType = "desc";
       } else {
-        orderBy = "";
-        orderType = "";
+        sortBy = "";
+        sortType = "";
       }
     }
     getData({
       ...searchParams,
-      order_by: orderBy,
-      order_type: orderType,
+      sort_by: sortBy,
+      sort_type: sortType,
     });
   };
   return (
@@ -276,8 +276,8 @@ const SortItems = ({
   const params = useSearchParams();
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      {params.get("order_by") === header.id ? (
-        params.get("order_type") === "asc" ? (
+      {params.get("sort_by") === header.id ? (
+        params.get("sort_type") === "asc" ? (
           <Image src="/sort-asc.svg" height={10} width={10} alt="image" />
         ) : (
           <Image src="/sort-desc.svg" height={10} width={10} alt="image" />
