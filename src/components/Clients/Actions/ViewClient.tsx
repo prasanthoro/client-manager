@@ -6,11 +6,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ServicesList from "../Services";
 import InvoicesList from "../Invoices";
-import { viewClientAPI } from "@/services/clients";
+import { clientWiseInvoicesAPI, clientWiseServicesAPI, viewClientAPI } from "@/services/clients";
+import { LoadingComponent } from "@/components/core/LoadingComponent";
 
 const ViewClient = () => {
   const { client_Id } = useParams();
   const [clientData, setClientData] = useState<any>();
+  const [clientServices, setClientServices] = useState<any[]>([]);
+  const [clientInvoices, setClientInvoices] = useState<any[]>([]);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -29,12 +32,44 @@ const ViewClient = () => {
     }
   };
 
+  const getClientWiseSerivces = async () => {
+    try {
+      setLoading(true);
+      const response = await clientWiseServicesAPI(client_Id);
+      if (response?.status == 200 || response?.status == 201) {
+        let { data } = response?.data;
+        setClientServices(data);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getClientWiseInvoices = async () => {
+    try {
+      setLoading(true);
+      const response = await clientWiseInvoicesAPI(client_Id);
+      if (response?.status == 200 || response?.status == 201) {
+        let { data } = response?.data;
+        setClientInvoices(data);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleBackClick = () => {
     router.back();
   };
 
   useEffect(() => {
     getSingleClientView();
+    // getClientWiseSerivces();
+    // getClientWiseInvoices();
   }, []);
 
   return (
@@ -136,14 +171,15 @@ const ViewClient = () => {
           </div>
         </CardContent>
       </Card>
-      <div className="flex justify-between gap-[20px] mt-6">
+      {/* <div className="flex justify-between gap-[20px] mt-6">
         <div className="w-1/2 pl-4">
-          <ServicesList />
+          <ServicesList clientServices={clientServices}/>
         </div>
         <div className="w-1/2 pr-4">
-          <InvoicesList />
+          <InvoicesList clientInvoices={clientInvoices}/>
         </div>
-      </div>
+      </div> */}
+      <LoadingComponent loading={loading} label={""} />
     </div>
   );
 };

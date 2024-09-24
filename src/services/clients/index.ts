@@ -36,3 +36,17 @@ export const updateClientAPI = async (clientId: any) => {
     console.error(err);
   }
 };
+export const clientWiseServicesAPI = async (client_Id: any) => {
+  try {
+    return await $fetch.get(`/clients/${client_Id}/services`);
+  } catch (err) {
+    console.error(err);
+  }
+};
+export const clientWiseInvoicesAPI = async (client_Id: any) => {
+  try {
+    return await $fetch.get(`/clients/${client_Id}/invoices`);
+  } catch (err) {
+    console.error(err);
+  }
+};
