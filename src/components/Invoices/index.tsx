@@ -7,6 +7,7 @@ import TanStackTableComponent from "../core/TanstackTable";
 import { invoicesColumns } from "./InvoicesColumns";
 import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
 import { getAllInvoicesListAPI } from "@/services/invoices";
+import { LoadingComponent } from "../core/LoadingComponent";
 
 const InvoicesList = () => {
   const params = useSearchParams();
@@ -60,6 +61,7 @@ const InvoicesList = () => {
         loading={loading}
         removeSortingForColumnIds={["actions"]}
       />
+      <LoadingComponent loading={loading} label={"Invoices"} />
     </div>
   );
 };

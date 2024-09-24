@@ -1,4 +1,4 @@
-import { Home, Users } from "lucide-react";
+import { Home, IndianRupee, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -33,6 +33,15 @@ const SideBar = ({
               >
                 <Users className="h-4 w-4" />
                 Clients
+              </Link>
+              <Link
+                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
+                  pathname.includes("invoices") ? "font-bold" : ""
+                }`}
+                href="/invoices"
+              >
+                <IndianRupee className="h-4 w-4" />
+                Invoices
               </Link>
             </nav>
           </div>
