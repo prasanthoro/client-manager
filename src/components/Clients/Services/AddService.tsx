@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label"
 
 const AddService = ({ open, onClickClose }: { open: boolean, onClickClose: () => void }) => {
   return (
-    <Dialog open={open} onOpenChange={onClickClose} className="bg-white">
+    <Dialog open={open} onOpenChange={onClickClose}>
       <DialogContent className="bg-white">
         <DialogHeader>
           <DialogTitle>Add Service</DialogTitle>
