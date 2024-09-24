@@ -6,14 +6,16 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ServicesList from "../Services";
 import InvoicesList from "../Invoices";
-import { clientWiseInvoicesAPI, clientWiseServicesAPI, viewClientAPI } from "@/services/clients";
+import {
+  clientWiseInvoicesAPI,
+  clientWiseServicesAPI,
+  viewClientAPI,
+} from "@/services/clients";
 import { LoadingComponent } from "@/components/core/LoadingComponent";
 
 const ViewClient = () => {
   const { client_Id } = useParams();
   const [clientData, setClientData] = useState<any>();
-  const [clientServices, setClientServices] = useState<any[]>([]);
-  const [clientInvoices, setClientInvoices] = useState<any[]>([]);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -32,44 +34,12 @@ const ViewClient = () => {
     }
   };
 
-  const getClientWiseSerivces = async () => {
-    try {
-      setLoading(true);
-      const response = await clientWiseServicesAPI(client_Id);
-      if (response?.status == 200 || response?.status == 201) {
-        let { data } = response?.data;
-        setClientServices(data);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getClientWiseInvoices = async () => {
-    try {
-      setLoading(true);
-      const response = await clientWiseInvoicesAPI(client_Id);
-      if (response?.status == 200 || response?.status == 201) {
-        let { data } = response?.data;
-        setClientInvoices(data);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleBackClick = () => {
     router.back();
   };
 
   useEffect(() => {
     getSingleClientView();
-    // getClientWiseSerivces();
-    // getClientWiseInvoices();
   }, []);
 
   return (
@@ -83,87 +53,82 @@ const ViewClient = () => {
             <span className="material-icons">Back</span>
           </Button>
           <h1 className="text-3xl font-bold text-red-600 ml-2">
-            Client Details
+            Client Information
           </h1>
         </div>
-        <Button className="bg-purple-500 hover:bg-purple-600 text-white">
-          Edit
-        </Button>
+
+        <span className="bg-purple-500 hover:bg-purple-600 text-white">
+          Total Invoice Amount : ₹{clientData?.total_invoice_amount}
+        </span>
       </div>
 
       {/* Client Information */}
       <Card className="mb-4">
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-blue-800">
-            Client Information
+            Client Details
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
-          <div className="grid grid-cols-3 gap-4 text-gray-600">
+        <CardContent className="grid grid-cols-4 gap-4 text-gray-600">
+          <div className="grid grid-cols-4 gap-4 text-gray-600">
             <div className="flex flex-col">
-              <span className="font-bold">Client Name </span>
-              <span>{clientData?.name}</span>
+              <span className="font-bold">Company Name </span>
+              <span>{clientData?.company_name}</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-bold">Poc</span>
+              <span className="font-bold">Name </span>
+              <span>{clientData?.client_name}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold"> Email </span>
+              <span>{clientData?.client_email}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">Phone </span>
+              <span>{clientData?.client_phone}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">Address</span>
+              <span>
+                {clientData?.address}, {clientData?.city}, {clientData?.state},{" "}
+                {clientData?.country}
+              </span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="mb-4">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold text-blue-800">
+            Poc Details
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-4 gap-4 text-gray-600">
+          <div className="grid grid-cols-4 gap-4 text-gray-600">
+            <div className="flex flex-col">
+              <span className="font-bold">Name </span>
               <span>{clientData?.poc}</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-bold">Role</span>
-              <span>{clientData?.role}</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="mb-4">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-blue-800">
-            Address Information
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
-          <div className="grid grid-cols-3 gap-4 text-gray-600">
-            <div className="flex flex-col">
-              <span className="font-bold">Address</span>
-              <span>{clientData?.address}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">Country</span>
-              <span>{clientData?.country}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">State</span>
-              <span>{clientData?.state}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">City</span>
-              <span>{clientData?.city}</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="mb-4">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-blue-800">
-            Contact Information
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
-          <div className="grid grid-cols-3 gap-4 text-gray-600">
-            <div className="flex flex-col">
-              <span className="font-bold">Phone No</span>
-              <span>{clientData?.phone}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">Secondary Phone</span>{" "}
-              <span>{clientData?.secondary_phone}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">Email</span>
+              <span className="font-bold"> Email </span>
               <span>{clientData?.email}</span>
             </div>
+            <div className="flex flex-col">
+              <span className="font-bold">Phone </span>
+              <span>{clientData?.phone}</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="mb-4">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold text-blue-800">
+            Other Information
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
+          <div className="grid grid-cols-3 gap-4 text-gray-600">
             <div className="flex flex-col">
               <span className="font-bold">Remarks</span>
               <span>{clientData?.remarks}</span>
@@ -171,14 +136,7 @@ const ViewClient = () => {
           </div>
         </CardContent>
       </Card>
-      {/* <div className="flex justify-between gap-[20px] mt-6">
-        <div className="w-1/2 pl-4">
-          <ServicesList clientServices={clientServices}/>
-        </div>
-        <div className="w-1/2 pr-4">
-          <InvoicesList clientInvoices={clientInvoices}/>
-        </div>
-      </div> */}
+
       <LoadingComponent loading={loading} label={""} />
     </div>
   );
