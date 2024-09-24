@@ -104,12 +104,12 @@ const AddClient = () => {
             </label>
             <Input
               placeholder="Enter Client Name"
-              value={clientData["name"]}
-              name="name"
+              value={clientData.client_name}
+              name="client_name"
               onChange={handleInputChange}
             />
-            {errorMessages?.name && (
-              <p style={{ color: "red" }}>{errorMessages.name[0]}</p>
+            {errorMessages?.client_name && (
+              <p style={{ color: "red" }}>{errorMessages.client_name[0]}</p>
             )}
           </div>
 
