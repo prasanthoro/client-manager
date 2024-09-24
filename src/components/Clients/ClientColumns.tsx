@@ -6,7 +6,15 @@ import { ViewButton } from "./ViewButton";
 export const clientColumns = (getAllClients: any) => {
   return [
     {
-<<<<<<< HEAD
+      accessorFn: (row: any) => row.serial,
+      id: "serial",
+      header: () => <span>S.No</span>,
+      footer: (props: any) => props.column.id,
+      width: "60px",
+      maxWidth: "60px",
+      minWidth: "60px",
+    },
+    {
       accessorFn: (row: any) => row,
       header: () => (
         <span style={{ whiteSpace: "nowrap" }}>Client Details</span>
@@ -16,23 +24,26 @@ export const clientColumns = (getAllClients: any) => {
 
       columns: [
         {
-          accessorFn: (row: any) => row?.client_name,
-          header: () => <span>Name</span>,
-          id: "client_name",
-          cell: (info: any) => {
-            return <span className="eachCell">{info.getValue()}</span>;
-          },
-          width: "220px",
-        },
-        {
           accessorFn: (row: any) => row?.company_name,
           header: () => <span>Company Name</span>,
           id: "company_name",
           cell: (info: any) => {
             return <span className="eachCell">{info.getValue()}</span>;
           },
-          width: "220px",
+          width: "150px",
+          maxWidth: "150px",
+          minWidth: "150px",
         },
+        {
+          accessorFn: (row: any) => row?.client_name,
+          header: () => <span> Client Name</span>,
+          id: "client_name",
+          cell: (info: any) => {
+            return <span className="eachCell">{info.getValue()}</span>;
+          },
+          width: "100px",
+        },
+
         {
           accessorFn: (row: any) => row.client_email,
           header: () => <span>Email</span>,
@@ -40,7 +51,7 @@ export const clientColumns = (getAllClients: any) => {
           cell: (info: any) => {
             return <span className="eachCell">{info.getValue()}</span>;
           },
-          width: "220px",
+          width: "100px",
         },
         {
           accessorFn: (row: any) => row.client_phone,
@@ -49,31 +60,20 @@ export const clientColumns = (getAllClients: any) => {
           cell: (info: any) => {
             return <span className="eachCell">{info.getValue()}</span>;
           },
-          width: "220px",
+          width: "100px",
+        },
+        {
+          accessorFn: (row: any) =>
+            `${row?.address}, ${row?.city}, ${row?.state}, ${row?.country}`,
+          id: "address",
+          header: () => <span>Address</span>,
+          cell: (info: any) => {
+            return <span className="eachCell">{info.getValue()}</span>;
+          },
+          footer: (props: any) => props.columns.id,
+          width: "100px",
         },
       ],
-=======
-      accessorFn: (row: any) => row?.client_name,
-      id: "client_name",
-      header: () => <span>Name</span>,
-      cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
-      },
-      footer: (props: any) => props.columns.id,
-      width: "100px",
->>>>>>> 527134b4a2de046832e9431801399102f75091a4
-    },
-
-    {
-      accessorFn: (row: any) =>
-        `${row?.address}, ${row?.city}, ${row?.state}, ${row?.country}`,
-      id: "address",
-      header: () => <span>Address</span>,
-      cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
-      },
-      footer: (props: any) => props.columns.id,
-      width: "300px",
     },
 
     {
@@ -90,7 +90,7 @@ export const clientColumns = (getAllClients: any) => {
           cell: (info: any) => {
             return <span className="eachCell">{info.getValue()}</span>;
           },
-          width: "220px",
+          width: "100px",
         },
         {
           accessorFn: (row: any) => row.email,
@@ -99,7 +99,7 @@ export const clientColumns = (getAllClients: any) => {
           cell: (info: any) => {
             return <span className="eachCell">{info.getValue()}</span>;
           },
-          width: "220px",
+          width: "100px",
         },
         {
           accessorFn: (row: any) => row.phone,
@@ -108,16 +108,7 @@ export const clientColumns = (getAllClients: any) => {
           cell: (info: any) => {
             return <span className="eachCell">{info.getValue()}</span>;
           },
-          width: "220px",
-        },
-        {
-          accessorFn: (row: any) => row.secondary_phone,
-          header: () => <span>Secondary Phone</span>,
-          id: "secondary_phone",
-          cell: (info: any) => {
-            return <span className="eachCell">{info.getValue()}</span>;
-          },
-          width: "220px",
+          width: "100px",
         },
       ],
     },
@@ -156,7 +147,10 @@ export const clientColumns = (getAllClients: any) => {
               <li className="eachList" style={{ marginRight: "1px" }}>
                 <ViewButton row={info?.row?.original} />
               </li>
-              <li className="eachList" style={{ marginRight: "10px" }}>
+              <li
+                className="eachList"
+                style={{ marginRight: "10px", cursor: "pointer" }}
+              >
                 <EditButton />
               </li>
               <li className="eachList">

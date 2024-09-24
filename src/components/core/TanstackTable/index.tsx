@@ -155,8 +155,8 @@ const TanStackTableComponent: FunctionComponent<tanstackTablePropTypes> = ({
                             className="cell"
                             style={{
                               display: "flex",
+                              justifyContent: "center",
                               gap: "4px",
-                              color: "grey",
                               cursor: "pointer",
                               alignItems: "center",
                             }}

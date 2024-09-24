@@ -4,7 +4,6 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -94,202 +93,208 @@ body {
   }
 }
 
- html {
-    font-size: 16px;
-    height: 100%;
-    font-family: "Poppins", sans-serif;
-    scroll-behavior: smooth;
-  }
+html {
+  font-size: 16px;
+  height: 100%;
+  font-family: "Poppins", sans-serif;
+  scroll-behavior: smooth;
+}
 
-  body {
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
-    font-family: "Poppins", sans-serif;
-    margin: 0;
-    background: #eef2f5 !important;
-    height: 100%;
-  }
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  background: #eef2f5 !important;
+  height: 100%;
+}
 
-  a {
-    text-decoration: none;
-  }
+a {
+  text-decoration: none;
+}
 
-  a:visited, a:focus, a:active, a:hover {
-    text-decoration: none;
-    outline: none;
-  }
+a:visited,
+a:focus,
+a:active,
+a:hover {
+  text-decoration: none;
+  outline: none;
+}
 
-  button {
-    font-family: "Poppins", sans-serif;
-  }
+button {
+  font-family: "Poppins", sans-serif;
+}
 
-  button:hover {
-    cursor: pointer;
-  }
+button:hover {
+  cursor: pointer;
+}
 
-  button:focus {
-    outline: none;
-  }
+button:focus {
+  outline: none;
+}
 
-  ul {
-    margin: 0;
-    padding: 0;
-  }
+ul {
+  margin: 0;
+  padding: 0;
+}
 
-  ul li {
-    list-style: none;
-  }
+ul li {
+  list-style: none;
+}
 
-  .d-none {
-    display: none !important;
-  }
+.d-none {
+  display: none !important;
+}
 
-  * {
-    font-family: "Poppins", sans-serif !important;
-  }
+* {
+  font-family: "Poppins", sans-serif !important;
+}
 
-  *::-webkit-scrollbar {
-    width: 10px;
-    height: 7px;
-    border-radius: 20px;
-  }
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 7px;
+  border-radius: 20px;
+}
 
-  *::-webkit-scrollbar-track {
-    background: transparent;
-  }
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
 
-  *::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 20px;
-  }
+*::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 20px;
+}
 
-  *::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
+*::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
-  ul {
-    list-style: none;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
+ul {
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+}
 
-  input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 1000px #fff inset;
-  }
-  li {
-    list-style: none;
-  }
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset;
+}
+li {
+  list-style: none;
+}
 
-  .active-link {
-    color: #cf546b;
-    font-size: 14px;
-  }
+.active-link {
+  color: #cf546b;
+  font-size: 14px;
+}
 
-  .inactive-link {
-    color: #404040;
-    font-size: 14px;
-  }
+.inactive-link {
+  color: #404040;
+  font-size: 14px;
+}
 
-  .MuiMenuItem-root.Mui-disabled {
-    opacity: 1 !important;
-  }
+.MuiMenuItem-root.Mui-disabled {
+  opacity: 1 !important;
+}
 
-  .defaultTextField {
-    height: 34px;
-    background: #fff;
-    border-radius: 10px;
-  }
+.defaultTextField {
+  height: 34px;
+  background: #fff;
+  border-radius: 10px;
+}
 
-  .defaultTextField .MuiInputBase-root {
-    background: #fff;
-    color: #000;
-    font-weight: 400;
-    font-size: 13.5px;
-    box-sizing: border-box;
-    border-radius: 3.56227px;
-    height: 34px;
-    border: 1px solid #dcdfe6;
-  }
+.defaultTextField .MuiInputBase-root {
+  background: #fff;
+  color: #000;
+  font-weight: 400;
+  font-size: 13.5px;
+  box-sizing: border-box;
+  border-radius: 3.56227px;
+  height: 34px;
+  border: 1px solid #dcdfe6;
+}
 
-  .defaultTextField .MuiInputBase-root .MuiAutocomplete-tag {
-    height: 20px;
-    margin: auto 0;
-    background-color: #f0f2f5;
-    color: #909399;
-    font-weight: 400;
-  }
+.defaultTextField .MuiInputBase-root .MuiAutocomplete-tag {
+  height: 20px;
+  margin: auto 0;
+  background-color: #f0f2f5;
+  color: #909399;
+  font-weight: 400;
+}
 
-  .defaultTextField .MuiInputBase-root fieldset {
-    border: 0 !important;
-  }
+.defaultTextField .MuiInputBase-root fieldset {
+  border: 0 !important;
+}
 
-  .defaultTextField input {
-    display: inline-flex;
-    flex-grow: 1;
-    align-items: center;
-    justify-content: center;
-    padding: 1px 10px;
-    background-image: none;
-    cursor: text;
-    transform: translate3d(0, 0, 0);
-  }
+.defaultTextField input {
+  display: inline-flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 10px;
+  background-image: none;
+  cursor: text;
+  transform: translate3d(0, 0, 0);
+}
 
-  .defaultTextField input::placeholder {
-    font-size: 13px;
-    font-weight: normal;
-    color: #949494;
-    opacity: 0.5;
-  }
+.defaultTextField input::placeholder {
+  font-size: 13px;
+  font-weight: normal;
+  color: #949494;
+  opacity: 0.5;
+}
 
-  .defaultTextField.withIcon .MuiInputBase-root {
-    padding: 0;
-  }
+.defaultTextField.withIcon .MuiInputBase-root {
+  padding: 0;
+}
 
-  .defaultTable {
-    background: #fff;
-    overflow: auto;
-  }
+.defaultTable {
+  background: #fff;
+  overflow: auto;
+}
 
-  .defaultTable .overflow-auto {
-    height: calc(100vh - 200px);
-  }
-     .defaultTable thead  {
-      position: sticky;
-      top: 0;
-      background-color: #09affc71;
-      z-index: 1;
-     }
- .defaultTable thead th {
-   border-right: 1px solid lightgray;
-   color: #000;
-   font-weight: 600;
- }
-  .defaultTable tbody td {
-    padding: 0.5rem 1rem;
-    border-right: 1px solid lightgray;
-  }
-  /* pagination// */
-    .listingPagination {
-      padding: 0.625rem 0.625rem 0.625rem 0.9375rem !important;
-      box-shadow: none !important;
-      border: none !important;
-      max-width: 100% !important;
-      border-radius: 0 0 10px 10px !important;
-      font-size: 13px !important;
-      font-family: "Poppins", sans-serif !important;
-    }
-  
-    .listingPagination .tablePagination {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 1.5rem;
-      color: #000 !important;
-      border-radius: 0 !important;
-      width: 100% !important;
-      box-shadow: none;
-    }
-  
-   
+.defaultTable .overflow-auto {
+  height: calc(100vh - 200px);
+}
+.defaultTable thead {
+  position: sticky;
+  top: 0;
+  background-color: #ade0f8;
+  z-index: 1;
+}
+.defaultTable thead tr:hover {
+  background-color: #ade0f8;
+}
+.defaultTable thead th {
+  border-right: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+  color: #000;
+  font-weight: 500;
+}
+.defaultTable tbody td {
+  padding: 0.5rem 1rem;
+  border-right: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+/* pagination// */
+.listingPagination {
+  padding: 0.625rem 0.625rem 0.625rem 0.9375rem !important;
+  box-shadow: none !important;
+  border: none !important;
+  max-width: 100% !important;
+  border-radius: 0 0 10px 10px !important;
+  font-size: 13px !important;
+  font-family: "Poppins", sans-serif !important;
+}
+
+.listingPagination .tablePagination {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 1.5rem;
+  color: #000 !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+  box-shadow: none;
+}

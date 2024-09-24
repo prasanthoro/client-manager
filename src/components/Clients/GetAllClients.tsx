@@ -66,13 +66,27 @@ const Clients = () => {
       router.push(`${pathname}${queryString}`);
       const response = await getAllClientsListAPI(queryParams);
       let { data, ...rest } = response?.data;
-      setClientsData(data);
-      setPaginationDetails(rest);
+      data = addSerial(data, rest.page, rest.limit);
+      if (!data?.length && rest.page != 1) {
+        await getAllClients({ page: +rest.page - 1 });
+      } else {
+        setPaginationDetails(rest);
+        setClientsData(data);
+      }
     } catch (err: any) {
       console.error(err);
     } finally {
       setLoading(false);
     }
+  };
+  const addSerial = (dataArray: any, page: any, limit: any) => {
+    if (dataArray?.length) {
+      let arrayAfterSerial = dataArray.map((item: any, index: number) => {
+        return { ...item, serial: (page - 1) * limit + (index + 1) };
+      });
+      return arrayAfterSerial;
+    }
+    return [];
   };
   const onSerachChange = async (event: any) => {
     const client = event?.target.value;
@@ -110,21 +124,17 @@ const Clients = () => {
           Add client
         </Button>
       </div>
-      <div className="relative w-full">
+      <div className="relative w-medium max-w-sm">
+        {" "}
         <Input
           type="search"
           value={searchString}
           onChange={onSerachChange}
-          placeholder="Search Payor Name"
-          className="defaultAutoComplete block w-full px-4 py-2 pr-12 border rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          placeholder="Search Client Name"
+          className="defaultAutoComplete block w-1/2 px-4 py-2 pr-12 border rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-red-500" // Input field with reduced width, padding, and border styles
         />
         <span className="absolute inset-y-0 right-0 flex items-center pr-3">
-          <Image
-            src="/icons/search-icon-with-bg-red.svg"
-            height={20}
-            width={20}
-            alt="search"
-          />
+          <Image src="/search.svg" height={20} width={20} alt="search" />
         </span>
       </div>
 
