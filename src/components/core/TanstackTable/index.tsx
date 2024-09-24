@@ -101,7 +101,7 @@ const TanStackTableComponent: FunctionComponent<tanstackTablePropTypes> = ({
 
     let orderBy = header.id;
     let orderType = "asc";
-    if (params.get("order_by") === header.id) {
+    if (params.get("sort_by") === header.id) {
       if (params.get("order_type") === "asc") {
         orderType = "desc";
       } else {

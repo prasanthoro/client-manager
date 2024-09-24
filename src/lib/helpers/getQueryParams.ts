@@ -4,6 +4,6 @@ export type apiPropTypes = {
   userId: string;
   search_string: string;
   SearchName: string;
-  order_by: string;
-  order_type: string;
+  sort_by: string;
+  sort_type: string;
 };
