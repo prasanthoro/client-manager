@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import TanStackTableComponent from "../core/TanstackTable";
 import { invoicesColumns } from "./InvoicesColumns";
 import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
-import { getAllInvoicesListAPI } from "@/services/invoices";
+import { clientNameDropDownAPI, getAllInvoicesListAPI, servicesDropDownAPI } from "@/services/invoices";
 import { LoadingComponent } from "../core/LoadingComponent";
 import InvoicesFilters from "./InvoicesFilters";
 
@@ -16,6 +16,8 @@ const InvoicesList = () => {
   const router = useRouter();
 
   const [invoicesData, setInvoicesData] = useState([]);
+  const [clientNameForDropDown, setClientNameForDropDown] = useState<any>([]);
+  const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
   const [paginationDetails, setPaginationDetails] = useState({});
   const [searchString, setSearchString] = useState(
     params.get("search_string") ? params.get("search_string") : ''
@@ -33,7 +35,9 @@ const InvoicesList = () => {
     from_date = params.get("from_date") as string,
     to_date = params.get("to_date") as string,
     search_string = params.get("search_string") as string,
-    invoice_status = params.get("invoice_status") as string
+    invoice_status = params.get("invoice_status") as string,
+    client_id = params.get("client_id") as string,
+    service_id = params.get("service_id") as string,
   }: Partial<invoicesListPropTypes>) => {
     try {
       let queryParams: any = {
@@ -45,6 +49,8 @@ const InvoicesList = () => {
         to_date: to_date,
         search_string: search_string,
         status: invoice_status,
+        client_id: client_id,
+        service_id: service_id,
       };
 
       setLoading(true);
@@ -62,8 +68,36 @@ const InvoicesList = () => {
     }
   };
 
+  const clientNameDropDown = async () => {
+    setLoading(true);
+    try {
+      const reponse = await clientNameDropDownAPI();
+      if (reponse?.status == 200 || reponse?.status == 201) {
+        setClientNameForDropDown(reponse?.data?.data);
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const servicesDropDown = async () => {
+    setLoading(true);
+    try {
+      const reponse = await servicesDropDownAPI();
+      if (reponse?.status == 200 || reponse?.status == 201) {
+        setServicesForDropDown(reponse?.data?.data);
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
       getAllIvoices({});
+      clientNameDropDown();
+      servicesDropDown();
   }, []);
 
   return (
@@ -74,6 +108,8 @@ const InvoicesList = () => {
         setSearchString={setSearchString}
         selectStatus={selectStatus}
         setSelectStatus={setSelectStatus}
+        clientNameForDropDown={clientNameForDropDown}
+        servicesForDropDown={servicesForDropDown}
       />
       <TanStackTableComponent
         columns={invoicesColumns()}

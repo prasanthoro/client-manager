@@ -36,7 +36,6 @@ const InvoicesList = ({clientInvoices}: any) => {
           <TableBody>
           {clientInvoices?.length > 0 &&
               clientInvoices.map((item: any, index: number) => {
-                console.log(item);
                 return (
             <TableRow className="bg-accent">
               <TableCell>

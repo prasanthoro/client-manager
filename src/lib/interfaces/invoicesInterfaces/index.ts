@@ -9,5 +9,7 @@ export type invoicesListPropTypes = {
     from_date: string;
     to_date: string;
     invoice_status: string;
+    client_id: string;
+    service_id: string;
   };
   

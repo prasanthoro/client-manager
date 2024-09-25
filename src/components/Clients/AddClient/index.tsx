@@ -4,6 +4,7 @@ import { LoadingComponent } from "@/components/core/LoadingComponent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { checkPhoneNumber } from "@/lib/helpers/core/changeFirstLetterToCap";
 import { addClientAPI, updateClientAPI } from "@/services/clients";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -13,7 +14,6 @@ import { toast } from "sonner";
 const AddClient = () => {
   const router = useRouter();
   const [errorMessages, setErrorMessages] = useState<any>();
-  console.log(errorMessages, "error");
   const [clientData, setClientData] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [label, setLabel] = useState(loading);
@@ -26,17 +26,18 @@ const AddClient = () => {
       let payload = {
         ...restData,
       };
-      console.log(payload, "payload");
       const response = await addClientAPI(payload);
       if (response?.status == 200 || response?.status == 201) {
         router.back();
       } else if (response?.status == 422) {
         setErrorMessages(response?.data?.errors);
+      } else if (response?.status == 409) {
+        setErrorMessages(response?.data?.errors);
       } else {
         throw response;
       }
     } catch (err: any) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -59,6 +60,8 @@ const AddClient = () => {
         router.back();
       } else if (response?.status == 422) {
         setErrorMessages(response?.data?.errors);
+      } else if (response?.status == 409) {
+        setErrorMessages(response?.data?.errors);
       } else {
         throw response;
       }
@@ -70,14 +73,6 @@ const AddClient = () => {
   };
   const handleInputChange = (e: any) => {
     let { name, value } = e.target;
-
-    if (name == "faxNo" || name == "phon" || name == "pocPhoneNo") {
-      // value = formatPhoneNumber(value);
-    }
-    if (name == "zipCode") {
-      // value = formatZipCode(value);
-    }
-
     setClientData({
       ...clientData,
       [name]: value,
@@ -96,10 +91,6 @@ const AddClient = () => {
           </button>
           <h1 className="text-2xl font-bold text-red-600 ml-2">Add Client</h1>
         </div>
-
-        <span className="bg-purple-500 hover:bg-purple-600 text-white">
-          Total Invoice Amount : ₹{clientData?.total_invoice_amount}
-        </span>
       </div>
 
       <section className="mb-6">
@@ -216,6 +207,7 @@ const AddClient = () => {
             <Input
               placeholder="Enter Phone No."
               value={clientData["phone"]}
+              onInput={checkPhoneNumber}
               name="phone"
               onChange={handleInputChange}
             />
@@ -235,12 +227,14 @@ const AddClient = () => {
               name="email"
               onChange={handleInputChange}
             />
-            {errorMessages?.email && (
+            {errorMessages?.email && Array.isArray(errorMessages.email) && (
               <p style={{ color: "red" }}>{errorMessages.email[0]}</p>
             )}
+            {errorMessages?.email &&
+              typeof errorMessages.email === "string" && (
+                <p style={{ color: "red" }}>{errorMessages.email}</p>
+              )}
           </div>
-
-          {/* Secondary Email */}
         </div>
       </section>
       <section className="mt-8">

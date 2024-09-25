@@ -52,7 +52,6 @@ const ServicesList = ({ clientServices }: any) => {
           <TableBody>
             {clientServices?.length > 0 &&
               clientServices.map((item: any, index: number) => {
-                console.log(item);
                 return (
                   <TableRow className="bg-accent" key={index}>
                     <TableCell>{item?.title}</TableCell>

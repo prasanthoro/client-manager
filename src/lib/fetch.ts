@@ -28,7 +28,6 @@ class FetchService {
     const state = store.getState();
     console.log(state, "state");
     const accessToken = state?.userLogin?.userDetails?.data?.access_token;
-    console.log(accessToken, "token");
 
     // IMPLEMENT STORE/COOCIKES DATA HERE
     config.headers["Authorization"] = accessToken; // we need to

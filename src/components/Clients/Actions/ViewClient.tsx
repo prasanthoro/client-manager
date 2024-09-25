@@ -86,56 +86,43 @@ const ViewClient = () => {
       <Card className="mb-4">
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-blue-800">
-            Client Details
+            Primary Information
           </CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-4 gap-4 text-gray-600">
           <div className="grid grid-cols-4 gap-4 text-gray-600">
             <div className="flex flex-col">
               <span className="font-bold">Company Name </span>
-              <span>{clientData?.company_name}</span>
+              <span>
+                {clientData?.company_name ? clientData?.company_name : "--"}
+              </span>
             </div>
             <div className="flex flex-col">
               <span className="font-bold">Name </span>
-              <span>{clientData?.client_name}</span>
+              <span>
+                {clientData?.client_name ? clientData?.client_name : "--"}
+              </span>
             </div>
             <div className="flex flex-col">
-              <span className="font-bold"> Email </span>
-              <span>{clientData?.client_email}</span>
+              <span className="font-bold"> Poc </span>
+              <span>{clientData?.poc ? clientData?.poc : "--"}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">Email </span>
+              <span>{clientData?.email ? clientData?.email : "--"}</span>
             </div>
             <div className="flex flex-col">
               <span className="font-bold">Phone </span>
-              <span>{clientData?.client_phone}</span>
+              <span>{clientData?.phone ? clientData?.phone : "--"}</span>
             </div>
             <div className="flex flex-col">
               <span className="font-bold">Address</span>
               <span>
-                {clientData?.address}, {clientData?.city}, {clientData?.state},{" "}
-                {clientData?.country}
+                {clientData?.address ? `${clientData?.address}, ` : ""}
+                {clientData?.city ? `${clientData?.city}, ` : ""}
+                {clientData?.state ? `${clientData?.state}, ` : ""}
+                {clientData?.country ? clientData?.country : ""}
               </span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-      <Card className="mb-4">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-blue-800">
-            Poc Details
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-4 gap-4 text-gray-600">
-          <div className="grid grid-cols-4 gap-4 text-gray-600">
-            <div className="flex flex-col">
-              <span className="font-bold">Name </span>
-              <span>{clientData?.poc}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold"> Email </span>
-              <span>{clientData?.email}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">Phone </span>
-              <span>{clientData?.phone}</span>
             </div>
           </div>
         </CardContent>
@@ -151,12 +138,13 @@ const ViewClient = () => {
           <div className="grid grid-cols-3 gap-4 text-gray-600">
             <div className="flex flex-col">
               <span className="font-bold">Remarks</span>
-              <span>{clientData?.remarks}</span>
+              <span>{clientData?.remarks ? clientData?.remarks : "--"}</span>
             </div>
           </div>
         </CardContent>
       </Card>
       <div>
+        <h5>Client Invoices</h5>
         <Table>
           <TableHeader>
             <TableRow>
@@ -197,7 +185,7 @@ const ViewClient = () => {
             ) : (
               <TableRow>
                 <TableCell colSpan={7} style={{ textAlign: "center" }}>
-                  No Data
+                  No Invoices
                 </TableCell>
               </TableRow>
             )}

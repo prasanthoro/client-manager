@@ -130,7 +130,6 @@ export const Dashboard = () => {
       }
 
       let queryString = prepareURLEncodedParams("", queryParams);
-      console.log(queryString, "string");
 
       router.push(`${pathname}${queryString}`);
       setLoading(true);
