@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { servicesColumns } from "./ServicesColumns";
 import TanStackTableComponent from "../core/TanstackTable";
+import { LoadingComponent } from "../core/LoadingComponent";
 
 const ServicesList = () => {
   const params = useSearchParams();
@@ -60,6 +61,7 @@ const ServicesList = () => {
         loading={loading}
         removeSortingForColumnIds={["actions"]}
       />
+      <LoadingComponent loading={loading} label={"Services"} />
     </div>
   );
 };
