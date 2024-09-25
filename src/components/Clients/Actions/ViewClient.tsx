@@ -1,17 +1,6 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import {
-  clientWiseInvoicesAPI,
-  clientWiseServicesAPI,
-  viewClientAPI,
-  viewInvoiceAPI,
-} from "@/services/clients";
 import { LoadingComponent } from "@/components/core/LoadingComponent";
-import Image from "next/image";
 import {
   Table,
   TableBody,
@@ -19,12 +8,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { viewClientAPI, viewInvoiceAPI } from "@/services/clients";
+import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const ViewClient = () => {
   const { client_Id } = useParams();
   const [clientData, setClientData] = useState<any>();
   const [invoiceData, setInvoiceData] = useState<any>([]);
-  console.log(invoiceData, "invoice");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -118,10 +110,14 @@ const ViewClient = () => {
             <div className="flex flex-col">
               <span className="font-bold">Address</span>
               <span>
-                {clientData?.address ? `${clientData?.address}, ` : ""}
-                {clientData?.city ? `${clientData?.city}, ` : ""}
-                {clientData?.state ? `${clientData?.state}, ` : ""}
-                {clientData?.country ? clientData?.country : ""}
+                {[
+                  clientData?.address,
+                  clientData?.city,
+                  clientData?.state,
+                  clientData?.country,
+                ]
+                  .filter(Boolean)
+                  .join(", ") || "--"}
               </span>
             </div>
           </div>

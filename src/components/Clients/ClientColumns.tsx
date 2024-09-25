@@ -65,12 +65,22 @@ export const clientColumns = (getAllClients: any) => {
       },
       width: "100px",
     },
+
     {
-      accessorFn: (row: any) =>
-        `${row?.address}, ${row?.city}, ${row?.state}, ${row?.country}`,
+      accessorFn: (row: any) => {
+        const address = row?.address || "";
+        const city = row?.city || "";
+        const state = row?.state || "";
+        const country = row?.country || "";
+        const addressParts = [address, city, state, country].filter(
+          (part) => part
+        );
+        return addressParts.join(", ");
+      },
       id: "address",
       header: () => <span>Address</span>,
       cell: (info: any) => {
+        console.log("Row in cell:", info.row.original); // Log the row for debugging
         return <span className="eachCell">{info.getValue()}</span>;
       },
       footer: (props: any) => props.columns.id,
@@ -106,7 +116,7 @@ export const clientColumns = (getAllClients: any) => {
                 className="eachList"
                 style={{ marginRight: "10px", cursor: "pointer" }}
               >
-                <EditButton />
+                {/* <EditButton /> */}
               </li>
               <li className="eachList">
                 <DeleteButton

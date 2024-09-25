@@ -193,7 +193,10 @@ export const Dashboard = () => {
           </header>
           <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <Card className="p-2 max-w-xs mx-auto">
+              <Card
+                className="p-2 max-w-xs mx-auto"
+                onClick={() => router.push("/clients")}
+              >
                 <div className="bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-lg rounded-lg">
                   <CardHeader className="flex flex-row items-center justify-between pb-1">
                     <CardTitle className="text-lg font-bold">
@@ -205,7 +208,10 @@ export const Dashboard = () => {
                   </CardContent>
                 </div>
               </Card>
-              <Card className="p-2 max-w-xs mx-auto">
+              <Card
+                className="p-2 max-w-xs mx-auto"
+                onClick={() => router.push("/invoices")}
+              >
                 <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg rounded-lg">
                   <CardHeader className="flex flex-row items-center justify-between pb-1">
                     <CardTitle className="text-lg font-bold">

@@ -28,6 +28,7 @@ const AddClient = () => {
       };
       const response = await addClientAPI(payload);
       if (response?.status == 200 || response?.status == 201) {
+        toast.success(response?.data?.message || "Client Added succesfully");
         router.back();
       } else if (response?.status == 422) {
         setErrorMessages(response?.data?.errors);
@@ -38,6 +39,7 @@ const AddClient = () => {
       }
     } catch (err: any) {
       console.error(err);
+      toast.error(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -54,7 +56,6 @@ const AddClient = () => {
         clientId: client_Id as string,
         payload,
       });
-
       if (response?.status == 200 || response?.status == 201) {
         toast.success(response?.data?.message);
         router.back();
@@ -66,7 +67,7 @@ const AddClient = () => {
         throw response;
       }
     } catch (err: any) {
-      //  errorPopper(err || "Something went wrong");
+      toast.error(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
