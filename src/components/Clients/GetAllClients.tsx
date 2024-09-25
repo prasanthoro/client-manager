@@ -3,19 +3,18 @@
 import { apiPropTypes } from "@/lib/helpers/getQueryParams";
 import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
 
+import {
+  getAllClientsListAPI,
+  getClientsDropDownAPI,
+} from "@/services/clients";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import TanStackTableComponent from "../core/TanstackTable";
-import { clientColumns } from "./ClientColumns";
-import { ViewButton } from "./ViewButton";
-import { getAllClientsListAPI } from "@/services/clients";
 import { LoadingComponent } from "../core/LoadingComponent";
-import { Input } from "../ui/input";
-import { on } from "stream";
-import dayjs from "dayjs";
-import Image from "next/image";
+import TanStackTableComponent from "../core/TanstackTable";
+import { Button } from "../ui/button";
+import { clientColumns } from "./ClientColumns";
 import ClientFilters from "./ClientFilters";
+import { toast } from "sonner";
 
 const Clients = () => {
   const params = useSearchParams();
@@ -23,6 +22,7 @@ const Clients = () => {
   const router = useRouter();
   const [clientsData, setClientsData] = useState([]);
   const [paginationDetails, setPaginationDetails] = useState({});
+  const [dropDownClientsData, setDropDownClientsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchString, setSearchString] = useState("");
   const [dateInformation, setDateInformation] = useState<any>([]);
@@ -80,6 +80,20 @@ const Clients = () => {
       setLoading(false);
     }
   };
+  const getClientsDropDown = async () => {
+    try {
+      const response = await getClientsDropDownAPI();
+      if (response?.status == 200 || response?.status == 201) {
+        let { data } = response?.data;
+        setDropDownClientsData(data);
+      } else {
+        throw response;
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "Something went wrong");
+    } finally {
+    }
+  };
   const addSerial = (dataArray: any, page: any, limit: any) => {
     if (dataArray?.length) {
       let arrayAfterSerial = dataArray.map((item: any, index: number) => {
@@ -102,6 +116,8 @@ const Clients = () => {
         setSearchString={setSearchString}
         dateinfo={dateInformation}
         setDateInformation={setDateInformation}
+        getClientsDropDown={getClientsDropDown}
+        dropDownClientsData={dropDownClientsData}
       />
       <div className="flex">
         <Button

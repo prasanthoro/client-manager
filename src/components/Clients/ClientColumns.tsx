@@ -15,113 +15,68 @@ export const clientColumns = (getAllClients: any) => {
       minWidth: "60px",
     },
     {
-      accessorFn: (row: any) => row,
-      header: () => (
-        <span style={{ whiteSpace: "nowrap" }}>Client Details</span>
-      ),
-      id: "volume",
-      width: "800px",
-
-      columns: [
-        {
-          accessorFn: (row: any) => row?.company_name,
-          header: () => <span>Company Name</span>,
-          id: "company_name",
-          cell: (info: any) => {
-            return <span className="eachCell">{info.getValue()}</span>;
-          },
-          width: "150px",
-          maxWidth: "150px",
-          minWidth: "150px",
-        },
-        {
-          accessorFn: (row: any) => row?.client_name,
-          header: () => <span> Client Name</span>,
-          id: "client_name",
-          cell: (info: any) => {
-            return <span className="eachCell">{info.getValue()}</span>;
-          },
-          width: "100px",
-        },
-
-        {
-          accessorFn: (row: any) => row.client_email,
-          header: () => <span>Email</span>,
-          id: "client_email",
-          cell: (info: any) => {
-            return <span className="eachCell">{info.getValue()}</span>;
-          },
-          width: "100px",
-        },
-        {
-          accessorFn: (row: any) => row.client_phone,
-          header: () => <span>Phone</span>,
-          id: "client_phone",
-          cell: (info: any) => {
-            return <span className="eachCell">{info.getValue()}</span>;
-          },
-          width: "100px",
-        },
-        {
-          accessorFn: (row: any) =>
-            `${row?.address}, ${row?.city}, ${row?.state}, ${row?.country}`,
-          id: "address",
-          header: () => <span>Address</span>,
-          cell: (info: any) => {
-            return <span className="eachCell">{info.getValue()}</span>;
-          },
-          footer: (props: any) => props.columns.id,
-          width: "100px",
-        },
-      ],
+      accessorFn: (row: any) => row?.company_name,
+      header: () => <span>Company Name</span>,
+      id: "company_name",
+      cell: (info: any) => {
+        return <span className="eachCell">{info.getValue()}</span>;
+      },
+      width: "150px",
+      maxWidth: "150px",
+      minWidth: "150px",
     },
 
     {
-      accessorFn: (row: any) => row,
-      header: () => <span style={{ whiteSpace: "nowrap" }}>Poc Details</span>,
-      id: "pocdetails",
-      width: "800px",
-
-      columns: [
-        {
-          accessorFn: (row: any) => row?.poc,
-          header: () => <span>Name</span>,
-          id: "poc",
-          cell: (info: any) => {
-            return <span className="eachCell">{info.getValue()}</span>;
-          },
-          width: "100px",
-        },
-        {
-          accessorFn: (row: any) => row.email,
-          header: () => <span>Email</span>,
-          id: "email",
-          cell: (info: any) => {
-            return <span className="eachCell">{info.getValue()}</span>;
-          },
-          width: "100px",
-        },
-        {
-          accessorFn: (row: any) => row.phone,
-          header: () => <span>Phone</span>,
-          id: "phone",
-          cell: (info: any) => {
-            return <span className="eachCell">{info.getValue()}</span>;
-          },
-          width: "100px",
-        },
-      ],
+      accessorFn: (row: any) => row?.client_name,
+      header: () => <span> Client Name</span>,
+      id: "client_name",
+      cell: (info: any) => {
+        return <span className="eachCell">{info.getValue()}</span>;
+      },
+      width: "100px",
     },
     {
-      accessorFn: (row: any) => row?.status,
-      id: "status",
-      header: () => <span>Status</span>,
+      accessorFn: (row: any) => row?.poc,
+      header: () => <span>Poc</span>,
+      id: "poc",
+      cell: (info: any) => {
+        return <span className="eachCell">{info.getValue()}</span>;
+      },
+      width: "150px",
+      maxWidth: "150px",
+      minWidth: "150px",
+    },
+
+    {
+      accessorFn: (row: any) => row.email,
+      header: () => <span>Email</span>,
+      id: "email",
+      cell: (info: any) => {
+        return <span className="eachCell">{info.getValue()}</span>;
+      },
+      width: "100px",
+    },
+    {
+      accessorFn: (row: any) => row.phone,
+      header: () => <span>Phone</span>,
+      id: "phone",
+      cell: (info: any) => {
+        return <span className="eachCell">{info.getValue()}</span>;
+      },
+      width: "100px",
+    },
+    {
+      accessorFn: (row: any) =>
+        `${row?.address}, ${row?.city}, ${row?.state}, ${row?.country}`,
+      id: "address",
+      header: () => <span>Address</span>,
       cell: (info: any) => {
         return <span className="eachCell">{info.getValue()}</span>;
       },
       footer: (props: any) => props.columns.id,
       width: "100px",
     },
+
     {
       accessorFn: (row: any) => row?.total_invoice_amount,
       id: "total_invoice_amount",

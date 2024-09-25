@@ -22,7 +22,6 @@ import {
   getAllClientsCountsAPI,
   getClientWiseTotalInvoiceAmountAPI,
   getInvoiceAmountAPI,
-  getServicesCountsAPI,
   getServicesWiseInvoicesAmountAPI,
 } from "@/services/dashboard";
 import { formatAmount } from "@/lib/helpers/core/formatAmount";
@@ -46,10 +45,28 @@ export const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [dateInformation, setDateInformation] = useState<any>([]);
 
-  const getAllClientsCount = async () => {
+  const getAllClientsCount = async ({
+    from_date = params.get("from_date") as string,
+    to_date = params.get("to_date") as string,
+  }) => {
     try {
+      let queryParams: any = {};
+
+      if (from_date) {
+        queryParams["from_date"] = from_date;
+      }
+      if (to_date) {
+        queryParams["to_date"] = to_date;
+      }
+      let queryString = prepareURLEncodedParams("", queryParams);
+      console.log(queryString, "string");
+
+      router.push(`${pathname}${queryString}`);
       setLoading(true);
-      const response = await getAllClientsCountsAPI();
+      const response = await getAllClientsCountsAPI({
+        from_date,
+        to_date,
+      });
       if (response?.status == 200 || response?.status == 201) {
         let { data } = response?.data;
         setClientsCount(data);
@@ -63,10 +80,28 @@ export const Dashboard = () => {
     }
   };
 
-  const getInvoiceAmount = async () => {
+  const getInvoiceAmount = async ({
+    from_date = params.get("from_date") as string,
+    to_date = params.get("to_date") as string,
+  }) => {
     setLoading(true);
     try {
-      const response = await getInvoiceAmountAPI();
+      let queryParams: any = {};
+
+      if (from_date) {
+        queryParams["from_date"] = from_date;
+      }
+      if (to_date) {
+        queryParams["to_date"] = to_date;
+      }
+      let queryString = prepareURLEncodedParams("", queryParams);
+      console.log(queryString, "string");
+
+      router.push(`${pathname}${queryString}`);
+      const response = await getInvoiceAmountAPI({
+        from_date,
+        to_date,
+      });
       if (response?.status == 200 || response?.status == 201) {
         let { data } = response?.data;
         setInvoiceAmount(data);
@@ -134,9 +169,9 @@ export const Dashboard = () => {
   };
 
   useEffect(() => {
-    getAllClientsCount();
+    getAllClientsCount({});
 
-    getInvoiceAmount();
+    getInvoiceAmount({});
 
     getClientWiseTotalInvoiceAmount({});
   }, []);

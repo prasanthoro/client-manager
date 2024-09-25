@@ -13,6 +13,7 @@ import {
 } from "../ui/select";
 import { DateRangePicker } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const ClientFilters = ({
   getAllClients,
@@ -20,17 +21,9 @@ const ClientFilters = ({
   setSearchString,
   setDateInformation,
   dateInfo,
+  getClientsDropDown,
+  dropDownClientsData,
 }: any) => {
-  const onDateChange = (date: any) => {
-    if (date) {
-      let fromDate = dayjs(date.from).format("YYYY-MM-DD");
-      let toDate = dayjs(date.to).format("YYYY-MM-DD");
-
-      getAllClients({ from_date: fromDate, to_date: toDate });
-    } else {
-      getAllClients({ from_date: "", to_date: "" });
-    }
-  };
   const handleDateChange = async (value: any) => {
     if (value) {
       await setDateInformation(value);
@@ -64,7 +57,7 @@ const ClientFilters = ({
         placeholder="Select Date Range"
         value={dateInfo}
         onChange={handleDateChange}
-        format="MM-dd-yyyy"
+        format="yyyy-MM-dd"
         style={{ width: 250 }}
       />
       <Input

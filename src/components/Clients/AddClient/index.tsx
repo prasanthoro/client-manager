@@ -3,7 +3,9 @@
 import { LoadingComponent } from "@/components/core/LoadingComponent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { addClientAPI, updateClientAPI } from "@/services/clients";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -26,7 +28,6 @@ const AddClient = () => {
       };
       console.log(payload, "payload");
       const response = await addClientAPI(payload);
-      console.log(response, "res");
       if (response?.status == 200 || response?.status == 201) {
         router.back();
       } else if (response?.status == 422) {
@@ -85,19 +86,39 @@ const AddClient = () => {
 
   return (
     <div className="p-8 bg-white rounded-lg shadow-md max-w-4xl mx-auto">
-      <div className="flex items-center justify-between">
-        <button
-          className="p-2 rounded-full hover:bg-gray-100"
-          onClick={() => router.back()}
-        >
-          <span className="material-icons">arrow_back</span>
-          <h1 className="text-2xl font-bold text-red-600">Add Client</h1>
-        </button>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <button
+            onClick={() => router.back()}
+            className="p-2 -full hover:bg-pink-200"
+          >
+            <Image alt="image" width={24} height={24} src="/back-button.svg" />
+          </button>
+          <h1 className="text-2xl font-bold text-red-600 ml-2">Add Client</h1>
+        </div>
+
+        <span className="bg-purple-500 hover:bg-purple-600 text-white">
+          Total Invoice Amount : ₹{clientData?.total_invoice_amount}
+        </span>
       </div>
 
       <section className="mb-6">
-        <h2 className="text-lg font-semibold">Client Information</h2>
+        <h2 className="text-lg font-semibold">Primary Information</h2>
         <div className="grid grid-cols-3 gap-6 mt-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Company Name<span className="text-red-500">*</span>
+            </label>
+            <Input
+              placeholder="Enter Company Name"
+              value={clientData.company_name}
+              name="company_name"
+              onChange={handleInputChange}
+            />
+            {errorMessages?.company_name && (
+              <p style={{ color: "red" }}>{errorMessages.company_name[0]}</p>
+            )}
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Client Name<span className="text-red-500">*</span>
@@ -128,17 +149,6 @@ const AddClient = () => {
                 <p style={{ color: "red" }}>{errorMessages.poc[0]}</p>
               )}
             </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Role
-            </label>
-            <Input
-              placeholder="Enter Role"
-              value={clientData["role"]}
-              name="role"
-              onChange={handleInputChange}
-            />
           </div>
         </div>
       </section>
@@ -231,17 +241,21 @@ const AddClient = () => {
           </div>
 
           {/* Secondary Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Remarks
-            </label>
-            <Input
-              placeholder="Enter Remarks"
-              value={clientData["remarks"]}
-              name="remarks"
-              onChange={handleInputChange}
-            />
-          </div>
+        </div>
+      </section>
+      <section className="mt-8">
+        <h2 className="text-lg font-semibold">Other Information</h2>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Remarks
+          </label>
+
+          <Textarea
+            placeholder="Enter Remarks"
+            value={clientData["remarks"]}
+            name="remarks"
+            onChange={handleInputChange}
+          />
         </div>
       </section>
       {/* Submit and Reset Buttons */}

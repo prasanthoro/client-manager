@@ -8,12 +8,23 @@ import {
   clientWiseInvoicesAPI,
   clientWiseServicesAPI,
   viewClientAPI,
+  viewInvoiceAPI,
 } from "@/services/clients";
 import { LoadingComponent } from "@/components/core/LoadingComponent";
+import Image from "next/image";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const ViewClient = () => {
   const { client_Id } = useParams();
   const [clientData, setClientData] = useState<any>();
+  const [invoiceData, setInvoiceData] = useState<any>([]);
+  console.log(invoiceData, "invoice");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -31,6 +42,20 @@ const ViewClient = () => {
       setLoading(false);
     }
   };
+  const ViewInvoiceList = async () => {
+    try {
+      setLoading(true);
+      const response = await viewInvoiceAPI(client_Id);
+      if (response?.status == 200 || response?.status == 201) {
+        let { data } = response?.data;
+        setInvoiceData(data);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleBackClick = () => {
     router.back();
@@ -38,26 +63,23 @@ const ViewClient = () => {
 
   useEffect(() => {
     getSingleClientView();
+    ViewInvoiceList();
   }, []);
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <Button
+          <button
             onClick={() => router.back()}
-            className="p-2 -full hover:bg-gray-200"
+            className="p-2 -full hover:bg-pink-200"
           >
-            <span className="material-icons">Back</span>
-          </Button>
-          <h1 className="text-3xl font-bold text-red-600 ml-2">
+            <Image alt="image" width={24} height={24} src="/back-button.svg" />
+          </button>
+          <h1 className="text-2xl font-bold text-red-600 ml-2">
             Client Information
           </h1>
         </div>
-
-        <span className="bg-purple-500 hover:bg-purple-600 text-white">
-          Total Invoice Amount : ₹{clientData?.total_invoice_amount}
-        </span>
       </div>
 
       {/* Client Information */}
@@ -134,6 +156,54 @@ const ViewClient = () => {
           </div>
         </CardContent>
       </Card>
+      <div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableCell>Company Name</TableCell>
+              <TableCell>Client Name</TableCell>
+              <TableCell>Service Type</TableCell>
+              <TableCell>Invoice Date</TableCell>
+              <TableCell>Invoice Status</TableCell>
+              <TableCell>Invoice Amount</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {invoiceData.length > 0 ? (
+              invoiceData.map((item: any) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    {item.company_name ? item.company_name : "--"}
+                  </TableCell>
+                  <TableCell>
+                    {item.client_name ? item.client_name : "--"}
+                  </TableCell>
+                  <TableCell>{item.type ? item.type : "--"}</TableCell>
+                  <TableCell>
+                    {item.invoice_date ? item.invoice_date : "--"}
+                  </TableCell>
+                  <TableCell>
+                    {item.invoice_status ? item.invoice_status : "--"}
+                  </TableCell>
+                  <TableCell>
+                    {item.invoice_amount
+                      ? `₹ ${Number(item.invoice_amount).toLocaleString(
+                          "en-IN"
+                        )}`
+                      : "--"}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} style={{ textAlign: "center" }}>
+                  No Data
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
 
       <LoadingComponent loading={loading} label={""} />
     </div>
