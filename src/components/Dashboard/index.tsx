@@ -63,23 +63,6 @@ export const Dashboard = () => {
     }
   };
 
-  const getServicesCount = async () => {
-    setLoading(true);
-    try {
-      const response = await getServicesCountsAPI();
-      if (response?.status == 200 || response?.status == 201) {
-        let { data } = response?.data;
-        setServicesCount(data);
-      } else {
-        throw response;
-      }
-    } catch (err: any) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const getInvoiceAmount = async () => {
     setLoading(true);
     try {
@@ -152,7 +135,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     getAllClientsCount();
-    getServicesCount();
+
     getInvoiceAmount();
 
     getClientWiseTotalInvoiceAmount({});

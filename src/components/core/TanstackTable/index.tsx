@@ -133,7 +133,7 @@ const TanStackTableComponent: FunctionComponent<tanstackTablePropTypes> = ({
                 height: "32px",
                 position: "sticky",
                 top: "-1px",
-                zIndex: "9",
+                // zIndex: "9",
                 color: "white",
               }}
             >
