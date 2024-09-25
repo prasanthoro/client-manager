@@ -1,10 +1,10 @@
 "use client";
-import type { Metadata } from "next";
+import { Providers } from "@/redux/Provider";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Providers } from "@/redux/Provider";
 // import { NavBarComponent } from "@/components/Navbar";
 import MainComponent from "@/components/Navbar/Main";
+import { Toaster } from "sonner";
 import { usePathname } from "next/navigation";
 
 const geistSans = localFont({
@@ -35,7 +35,7 @@ export default function RootLayout({
           )}
         </Providers>
       </body>
-      {/* <Toaster richColors closeButton position="top-right" /> */}
+      <Toaster richColors closeButton position="top-right" />
     </html>
   );
 }

@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
 import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, X } from "lucide-react"; // Import the X icon
@@ -21,9 +21,8 @@ const ClientDropDown = ({
   clientNameForDropDown,
   clientName,
   setClientName,
-  onSelectClient
+  onSelectClient,
 }: any) => {
-
   const handleClearClient = (e: any) => {
     e.stopPropagation();
     setClientName(null);

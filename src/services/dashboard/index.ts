@@ -1,23 +1,17 @@
 import { $fetch } from "@/lib/fetch";
 import { apiPropTypes } from "@/lib/helpers/getQueryParams";
 
-export const getAllClientsCountsAPI = async () => {
+export const getAllClientsCountsAPI = async (params: any) => {
   try {
-    return await $fetch.get(`/clients/count`);
+    return await $fetch.get(`/clients/count`, params);
   } catch (err) {
     console.error();
   }
 };
-export const getServicesCountsAPI = async () => {
+
+export const getInvoiceAmountAPI = async (params: any) => {
   try {
-    return await $fetch.get(`/services/count`);
-  } catch (err) {
-    console.error();
-  }
-};
-export const getInvoiceAmountAPI = async () => {
-  try {
-    return await $fetch.get(`/invoices/amount`);
+    return await $fetch.get(`/invoices/amount`, params);
   } catch (err) {
     console.error();
   }

@@ -24,7 +24,7 @@ export const DeleteButton = ({ getAllClients, clientId }: any) => {
       const response = await deleteClientAPI(clientId);
       if (response?.status == 200 || response?.status == 201) {
         toast.success("Client Deleted Successfully");
-        getAllClients();
+        getAllClients({});
         handleClose();
       }
     } catch (err: any) {

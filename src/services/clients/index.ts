@@ -8,6 +8,13 @@ export const getAllClientsListAPI = async (params: Partial<apiPropTypes>) => {
     console.error(err);
   }
 };
+export const getClientsDropDownAPI = async () => {
+  try {
+    return await $fetch.get(`/clients/list/drop-down`);
+  } catch (err: any) {
+    console.error(err);
+  }
+};
 export const deleteClientAPI = async (deleteId: string) => {
   try {
     return await $fetch.delete(`/clients/${deleteId}`);
@@ -25,6 +32,13 @@ export const viewClientAPI = async (client_Id: any) => {
 export const addClientAPI = async (payload: any) => {
   try {
     return await $fetch.post(`/clients`, payload);
+  } catch (err) {
+    console.error(err);
+  }
+};
+export const viewInvoiceAPI = async (client_Id: any) => {
+  try {
+    return await $fetch.get(`/invoices/list/${client_Id}`);
   } catch (err) {
     console.error(err);
   }

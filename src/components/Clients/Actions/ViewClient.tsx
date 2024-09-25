@@ -1,19 +1,22 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { LoadingComponent } from "@/components/core/LoadingComponent";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { viewClientAPI, viewInvoiceAPI } from "@/services/clients";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import ServicesList from "../Services";
-import InvoicesList from "../Invoices";
-import { clientWiseInvoicesAPI, clientWiseServicesAPI, viewClientAPI } from "@/services/clients";
-import { LoadingComponent } from "@/components/core/LoadingComponent";
 
 const ViewClient = () => {
   const { client_Id } = useParams();
   const [clientData, setClientData] = useState<any>();
-  const [clientServices, setClientServices] = useState<any[]>([]);
-  const [clientInvoices, setClientInvoices] = useState<any[]>([]);
+  const [invoiceData, setInvoiceData] = useState<any>([]);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -31,29 +34,13 @@ const ViewClient = () => {
       setLoading(false);
     }
   };
-
-  const getClientWiseSerivces = async () => {
+  const ViewInvoiceList = async () => {
     try {
       setLoading(true);
-      const response = await clientWiseServicesAPI(client_Id);
+      const response = await viewInvoiceAPI(client_Id);
       if (response?.status == 200 || response?.status == 201) {
         let { data } = response?.data;
-        setClientServices(data);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getClientWiseInvoices = async () => {
-    try {
-      setLoading(true);
-      const response = await clientWiseInvoicesAPI(client_Id);
-      if (response?.status == 200 || response?.status == 201) {
-        let { data } = response?.data;
-        setClientInvoices(data);
+        setInvoiceData(data);
       }
     } catch (err) {
       console.error(err);
@@ -68,77 +55,70 @@ const ViewClient = () => {
 
   useEffect(() => {
     getSingleClientView();
-    // getClientWiseSerivces();
-    // getClientWiseInvoices();
+    ViewInvoiceList();
   }, []);
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <Button
+          <button
             onClick={() => router.back()}
-            className="p-2 -full hover:bg-gray-200"
+            className="p-2 -full hover:bg-pink-200"
           >
-            <span className="material-icons">Back</span>
-          </Button>
-          <h1 className="text-3xl font-bold text-red-600 ml-2">
-            Client Details
+            <Image alt="image" width={24} height={24} src="/back-button.svg" />
+          </button>
+          <h1 className="text-2xl font-bold text-red-600 ml-2">
+            Client Information
           </h1>
         </div>
-        <Button className="bg-purple-500 hover:bg-purple-600 text-white">
-          Edit
-        </Button>
       </div>
 
       {/* Client Information */}
       <Card className="mb-4">
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-blue-800">
-            Client Information
+            Primary Information
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
-          <div className="grid grid-cols-3 gap-4 text-gray-600">
+        <CardContent className="grid grid-cols-4 gap-4 text-gray-600">
+          <div className="grid grid-cols-4 gap-4 text-gray-600">
             <div className="flex flex-col">
-              <span className="font-bold">Client Name </span>
-              <span>{clientData?.name}</span>
+              <span className="font-bold">Company Name </span>
+              <span>
+                {clientData?.company_name ? clientData?.company_name : "--"}
+              </span>
             </div>
             <div className="flex flex-col">
-              <span className="font-bold">Poc</span>
-              <span>{clientData?.poc}</span>
+              <span className="font-bold">Name </span>
+              <span>
+                {clientData?.client_name ? clientData?.client_name : "--"}
+              </span>
             </div>
             <div className="flex flex-col">
-              <span className="font-bold">Role</span>
-              <span>{clientData?.role}</span>
+              <span className="font-bold"> Poc </span>
+              <span>{clientData?.poc ? clientData?.poc : "--"}</span>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="mb-4">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-blue-800">
-            Address Information
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
-          <div className="grid grid-cols-3 gap-4 text-gray-600">
+            <div className="flex flex-col">
+              <span className="font-bold">Email </span>
+              <span>{clientData?.email ? clientData?.email : "--"}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">Phone </span>
+              <span>{clientData?.phone ? clientData?.phone : "--"}</span>
+            </div>
             <div className="flex flex-col">
               <span className="font-bold">Address</span>
-              <span>{clientData?.address}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">Country</span>
-              <span>{clientData?.country}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">State</span>
-              <span>{clientData?.state}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">City</span>
-              <span>{clientData?.city}</span>
+              <span>
+                {[
+                  clientData?.address,
+                  clientData?.city,
+                  clientData?.state,
+                  clientData?.country,
+                ]
+                  .filter(Boolean)
+                  .join(", ") || "--"}
+              </span>
             </div>
           </div>
         </CardContent>
@@ -147,38 +127,68 @@ const ViewClient = () => {
       <Card className="mb-4">
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-blue-800">
-            Contact Information
+            Other Information
           </CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
           <div className="grid grid-cols-3 gap-4 text-gray-600">
             <div className="flex flex-col">
-              <span className="font-bold">Phone No</span>
-              <span>{clientData?.phone}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">Secondary Phone</span>{" "}
-              <span>{clientData?.secondary_phone}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">Email</span>
-              <span>{clientData?.email}</span>
-            </div>
-            <div className="flex flex-col">
               <span className="font-bold">Remarks</span>
-              <span>{clientData?.remarks}</span>
+              <span>{clientData?.remarks ? clientData?.remarks : "--"}</span>
             </div>
           </div>
         </CardContent>
       </Card>
-      {/* <div className="flex justify-between gap-[20px] mt-6">
-        <div className="w-1/2 pl-4">
-          <ServicesList clientServices={clientServices}/>
-        </div>
-        <div className="w-1/2 pr-4">
-          <InvoicesList clientInvoices={clientInvoices}/>
-        </div>
-      </div> */}
+      <div>
+        <h5>Client Invoices</h5>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableCell>Company Name</TableCell>
+              <TableCell>Client Name</TableCell>
+              <TableCell>Service Type</TableCell>
+              <TableCell>Invoice Date</TableCell>
+              <TableCell>Invoice Status</TableCell>
+              <TableCell>Invoice Amount</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {invoiceData.length > 0 ? (
+              invoiceData.map((item: any) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    {item.company_name ? item.company_name : "--"}
+                  </TableCell>
+                  <TableCell>
+                    {item.client_name ? item.client_name : "--"}
+                  </TableCell>
+                  <TableCell>{item.type ? item.type : "--"}</TableCell>
+                  <TableCell>
+                    {item.invoice_date ? item.invoice_date : "--"}
+                  </TableCell>
+                  <TableCell>
+                    {item.invoice_status ? item.invoice_status : "--"}
+                  </TableCell>
+                  <TableCell>
+                    {item.invoice_amount
+                      ? `₹ ${Number(item.invoice_amount).toLocaleString(
+                          "en-IN"
+                        )}`
+                      : "--"}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} style={{ textAlign: "center" }}>
+                  No Invoices
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
       <LoadingComponent loading={loading} label={""} />
     </div>
   );

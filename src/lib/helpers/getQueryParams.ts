@@ -8,4 +8,5 @@ export type apiPropTypes = {
   sort_type: string;
   from_date: any;
   to_date: any;
+  client_id: any;
 };
