@@ -36,7 +36,7 @@ const InvoicesFilters = ({
       let fromDate = dayjs(date[0]).format("YYYY-MM-DD");
       let toDate = dayjs(date[1]).format("YYYY-MM-DD");
 
-      getAllIvoices({ from_date: fromDate, to_date: toDate });
+      getAllIvoices({ from_date: fromDate, to_date: toDate, page:1 });
     } else {
       getAllIvoices({ from_date: "", to_date: "" });
     }
@@ -46,7 +46,7 @@ const InvoicesFilters = ({
     const { value } = e.target;
     setSearchString(value);
     if (value) {
-      getAllIvoices({ search_string: value });
+      getAllIvoices({ search_string: value, page:1 });
     } else {
       getAllIvoices({ search_string: "" });
     }
@@ -54,7 +54,7 @@ const InvoicesFilters = ({
 
   const onSelectClient = (value: any) => {
     if (value) {
-      getAllIvoices({ client_id: value?.id });
+      getAllIvoices({ client_id: value?.id, page:1 });
     } else {
       getAllIvoices({ client_id: "" });
       setClientName(null);
@@ -63,7 +63,7 @@ const InvoicesFilters = ({
 
   const onSelectService = (value: any) => {
     if (value) {
-      getAllIvoices({ service_id: value?.id });
+      getAllIvoices({ service_id: value?.id, page:1 });
     } else {
       getAllIvoices({ service_id: "" });
       setServiceName(null);
@@ -75,7 +75,7 @@ const InvoicesFilters = ({
     if (value === "ALL") {
       getAllIvoices({ invoice_status: "" });
     } else {
-      getAllIvoices({ invoice_status: value });
+      getAllIvoices({ invoice_status: value, page:1 });
     }
   };
 
