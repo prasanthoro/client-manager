@@ -69,28 +69,24 @@ const InvoicesList = () => {
   };
 
   const clientNameDropDown = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const reponse = await clientNameDropDownAPI();
       if (reponse?.status == 200 || reponse?.status == 201) {
         setClientNameForDropDown(reponse?.data?.data);
       }
     } catch (error) {
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const servicesDropDown = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const reponse = await servicesDropDownAPI();
       if (reponse?.status == 200 || reponse?.status == 201) {
         setServicesForDropDown(reponse?.data?.data);
       }
     } catch (error) {
-    } finally {
-      setLoading(false);
     }
   };
 
