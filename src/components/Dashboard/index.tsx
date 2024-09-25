@@ -194,6 +194,7 @@ export const Dashboard = () => {
           <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <Card
+                style={{ cursor: "pointer" }}
                 className="p-2 max-w-xs mx-auto"
                 onClick={() => router.push("/clients")}
               >
@@ -209,6 +210,7 @@ export const Dashboard = () => {
                 </div>
               </Card>
               <Card
+                style={{ cursor: "pointer" }}
                 className="p-2 max-w-xs mx-auto"
                 onClick={() => router.push("/invoices")}
               >
