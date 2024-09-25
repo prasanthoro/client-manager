@@ -1,4 +1,4 @@
-import { AddInvoice } from "@/components/Invoices/AddInvoice";
+import { AddInvoice } from "@/components/Invoices/AddInvoice/AddInvoice";
 import { Suspense } from "react";
 
 const AddInvoicePage = () => {

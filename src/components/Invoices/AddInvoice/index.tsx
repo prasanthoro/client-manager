@@ -1,5 +1,5 @@
 "use client";
-import { Check, ChevronsUpDown, Key } from "lucide-react";
+import { Check, ChevronsUpDown, Key, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,9 +32,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CardWithForm } from "./Card";
+import { checkAllowedValidText } from "@/lib/helpers/constants";
+import { DatePicker } from "rsuite";
+import "rsuite/DatePicker/styles/index.css";
+import { Textarea } from "@/components/ui/textarea";
 
 const invoiceStatus = [
+  // {
+  //   label: "",
+  //   value: "Clear",
+  // },
   {
     label: "Pending",
     value: "PENDING",
@@ -46,15 +53,15 @@ const invoiceStatus = [
 ];
 
 export const AddInvoice = () => {
-  const [open, setOpen] = useState(false);
   const [openService, setOpenService] = useState(false);
   const [clientNameForDropDown, setClientNameForDropDown] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const [clientName, setClientName] = useState<any>();
   const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
   const [serviceName, setServiceName] = useState<any>({});
   const [addCount, setAddCount] = useState(1);
   const [serviceDetails, setServiceDetails] = useState<any>({});
-  const [loading, setLoading] = useState(false);
   const [selectedClientIndex, setSelectedClientIndex] = useState<number | null>(
     null
   );
@@ -64,6 +71,10 @@ export const AddInvoice = () => {
   const [selectedServices, setSelectedServices] = useState<
     Array<{ service: string; amount: number }>
   >([]);
+  const [payer, setPayer] = useState<any | null>({});
+
+  const [date, setDate] = useState<Date>();
+  const [invoiceDetails, setInvoiceDetails] = useState<any>({});
 
   const clientNameDropDown = async () => {
     setLoading(true);
@@ -89,13 +100,11 @@ export const AddInvoice = () => {
       setLoading(false);
     }
   };
-
   const addInvoice = async () => {
     try {
       let payload = [
         {
-          client_id: clientName?.id,
-          name: clientName?.client_name,
+          ...selectedServices,
         },
       ];
 
@@ -125,11 +134,12 @@ export const AddInvoice = () => {
   };
 
   const onAddCount = () => {
-    setAddCount(addCount + 1);
+    selectedServices.push({ service: "", amount: 0 });
   };
 
-  const onRemoveCount = () => {
-    if (addCount > 1) setAddCount(addCount - 1);
+  const onRemoveCount = (index: number) => {
+    selectedServices.splice(index, 1);
+    setSelectedServices([...selectedServices]);
   };
 
   const handleServiceNameChange = (value: string, index: number) => {
@@ -142,14 +152,67 @@ export const AddInvoice = () => {
     setSelectedServices(updatedServices);
   };
 
+  const handleInvoiceStatusChange = (value: string) => {
+    setInvoiceStatus(value);
+  };
+
   useEffect(() => {
     clientNameDropDown();
     servicesDropDown();
   }, []);
 
+  const handleClearClient = (e: any) => {
+    e.stopPropagation();
+    setClientName(null);
+  };
+
+  const onFieldsChange = (event?: any) => {
+    const { name, value } = event.target;
+    if (value && checkAllowedValidText(value)) {
+      setInvoiceDetails((prev: any) => ({
+        ...prev,
+        [name]: value,
+      }));
+    } else {
+      let temp = { ...invoiceDetails };
+      delete temp[name];
+      setInvoiceDetails(temp);
+    }
+  };
+
+  console.log(selectedServices, "selectedServices");
+
   return (
     <div>
-      <div style={{ display: "flex", marginRight: "100px" }}>
+      <div style={{ marginRight: "100px" }}>
+        <div>
+          <Input
+            name="name"
+            placeholder="Enter Name"
+            onChange={onFieldsChange}
+          />
+        </div>
+        <div>
+          <DatePicker
+            className="defaultTextField"
+            placeholder="Select Contract Submission Date"
+            value={
+              invoiceDetails?.invoice_date
+                ? new Date(invoiceDetails?.invoice_date)
+                : null
+            }
+            onChange={(value: any) =>
+              onFieldsChange({
+                target: {
+                  name: "invoice_date",
+                  value,
+                },
+              })
+            }
+            editable={false}
+            format="MM/dd/yyyy"
+          />
+        </div>
         <div>
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -158,13 +221,21 @@ export const AddInvoice = () => {
                 role="combobox"
                 aria-expanded={open}
                 className="w-[200px] justify-between"
+                style={{ width: "300px" }}
               >
                 {clientName
                   ? clientNameForDropDown.find(
                       (client: any) => client.id === clientName?.id
                     )?.client_name
                   : "Select Client"}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                {clientName ? (
+                  <X
+                    className="ml-2 h-4 w-4 cursor-pointer"
+                    onClick={handleClearClient}
+                  />
+                ) : (
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                )}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0">
@@ -173,24 +244,24 @@ export const AddInvoice = () => {
                 <CommandList>
                   <CommandEmpty>No Client found.</CommandEmpty>
                   <CommandGroup>
-                    {clientNameForDropDown.map((clientName: any) => (
+                    {clientNameForDropDown.map((client: any) => (
                       <CommandItem
-                        key={clientName.id}
-                        value={clientName.client_name}
-                        onSelect={(currentValue) => {
-                          setClientName(clientName);
+                        key={client.id}
+                        value={client.client_name}
+                        onSelect={() => {
+                          setClientName(client);
                           setOpen(false);
                         }}
                       >
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            clientName === clientName.client_name
+                            clientName === client.client_name
                               ? "opacity-100"
                               : "opacity-0"
                           )}
                         />
-                        {clientName.client_name}
+                        {client.client_name}
                       </CommandItem>
                     ))}
                   </CommandGroup>
@@ -202,6 +273,7 @@ export const AddInvoice = () => {
         <div>
           <Select
             onValueChange={(value) => {
+              handleInvoiceStatusChange(value);
               const selectedStatus = invoiceStatus.find(
                 (status) => status.value === value
               );
@@ -227,11 +299,18 @@ export const AddInvoice = () => {
             </SelectContent>
           </Select>
         </div>
+        <div>
+          <Textarea
+            name="remarks"
+            placeholder="Enter remarks"
+            onChange={onFieldsChange}
+          />
+        </div>
       </div>
       <div>
         <Button onClick={onAddCount}>+</Button>
-        {addCount > 1 && <Button onClick={onRemoveCount}>-</Button>}
-        {[...Array(addCount)].map((_, index) => {
+
+        {[...Array(selectedServices.length)].map((_, index) => {
           return (
             <div key={index} style={{ display: "flex", marginBottom: "10px" }}>
               <div>
@@ -265,6 +344,15 @@ export const AddInvoice = () => {
                   name={`services_amount${index}`}
                   placeholder="Amount"
                 />
+              </div>
+              <div>
+                <Button
+                  variant="outline"
+                  color="red"
+                  onClick={() => onRemoveCount(index)}
+                >
+                  <X />
+                </Button>
               </div>
             </div>
           );
