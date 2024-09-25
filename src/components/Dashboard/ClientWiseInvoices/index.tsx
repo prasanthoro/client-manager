@@ -21,7 +21,7 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
           <TableCell>Invoice Date</TableCell>
           <TableCell>Invoice Status</TableCell>
           <TableCell>Invoice Amount</TableCell>
-          <TableCell>Actions</TableCell>
+          {/* <TableCell>Actions</TableCell> */}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -46,9 +46,9 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
                   ? `₹ ${Number(item.invoice_amount).toLocaleString("en-IN")}`
                   : "--"}
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <DownloadButton />
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))
         ) : (
@@ -62,5 +62,4 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
     </Table>
   );
 };
-
 export default ClientWiseInvoicesList;
