@@ -1,9 +1,11 @@
 "use client";
 import dayjs from "dayjs";
-import DatePickerWithRange from "../core/DatePickerWithRange";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
+import ClientDropDown from "../core/ClientDropDown";
+import DatePickerWithRange from "../core/DatePickerWithRange";
+import ServiceDropDown from "../core/ServicesDropDown";
+import { Button } from "../ui/button";
 import {
   Select,
   SelectContent,
@@ -12,8 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import ClientDropDown from "../core/ClientDropDown";
-import { useSearchParams } from "next/navigation";
 
 const InvoicesFilters = ({
   getAllIvoices,
@@ -27,6 +27,7 @@ const InvoicesFilters = ({
   const params = useSearchParams();
 
   const [open, setOpen] = useState(false);
+  const [openService, setOpenService] = useState(false);
   const [clientName, setClientName] = useState<any>({});
   const [serviceName, setServiceName] = useState<any>({});
 
@@ -60,6 +61,15 @@ const InvoicesFilters = ({
     }
   };
 
+  const onSelectService = (value: any) => {
+    if (value) {
+      getAllIvoices({ service_id: value?.id });
+    } else {
+      getAllIvoices({ service_id: "" });
+      setServiceName(null);
+    }
+  };
+
   const onChangeStatus = (value: string) => {
     setSelectStatus(value);
     if (value === "ALL") {
@@ -81,6 +91,17 @@ const InvoicesFilters = ({
     }
   }, [params, clientNameForDropDown, setClientName]);
 
+  useEffect(() => {
+    const serviceId = params.get("service_id");
+    if (serviceId) {
+      const matchedService = servicesForDropDown.find(
+        (service: any) => service.id == serviceId
+      );
+      if (matchedService) {
+        setServiceName(matchedService);
+      }
+    }
+  }, [params, servicesForDropDown, setServiceName]);
 
   return (
     <div className="flex justify-between items-center gap-2 p-5">
@@ -102,6 +123,16 @@ const InvoicesFilters = ({
           clientName={clientName}
           setClientName={setClientName}
           onSelectClient={onSelectClient}
+        />
+      </div>
+      <div style={{ width: "300px" }}>
+        <ServiceDropDown
+          open={openService}
+          setOpen={setOpenService}
+          servicesForDropDown={servicesForDropDown}
+          serviceName={serviceName}
+          setServiceName={setServiceName}
+          onSelectService={onSelectService}
         />
       </div>
       <Select onValueChange={onChangeStatus} value={selectStatus}>

@@ -67,7 +67,6 @@ export const CardWithForm = ({ onServiceNameChange, index }: any) => {
                   id="framework"
                   name={`services_framework${index}`}
                   onChange={() => {
-                    console.log("triggered");
                   }}
                   value={"next"}
                   defaultValue={"next"}

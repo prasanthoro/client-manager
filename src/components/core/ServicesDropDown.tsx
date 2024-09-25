@@ -15,19 +15,18 @@ import {
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, X } from "lucide-react"; // Import the X icon
 
-const ClientDropDown = ({
+const ServiceDropDown = ({
   open,
   setOpen,
-  clientNameForDropDown,
-  clientName,
-  setClientName,
-  onSelectClient
+  servicesForDropDown,
+  serviceName,
+  setServiceName,
+  onSelectService,
 }: any) => {
-
-  const handleClearClient = (e: any) => {
+  const handleClearService = (e: any) => {
     e.stopPropagation();
-    setClientName(null);
-    onSelectClient(null);
+    setServiceName(null);
+    onSelectService(null);
   };
 
   return (
@@ -42,15 +41,15 @@ const ClientDropDown = ({
               className="w-[200px] justify-between"
               style={{ width: "300px" }}
             >
-              {clientName?.client_name
-                ? clientNameForDropDown?.find(
-                    (client: any) => client?.id === clientName?.id
-                  )?.client_name
-                : "Select Client"}
-              {clientName?.client_name ? (
+              {serviceName?.name
+                ? servicesForDropDown?.find(
+                    (service: any) => service?.id === serviceName?.id
+                  )?.name
+                : "Select Service Type"}
+              {serviceName?.name ? (
                 <X
                   className="ml-2 h-4 w-4 cursor-pointer"
-                  onClick={handleClearClient}
+                  onClick={handleClearService}
                 />
               ) : (
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -59,29 +58,29 @@ const ClientDropDown = ({
           </PopoverTrigger>
           <PopoverContent className="w-[200px] p-0">
             <Command>
-              <CommandInput placeholder="Search Client" />
+              <CommandInput placeholder="Search service Type" />
               <CommandList>
-                <CommandEmpty>No Client found.</CommandEmpty>
+                <CommandEmpty>No services found.</CommandEmpty>
                 <CommandGroup>
-                  {clientNameForDropDown?.map((client: any) => (
+                  {servicesForDropDown?.map((serivce: any) => (
                     <CommandItem
-                      key={client?.id}
-                      value={client?.client_name}
+                      key={serivce?.id}
+                      value={serivce?.name}
                       onSelect={() => {
-                        setClientName(client);
-                        onSelectClient(client);
+                        setServiceName(serivce);
+                        onSelectService(serivce);
                         setOpen(false);
                       }}
                     >
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          clientName === client?.client_name
+                          serviceName === serivce?.name
                             ? "opacity-100"
                             : "opacity-0"
                         )}
                       />
-                      {client?.client_name}
+                      {serivce?.name}
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -93,4 +92,4 @@ const ClientDropDown = ({
     </div>
   );
 };
-export default ClientDropDown;
+export default ServiceDropDown;

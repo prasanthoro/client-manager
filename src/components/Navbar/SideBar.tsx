@@ -43,7 +43,7 @@ const SideBar = ({
                 <IndianRupee className="h-4 w-4" />
                 Invoices
               </Link>
-              <Link
+              {/* <Link
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                   pathname.includes("add-invoice") ? "font-bold" : ""
                 }`}
@@ -51,7 +51,7 @@ const SideBar = ({
               >
                 <IndianRupee className="h-4 w-4" />
                 Add Invoice
-              </Link>
+              </Link> */}
             </nav>
           </div>
         </div>

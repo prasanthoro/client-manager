@@ -104,7 +104,7 @@ export const AddInvoice = () => {
         throw reponse;
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

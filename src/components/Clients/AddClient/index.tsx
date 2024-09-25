@@ -11,7 +11,6 @@ import { toast } from "sonner";
 const AddClient = () => {
   const router = useRouter();
   const [errorMessages, setErrorMessages] = useState<any>();
-  console.log(errorMessages, "error");
   const [clientData, setClientData] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [label, setLabel] = useState(loading);
@@ -24,9 +23,7 @@ const AddClient = () => {
       let payload = {
         ...restData,
       };
-      console.log(payload, "payload");
       const response = await addClientAPI(payload);
-      console.log(response, "res");
       if (response?.status == 200 || response?.status == 201) {
         router.back();
       } else if (response?.status == 422) {
@@ -35,7 +32,7 @@ const AddClient = () => {
         throw response;
       }
     } catch (err: any) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }

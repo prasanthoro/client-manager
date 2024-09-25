@@ -29,7 +29,7 @@ export const DeleteButton = ({ getAllClients, clientId }: any) => {
       }
     } catch (err: any) {
       toast.error(err?.message || "Something went wrong");
-      console.log(err);
+      console.error(err);
     } finally {
       setDeleteLoading(false);
     }
