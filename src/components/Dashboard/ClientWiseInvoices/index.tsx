@@ -1,4 +1,5 @@
 "use client";
+import { ViewButton } from "@/components/Clients/ViewButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -10,71 +11,54 @@ import {
 
 const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
   return (
-    <Card>
-      <CardHeader className="px-5">
-        <CardTitle>Latest Invoices</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {clientWiseTotallInvoices && clientWiseTotallInvoices.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableCell>Company Name</TableCell>
-                <TableCell>Client Name</TableCell>
-                <TableCell>Service Type</TableCell>
-                <TableCell>Invoice Date</TableCell>
-                <TableCell>Invoice Status</TableCell>
-                <TableCell>Invoice Amount</TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {clientWiseTotallInvoices.map((item: any) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    {item.company_name ? item.company_name : "--"}
-                  </TableCell>
-                  <TableCell>
-                    {item.client_name ? item.client_name : "--"}
-                  </TableCell>
-                  <TableCell>{item.type ? item.type : "--"}</TableCell>
-                  <TableCell>
-                    {item.invoice_date ? item.invoice_date : "--"}
-                  </TableCell>
-                  <TableCell>
-                    {item.invoice_status ? item.invoice_status : "--"}
-                  </TableCell>
-                  <TableCell>
-                    {item.invoice_amount
-                      ? `₹ ${Number(item.invoice_amount).toLocaleString(
-                          "en-IN"
-                        )}`
-                      : "--"}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableCell>Company Name</TableCell>
+          <TableCell>Client Name</TableCell>
+          <TableCell>Service Type</TableCell>
+          <TableCell>Invoice Date</TableCell>
+          <TableCell>Invoice Status</TableCell>
+          <TableCell>Invoice Amount</TableCell>
+          <TableCell>Actions</TableCell>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {clientWiseTotallInvoices.length > 0 ? (
+          clientWiseTotallInvoices.map((item: any) => (
+            <TableRow key={item.id}>
+              <TableCell>
+                {item.company_name ? item.company_name : "--"}
+              </TableCell>
+              <TableCell>
+                {item.client_name ? item.client_name : "--"}
+              </TableCell>
+              <TableCell>{item.type ? item.type : "--"}</TableCell>
+              <TableCell>
+                {item.invoice_date ? item.invoice_date : "--"}
+              </TableCell>
+              <TableCell>
+                {item.invoice_status ? item.invoice_status : "--"}
+              </TableCell>
+              <TableCell>
+                {item.invoice_amount
+                  ? `₹ ${Number(item.invoice_amount).toLocaleString("en-IN")}`
+                  : "--"}
+              </TableCell>
+              <TableCell>
+                <ViewButton />
+              </TableCell>
+            </TableRow>
+          ))
         ) : (
-          <div className="text-center p-4 text-gray-500">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableCell>Company Name</TableCell>
-                  <TableCell>Client Name</TableCell>
-                  <TableCell>Service Type</TableCell>
-                  <TableCell>Invoice Date</TableCell>
-                  <TableCell>Invoice Status</TableCell>
-                  <TableCell>Invoice Amount</TableCell>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <h2>No Data </h2>
-              </TableBody>
-            </Table>
-          </div>
+          <TableRow>
+            <TableCell colSpan={7} style={{ textAlign: "center" }}>
+              No Data
+            </TableCell>
+          </TableRow>
         )}
-      </CardContent>
-    </Card>
+      </TableBody>
+    </Table>
   );
 };
 
