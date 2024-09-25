@@ -1,5 +1,6 @@
 "use client";
 import { ViewButton } from "@/components/Clients/ViewButton";
+import { DownloadButton } from "@/components/Invoices/DownloadButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -46,7 +47,7 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
                   : "--"}
               </TableCell>
               <TableCell>
-                <ViewButton />
+                <DownloadButton />
               </TableCell>
             </TableRow>
           ))
