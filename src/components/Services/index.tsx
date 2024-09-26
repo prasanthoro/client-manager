@@ -26,6 +26,7 @@ const ServicesList = () => {
     sort_type = params.get("sort_type") as string,
     from_date = params.get("from_date") as string,
     to_date = params.get("to_date") as string,
+    search_string = params.get("search_string") as string,
   }: Partial<servicesListPropTypes>) => {
     try {
       let queryParams: any = {
@@ -35,6 +36,7 @@ const ServicesList = () => {
         sort_type: sort_type,
         from_date: from_date,
         to_date: to_date,
+        search_string: search_string,
       };
 
       setLoading(true);
@@ -58,9 +60,7 @@ const ServicesList = () => {
 
   return (
     <div>
-      <ServicesFilters 
-      getAllServices={getAllServices}
-      />
+      <ServicesFilters getAllServices={getAllServices} />
       <TanStackTableComponent
         columns={servicesColumns()}
         getData={getAllServices}
