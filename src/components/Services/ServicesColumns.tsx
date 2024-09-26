@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/tooltip";
 import dayjs from "dayjs";
 import { formatAmount } from "@/lib/helpers/core/formatAmount";
+import { EditButton } from "./EditButton";
 
 export const servicesColumns = () => {
   return [
@@ -113,14 +114,29 @@ export const servicesColumns = () => {
       width: "100px",
     },
 
-    // {
-    //   accessorFn: (row: any) => row?.actions,
-    //   id: "actions",
-    //   header: () => <span>Actions</span>,
-    //   footer: (props: any) => props.columns.id,
-    //   cell: (info: any) => {
-    //     return <div className="actionIcons"></div>;
-    //   },
-    // },
+    {
+      accessorFn: (row: any) => row?.actions,
+      id: "actions",
+      header: () => <span>Actions</span>,
+      footer: (props: any) => props.columns.id,
+      cell: (info: any) => {
+        return (
+          <div className="actionIcons">
+            <ul
+              className="actionList"
+              style={{ display: "flex", listStyle: "none", padding: 0 }}
+            >
+              <li
+                className="eachList"
+                style={{ marginRight: "10px", cursor: "pointer" }}
+              >
+                <EditButton id={info?.row?.original?.id}/>
+              </li>
+              
+            </ul>
+          </div>
+        );
+      },
+    },
   ];
 };
