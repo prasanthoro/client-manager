@@ -98,7 +98,6 @@ export const Dashboard = () => {
         queryParams["to_date"] = to_date;
       }
       let queryString = prepareURLEncodedParams("", queryParams);
-      console.log(queryString, "string");
 
       router.push(`${pathname}${queryString}`);
       const response = await getInvoiceAmountAPI({
@@ -107,7 +106,7 @@ export const Dashboard = () => {
       });
       if (response?.status == 200 || response?.status == 201) {
         let { data } = response?.data;
-        setInvoiceAmount(data);
+        setInvoiceAmount(data[0]?.total_amount);
       } else {
         throw response;
       }
@@ -142,6 +141,7 @@ export const Dashboard = () => {
       });
       if (response?.status == 200 || response?.status == 201) {
         let { data } = response?.data;
+        
         setClientWiseTotalInvoices(data);
       } else {
         throw response;
