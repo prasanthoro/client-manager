@@ -38,6 +38,7 @@ const InvoicesList = () => {
     invoice_status = params.get("invoice_status") as string,
     client_id = params.get("client_id") as string,
     service_id = params.get("service_id") as string,
+    type = params.get("type") as string,
   }: Partial<invoicesListPropTypes>) => {
     try {
       let queryParams: any = {
@@ -51,6 +52,7 @@ const InvoicesList = () => {
         status: invoice_status,
         client_id: client_id,
         service_id: service_id,
+        type: type,
       };
 
       setLoading(true);

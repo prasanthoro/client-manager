@@ -345,12 +345,14 @@ export const Dashboard = () => {
               <Card
                 style={{ cursor: "pointer" }}
                 className="p-2 max-w-xs mx-auto"
-                onClick={() => router.push("/services")}
+                onClick={() =>
+                  router.push("/invoices?page=1&limit=25&type=ONE-TIME")
+                }
               >
                 <div className="bg-gradient-to-r from-orange-500 to-yellow-600 text-white shadow-lg rounded-lg">
                   <CardHeader className="flex flex-row items-center justify-between pb-1">
                     <CardTitle className="text-lg font-bold">
-                      Services Amount
+                      On Time Amount
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -364,7 +366,7 @@ export const Dashboard = () => {
                 style={{ cursor: "pointer" }}
                 className="p-2 max-w-xs mx-auto"
                 onClick={() =>
-                  router.push("/services?page=1&limit=25&type=RECURRING")
+                  router.push("/invoices?page=1&limit=25&type=RECURRING")
                 }
               >
                 <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg rounded-lg">
