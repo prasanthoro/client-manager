@@ -11,5 +11,7 @@ export type invoicesListPropTypes = {
     invoice_status: string;
     client_id: string;
     service_id: string;
+    type:string;
+    status:string;
   };
   

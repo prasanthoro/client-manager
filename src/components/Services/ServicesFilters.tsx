@@ -56,8 +56,8 @@ const ServicesFilters = ({ getAllServices }: any) => {
   };
 
   return (
-    <div className="flex justify-between items-center gap-2 p-5">
-      <div style={{ width: "300px" }}>
+    <div className="flex justify-between my-4 gap-2">
+      <div className="w-full">
         <DatePickerWithRange onDataChange={onDataChange} />
       </div>
       <Input
@@ -65,10 +65,10 @@ const ServicesFilters = ({ getAllServices }: any) => {
         placeholder="Search Name "
         value={searchString}
         onChange={onSearchStringChange}
-        className="w-[350px]"
+        className="w-full"
       />
       <Select onValueChange={onChangeType} value={selectType}>
-        <SelectTrigger className="w-[100px]">
+        <SelectTrigger className="w-full">
           {" "}
           <SelectValue placeholder="All" />
         </SelectTrigger>

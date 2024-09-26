@@ -118,7 +118,7 @@ const DatePickerWithRange = ({ onDataChange }: any) => {
           value={date}
           onChange={handleSelect}
           format="yyyy-MM-dd"
-          style={{ width: "300px" }}
+          style={{ width: "300%" }}
           disabledDate={disableFutureDates}
           cleanable={date && date[0] && date[1] ? true : false}
         />

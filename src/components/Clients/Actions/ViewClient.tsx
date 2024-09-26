@@ -1,6 +1,16 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import DatePickerWithRange from "@/components/core/DatePickerWithRange";
 import { LoadingComponent } from "@/components/core/LoadingComponent";
+import ServiceDropDown from "@/components/core/ServicesDropDown";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -8,17 +18,41 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
+import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
 import { viewClientAPI, viewInvoiceAPI } from "@/services/clients";
+import {
+  servicesDropDownAPI
+} from "@/services/invoices";
+import dayjs from "dayjs";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ViewClient = () => {
+  
+  const params = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
   const { client_Id } = useParams();
   const [clientData, setClientData] = useState<any>();
   const [invoiceData, setInvoiceData] = useState<any>([]);
-  const router = useRouter();
+  const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
+  const [serviceName, setServiceName] = useState<any>({});
+  const [openService, setOpenService] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectStatus, setSelectStatus] = useState<any>(
+    params.get("status") ? params.get("status") : "ALL"
+  );
+  const [selectType, setSelectType] = useState<any>(
+    params.get("type") ? params.get("type") : "ALL"
+  );
 
   const getSingleClientView = async () => {
     try {
@@ -34,10 +68,26 @@ const ViewClient = () => {
       setLoading(false);
     }
   };
-  const ViewInvoiceList = async () => {
+  const ViewInvoiceList = async ({
+    from_date = params.get("from_date") as string,
+    to_date = params.get("to_date") as string,
+    status = params.get("status") as string,
+    service_id = params.get("service_id") as string,
+    type = params.get("type") as string,
+  }: Partial<invoicesListPropTypes>) => {
     try {
+      let queryParams: any = {
+        from_date: from_date,
+        to_date: to_date,
+        status: status,
+        service_id: service_id,
+        type: type,
+      };
       setLoading(true);
-      const response = await viewInvoiceAPI(client_Id);
+      let queryString: any = prepareURLEncodedParams("", queryParams);
+
+      router.push(`${pathname}${queryString}`);
+      const response = await viewInvoiceAPI(client_Id, queryParams);
       if (response?.status == 200 || response?.status == 201) {
         let { data } = response?.data;
         setInvoiceData(data);
@@ -49,13 +99,74 @@ const ViewClient = () => {
     }
   };
 
+  const servicesDropDown = async () => {
+    // setLoading(true);
+    try {
+      const reponse = await servicesDropDownAPI();
+      if (reponse?.status == 200 || reponse?.status == 201) {
+        setServicesForDropDown(reponse?.data?.data);
+      }
+    } catch (error) {}
+  };
+
   const handleBackClick = () => {
     router.back();
   };
 
+  const onDataChange = (date: any) => {
+    if (date) {
+      let fromDate = dayjs(date[0]).format("YYYY-MM-DD");
+      let toDate = dayjs(date[1]).format("YYYY-MM-DD");
+
+      ViewInvoiceList({ from_date: fromDate, to_date: toDate });
+    } else {
+      ViewInvoiceList({ from_date: "", to_date: "" });
+    }
+  };
+
+  const onChangeStatus = (value: string) => {
+    setSelectStatus(value);
+    if (value === "ALL") {
+      ViewInvoiceList({ status: "" });
+    } else {
+      ViewInvoiceList({ status: value });
+    }
+  };
+
+  const onChangeType = (value: string) => {
+    setSelectType(value);
+    if (value === "ALL") {
+      ViewInvoiceList({ type: "" });
+    } else {
+      ViewInvoiceList({ type: value });
+    }
+  };
+
+  const onSelectService = (value: any) => {
+    if (value) {
+      ViewInvoiceList({ service_id: value?.id });
+    } else {
+      ViewInvoiceList({ service_id: "" });
+      setServiceName(null);
+    }
+  };
+
+  useEffect(() => {
+    const serviceId = params.get("service_id");
+    if (serviceId) {
+      const matchedService = servicesForDropDown.find(
+        (service: any) => service.id == serviceId
+      );
+      if (matchedService) {
+        setServiceName(matchedService);
+      }
+    }
+  }, [params, servicesForDropDown, setServiceName]);
+
   useEffect(() => {
     getSingleClientView();
-    ViewInvoiceList();
+    ViewInvoiceList({});
+    servicesDropDown();
   }, []);
 
   return (
@@ -75,7 +186,7 @@ const ViewClient = () => {
       </div>
 
       {/* Client Information */}
-      <Card className="mb-4">
+      <Card>
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-blue-800">
             Primary Information
@@ -123,29 +234,70 @@ const ViewClient = () => {
           </div>
         </CardContent>
       </Card>
-
-      <Card className="mb-4">
-        <CardHeader></CardHeader>
-        <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
-          <div className="grid grid-cols-3 gap-4 text-gray-600">
-            <div className="flex flex-col">
-              <span className="font-bold">Remarks</span>
-              <span>{clientData?.remarks ? clientData?.remarks : "--"}</span>
+      <div className="mt-4">
+        <Card>
+          <CardHeader></CardHeader>
+          <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
+            <div className="grid grid-cols-3 gap-4 text-gray-600">
+              <div className="flex flex-col">
+                <span className="font-bold">Remarks</span>
+                <span>{clientData?.remarks ? clientData?.remarks : "--"}</span>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
       <div>
-        <div>
+        <div className="flex justify-between my-4">
           <h5>Client Invoices</h5>
+          <div className="grid grid-cols-4 gap-2 w-[70%] ">
+            <div className="w-full">
+              <DatePickerWithRange onDataChange={onDataChange} />
+            </div>
+            <div className="w-full">
+              <ServiceDropDown
+                open={openService}
+                setOpen={setOpenService}
+                servicesForDropDown={servicesForDropDown}
+                serviceName={serviceName}
+                setServiceName={setServiceName}
+                onSelectService={onSelectService}
+              />
+            </div>
+            <Select onValueChange={onChangeType} value={selectType}>
+              <SelectTrigger className="w-full">
+                {" "}
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="ALL">All</SelectItem>
+                  <SelectItem value="RECURRING">Recurring</SelectItem>
+                  <SelectItem value="ONE-TIME">On Time</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <Select onValueChange={onChangeStatus} value={selectStatus}>
+              <SelectTrigger className="w-full">
+                {" "}
+                {/* Adjust the width */}
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="ALL">All</SelectItem>
+                  <SelectItem value="COMPLETED">Completed</SelectItem>
+                  <SelectItem value="PENDING">Pending</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-
         <div id="clientWiseTable" className="relative">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableCell>Company Name</TableCell>
-                <TableCell>Client Name</TableCell>
+                <TableCell>Service Name</TableCell>
                 <TableCell>Service Type</TableCell>
                 <TableCell>Invoice Date</TableCell>
                 <TableCell>Invoice Status</TableCell>
@@ -157,10 +309,7 @@ const ViewClient = () => {
                 invoiceData.map((item: any) => (
                   <TableRow key={item.id}>
                     <TableCell>
-                      {item.company_name ? item.company_name : "--"}
-                    </TableCell>
-                    <TableCell>
-                      {item.client_name ? item.client_name : "--"}
+                      {item.service_name ? item.service_name : "--"}
                     </TableCell>
                     <TableCell>{item.type ? item.type : "--"}</TableCell>
                     <TableCell>

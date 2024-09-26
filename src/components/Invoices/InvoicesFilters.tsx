@@ -105,8 +105,8 @@ const InvoicesFilters = ({
   }, [params, servicesForDropDown, setServiceName]);
 
   return (
-    <div className="flex justify-between items-center gap-2 p-5">
-      <div style={{ width: "500px" }}>
+    <div className="flex justify-between my-4 gap-2">
+      <div className="w-full">
         <DatePickerWithRange onDataChange={onDataChange} />
       </div>
       {/* <Input
@@ -116,7 +116,7 @@ const InvoicesFilters = ({
         onChange={onSearchStringChange}
         className="w-[350px]" // Adjust the width to match the image
       /> */}
-      <div style={{ width: "300px" }}>
+      <div className="w-full">
         <ClientDropDown
           open={open}
           setOpen={setOpen}
@@ -126,7 +126,7 @@ const InvoicesFilters = ({
           onSelectClient={onSelectClient}
         />
       </div>
-      <div style={{ width: "300px" }}>
+      <div className="w-full">
         <ServiceDropDown
           open={openService}
           setOpen={setOpenService}
@@ -137,7 +137,7 @@ const InvoicesFilters = ({
         />
       </div>
       <Select onValueChange={onChangeStatus} value={selectStatus}>
-        <SelectTrigger className="w-[100px]">
+        <SelectTrigger className="w-full">
           {" "}
           {/* Adjust the width */}
           <SelectValue placeholder="All" />

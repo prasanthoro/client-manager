@@ -58,7 +58,7 @@ const AddClient = () => {
       });
       if (response?.status == 200 || response?.status == 201) {
         toast.success(response?.data?.message);
-        router.back();
+        router.push('/clients');
       } else if (response?.status == 422) {
         setErrorMessages(response?.data?.errors);
       } else if (response?.status == 409) {

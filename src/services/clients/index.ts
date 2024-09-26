@@ -1,5 +1,6 @@
 import { $fetch } from "@/lib/fetch";
 import { apiPropTypes } from "@/lib/helpers/getQueryParams";
+import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
 
 export const getAllClientsListAPI = async (params: Partial<apiPropTypes>) => {
   try {
@@ -36,9 +37,9 @@ export const addClientAPI = async (payload: any) => {
     console.error(err);
   }
 };
-export const viewInvoiceAPI = async (client_Id: any) => {
+export const viewInvoiceAPI = async (client_Id: any, params: Partial<invoicesListPropTypes>) => {
   try {
-    return await $fetch.get(`/invoices/list/${client_Id}`);
+    return await $fetch.get(`/invoices/list/${client_Id}`, params);
   } catch (err) {
     console.error(err);
   }
