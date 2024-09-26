@@ -27,6 +27,7 @@ const ServicesList = () => {
     from_date = params.get("from_date") as string,
     to_date = params.get("to_date") as string,
     search_string = params.get("search_string") as string,
+    type = params.get("type") as string,
   }: Partial<servicesListPropTypes>) => {
     try {
       let queryParams: any = {
@@ -37,6 +38,7 @@ const ServicesList = () => {
         from_date: from_date,
         to_date: to_date,
         search_string: search_string,
+        type: type,
       };
 
       setLoading(true);

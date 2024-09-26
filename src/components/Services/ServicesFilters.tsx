@@ -5,6 +5,14 @@ import dayjs from "dayjs";
 import DatePickerWithRange from "../core/DatePickerWithRange";
 import { ChangeEvent, useState } from "react";
 import { Input } from "../ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const ServicesFilters = ({ getAllServices }: any) => {
   const router = useRouter();
@@ -12,6 +20,9 @@ const ServicesFilters = ({ getAllServices }: any) => {
 
   const [searchString, setSearchString] = useState<any>(
     params.get("search_string") ? params.get("search_string") : ""
+  );
+  const [selectType, setSelectType] = useState<any>(
+    params.get("type") ? params.get("type") : "ALL"
   );
 
   const onDataChange = (date: any) => {
@@ -35,9 +46,18 @@ const ServicesFilters = ({ getAllServices }: any) => {
     }
   };
 
+  const onChangeType = (value: string) => {
+    setSelectType(value);
+    if (value === "ALL") {
+      getAllServices({ type: "" });
+    } else {
+      getAllServices({ type: value, page: 1 });
+    }
+  };
+
   return (
     <div className="flex justify-between items-center gap-2 p-5">
-      <div style={{ width: "500px" }}>
+      <div style={{ width: "300px" }}>
         <DatePickerWithRange onDataChange={onDataChange} />
       </div>
       <Input
@@ -47,6 +67,19 @@ const ServicesFilters = ({ getAllServices }: any) => {
         onChange={onSearchStringChange}
         className="w-[350px]"
       />
+      <Select onValueChange={onChangeType} value={selectType}>
+        <SelectTrigger className="w-[100px]">
+          {" "}
+          <SelectValue placeholder="All" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="ALL">All</SelectItem>
+            <SelectItem value="RECURRING">Recurring</SelectItem>
+            <SelectItem value="ONE-TIME">On Time</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
       <Button
         className="w-[120px] bg-black text-white"
         onClick={() => {
