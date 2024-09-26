@@ -35,6 +35,7 @@ import "rsuite/dist/rsuite.min.css";
 import dayjs from "dayjs";
 import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
 import { toast } from "sonner";
+import DatePickerWithRange from "../core/DatePickerWithRange";
 export const Dashboard = () => {
   const router = useRouter();
   const params = useSearchParams();
@@ -97,7 +98,6 @@ export const Dashboard = () => {
         queryParams["to_date"] = to_date;
       }
       let queryString = prepareURLEncodedParams("", queryParams);
-      console.log(queryString, "string");
 
       router.push(`${pathname}${queryString}`);
       const response = await getInvoiceAmountAPI({
@@ -106,7 +106,7 @@ export const Dashboard = () => {
       });
       if (response?.status == 200 || response?.status == 201) {
         let { data } = response?.data;
-        setInvoiceAmount(data);
+        setInvoiceAmount(data[0]?.total_amount);
       } else {
         throw response;
       }
@@ -141,6 +141,7 @@ export const Dashboard = () => {
       });
       if (response?.status == 200 || response?.status == 201) {
         let { data } = response?.data;
+        
         setClientWiseTotalInvoices(data);
       } else {
         throw response;
@@ -239,6 +240,55 @@ export const Dashboard = () => {
     }
   };
 
+  const onDataChange = async (date: any) => {
+    if (date) {
+      let fromDate = dayjs(date[0]).format("YYYY-MM-DD");
+      let toDate = dayjs(date[1]).format("YYYY-MM-DD");
+
+      await getClientWiseTotalInvoiceAmount({
+        from_date: fromDate,
+        to_date: toDate,
+      });
+      await getAllClientsCount({
+        from_date: fromDate,
+        to_date: toDate,
+      });
+      await recurringTypeAmount({
+        from_date: fromDate,
+        to_date: toDate,
+      });
+      await getInvoiceAmount({
+        from_date: fromDate,
+        to_date: toDate,
+      });
+      await serviceOneTimeInvoiceCount({
+        from_date: fromDate,
+        to_date: toDate,
+      });
+    } else {
+      await getClientWiseTotalInvoiceAmount({
+        from_date: '',
+        to_date: '',
+      });
+      await getAllClientsCount({
+        from_date: '',
+        to_date: '',
+      });
+      await recurringTypeAmount({
+        from_date: '',
+        to_date: '',
+      });
+      await getInvoiceAmount({
+        from_date: '',
+        to_date: '',
+      });
+      await serviceOneTimeInvoiceCount({
+        from_date: '',
+        to_date: '',
+      });
+    }
+  };
+
   useEffect(() => {
     getAllClientsCount({});
     recurringTypeAmount({});
@@ -253,15 +303,7 @@ export const Dashboard = () => {
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
           <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
             <div>
-              <DateRangePicker
-                className="dateRangePicker"
-                placeholder="Select Date"
-                value={dateInformation}
-                format="MM-dd-yyyy"
-                onChange={handleDateChange}
-                editable={false}
-                disabledDate={(date: Date) => date.valueOf() > Date?.now()}
-              />
+              <DatePickerWithRange onDataChange={onDataChange} />
             </div>
           </header>
           <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">

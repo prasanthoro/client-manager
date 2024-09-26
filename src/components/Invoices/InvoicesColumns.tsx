@@ -57,6 +57,16 @@ export const invoicesColumns = () => {
       width: "100px",
     },
     {
+      accessorFn: (row: any) => row?.remarks,
+      id: "remarks",
+      header: () => <span>Remarks</span>,
+      cell: (info: any) => {
+        return <span className="eachCell">{info.getValue()}</span>;
+      },
+      footer: (props: any) => props.columns.id,
+      width: "100px",
+    },
+    {
       accessorFn: (row: any) => row?.actions,
       id: "actions",
       header: () => <span>Actions</span>,
@@ -72,14 +82,14 @@ export const invoicesColumns = () => {
                 className="eachList"
                 style={{ marginRight: "10px", cursor: "pointer" }}
               >
-                <EditButton />
+                <EditButton invoice_id={info.row?.original?.id} />
               </li>
               {info?.row?.original?.url ? (
                 <li
                   className="eachList"
                   style={{ marginRight: "10px", cursor: "pointer" }}
                 >
-                  <DownloadButton download={info?.row?.original?.url}/>
+                  <DownloadButton download={info?.row?.original?.url} />
                 </li>
               ) : (
                 ""

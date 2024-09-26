@@ -3,14 +3,13 @@ import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 // import LoadingComponent from "@/components/core/LoadingComponent";
-export const EditButton = ({ insurance_id }: any) => {
+export const EditButton = ({ invoice_id }: any) => {
   const [loading, setLoading] = useState(false);
   const params = useSearchParams();
-  const pathname = usePathname();
-  const lab_id = params?.get("lab_id" as string);
+
   const router = useRouter();
   const onEditClick = () => {
-   
+    router.push(`/edit-invoice/${invoice_id}`);
   };
 
   return (
@@ -18,7 +17,6 @@ export const EditButton = ({ insurance_id }: any) => {
       <Image
         title="Edit"
         onClick={() => {
-          setLoading(true);
           onEditClick();
         }}
         src={"/edit.svg"}
