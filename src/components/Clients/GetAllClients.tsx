@@ -104,17 +104,17 @@ const Clients = () => {
 
   return (
     <>
-      <ClientFilters
-        getAllClients={getAllClients}
-        searchString={searchString}
-        setSearchString={setSearchString}
-        dateinfo={dateInformation}
-        setDateInformation={setDateInformation}
-        dropDownClientsData={dropDownClientsData}
-      />
       <div className="flex">
+        <ClientFilters
+          getAllClients={getAllClients}
+          searchString={searchString}
+          setSearchString={setSearchString}
+          dateinfo={dateInformation}
+          setDateInformation={setDateInformation}
+          dropDownClientsData={dropDownClientsData}
+        />
         <Button
-          className="ml-auto bg-blue-500 hover:bg-blue-600 text-white"
+          className="static ml-auto bg-blue-500 hover:bg-blue-600 text-white"
           onClick={() => router.push("/clients/addclient")}
         >
           Add client

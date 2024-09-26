@@ -340,8 +340,12 @@ export const Dashboard = () => {
               </Card>
             </div>
           </main>
-          <h5>Latest Invoices</h5>
-          <Button>View All</Button>
+          <div className="flex justify-between my-4">
+            <h5>Latest Invoices</h5>
+            <Button onClick={() => router.push("/invoices")}>
+              View All Invoices
+            </Button>
+          </div>
 
           <div className="flex justify-center gap-[20px] mt-6">
             <ClientWiseInvoicesList
