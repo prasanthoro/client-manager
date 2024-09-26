@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { servicesColumns } from "./ServicesColumns";
 import TanStackTableComponent from "../core/TanstackTable";
 import { LoadingComponent } from "../core/LoadingComponent";
+import ServicesFilters from "./ServicesFilters";
 
 const ServicesList = () => {
   const params = useSearchParams();
@@ -53,6 +54,7 @@ const ServicesList = () => {
 
   return (
     <div>
+      <ServicesFilters />
       <TanStackTableComponent
         columns={servicesColumns()}
         getData={getAllServices}

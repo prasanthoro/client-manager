@@ -8,3 +8,11 @@ export const getAllServicesListAPI = async (params: Partial<servicesListPropType
     console.error();
   }
 };
+
+export const addServiceAPI = async (payload: any) => {
+  try {
+    return await $fetch.post(`/services`, payload);
+  } catch (err) {
+    console.error();
+  }
+};
