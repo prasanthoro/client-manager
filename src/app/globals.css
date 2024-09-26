@@ -314,14 +314,6 @@ li {
   position: relative;
 }
 
-button {
-  position: absolute;
-  top: -20px;
-  /* Adjust this value to move the button up */
-  left: calc(100% - 150px);
-  /* Adjust as per requirement */
-  z-index: 1;
-}
 
 /* pagination// */
 .listingPagination {
