@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import {
   addInvoiceAPI,
   clientNameDropDownAPI,
+  getSingleInvoicePI,
   servicesDropDownAPI,
+  updateInvoiceAPI,
+  uploadFileToS3,
+  uploadInvoiceAPI,
 } from "@/services/invoices";
 import { Input } from "@/components/ui/input";
 import { checkAllowedValidText } from "@/lib/helpers/constants";
@@ -38,8 +42,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { LoadingComponent } from "@/components/core/LoadingComponent";
 import { Label } from "@radix-ui/react-label";
 import { set } from "date-fns";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+import ErrorComponent from "./ErrorMessage";
+import { toast, Toaster } from "sonner";
+import path from "path";
 
 const invoiceStatus = [
   // {
@@ -57,6 +64,8 @@ const invoiceStatus = [
 ];
 export const AddInvoice = () => {
   const router = useRouter();
+  const pathname = usePathname();
+  const { invoice_id } = useParams();
   const [clientNameForDropDown, setClientNameForDropDown] = useState<any>([]);
   const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
   const [invoiceDetails, setInvoiceDetails] = useState<any>({});
@@ -68,13 +77,16 @@ export const AddInvoice = () => {
     Array<{ service_id: string; invoice_amount: number | null }>
   >([{ service_id: "", invoice_amount: null }]);
   const [errors, setErrors] = useState<any>();
+  const [isRendered, setIsRendered] = useState(false);
+  const [uploadFile, setUploadFile] = useState<any>();
+  const [editInvoiceData, setEditInvoiceData] = useState<any>();
 
   const clientNameDropDown = async () => {
     setLoading(true);
     try {
-      const reponse = await clientNameDropDownAPI();
-      if (reponse?.status == 200 || reponse?.status == 201) {
-        setClientNameForDropDown(reponse?.data?.data);
+      const response = await clientNameDropDownAPI();
+      if (response?.status == 200 || response?.status == 201) {
+        setClientNameForDropDown(response?.data?.data);
       }
     } catch (error) {
     } finally {
@@ -84,9 +96,9 @@ export const AddInvoice = () => {
   const servicesDropDown = async () => {
     setLoading(true);
     try {
-      const reponse = await servicesDropDownAPI();
-      if (reponse?.status == 200 || reponse?.status == 201) {
-        setServicesForDropDown(reponse?.data?.data);
+      const response = await servicesDropDownAPI();
+      if (response?.status == 200 || response?.status == 201) {
+        setServicesForDropDown(response?.data?.data);
       }
     } catch (error) {
     } finally {
@@ -95,6 +107,7 @@ export const AddInvoice = () => {
   };
 
   const addInvoice = async () => {
+    setErrors([]);
     setLoading(true);
     try {
       const updatatedServices = selectedServices.map((item: any) => {
@@ -107,14 +120,19 @@ export const AddInvoice = () => {
         };
       });
 
-      const reponse: any = await addInvoiceAPI(updatatedServices);
-      if (reponse.status == 200 || reponse.status == 201) {
-        router.push("/invoices");
-      } else if (reponse.status == 422) {
-        setErrors(reponse.data?.errors);
-        reponse.data?.errors.forEach((error: any) => {
-          alert(error.message);
-        });
+      const response: any = await addInvoiceAPI(updatatedServices);
+      if (response.status == 200 || response.status == 201) {
+        const { data } = response?.data;
+        if (uploadFile) {
+          await uploadInvoice(data);
+        } else {
+          toast.success("Invoice Added Successfully");
+          setTimeout(() => {
+            router.push("/invoices");
+          }, 1000);
+        }
+      } else if (response.status == 422) {
+        setErrors(response.data?.errors);
       }
     } catch (error) {
       console.error(error);
@@ -122,6 +140,88 @@ export const AddInvoice = () => {
       setLoading(false);
     }
   };
+  const uploadInvoice = async (data: any) => {
+    setLoading(true);
+    try {
+      const payload = data?.map((item: any) => {
+        return {
+          client_id: clientName?.id,
+          file_name: uploadFile?.name,
+          size: uploadFile?.size,
+          invoice_id: item?.id,
+        };
+      });
+
+      const response: any = await uploadInvoiceAPI(payload);
+      if (response.status == 200 || response.status == 201) {
+        const { upload_url } = response?.data?.data;
+        await uploadToS3(uploadFile, upload_url);
+      } else if (response.status == 422) {
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const uploadToS3 = async (file: any, url: string) => {
+    try {
+      const response = await uploadFileToS3(file, url);
+      if (response?.status == 200 || response.status == 201) {
+        toast.success("Invoice Uploaded Successfully");
+        setTimeout(() => {
+          router.push("/invoices");
+        }, 1000);
+      } else {
+        throw response;
+      }
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const getSingleInvoice = async () => {
+    setLoading(true);
+    try {
+      const response: any = await getSingleInvoicePI(invoice_id);
+      if (response.status == 200 || response.status == 201) {
+        setInvoiceDetails(response?.data?.data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const updateInvoice = async () => {
+    setLoading(true);
+    try {
+      let payload = {
+        // name: "sai group",
+        // service_id: 42,
+        // client_id: 501,
+        // invoice_status: "PENDING",
+        // remarks: "Payment partially paid",
+        // invoice_date: "2024-09-20",
+        // payment_date: "2024-10-20",
+        // invoice_amount: 4500.0,
+      };
+
+      const response: any = await updateInvoiceAPI(invoice_id, payload);
+      if (response.status == 200 || response.status == 201) {
+        toast.success("Invoice Updated Successfully");
+        setTimeout(() => {
+          router.push("/invoices");
+        }, 1000);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onFieldsChange = (event?: any) => {
     const { name, value } = event.target;
     if (value && checkAllowedValidText(value)) {
@@ -135,6 +235,8 @@ export const AddInvoice = () => {
       setInvoiceDetails(temp);
     }
   };
+
+  console.log(selectedServices, "selectedServices");
 
   const handleClearClient = (e: any) => {
     e.stopPropagation();
@@ -183,25 +285,43 @@ export const AddInvoice = () => {
     setSelectedServices(updatedServices);
   };
 
+  const handleUploadFile = (event: any) => {
+    renderInput();
+    let file = event.target.files[0];
+    setUploadFile(file);
+  };
+
+  const renderInput = () => {
+    setIsRendered(true);
+    setTimeout(() => {
+      setIsRendered(false);
+    }, 1);
+  };
+
   useEffect(() => {
+    if (pathname?.includes("/edit-invoice")) {
+      getSingleInvoice();
+    }
     clientNameDropDown();
     servicesDropDown();
   }, []);
 
   return (
-    <div>
+    <div className="p-8 bg-white rounded-lg shadow-md max-w-4xl mx-auto">
       {/* <div>
         <Label>Invoice Name</Label>
         <Input name="name" placeholder="Enter Name" onChange={onFieldsChange} />
       </div> */}
-      <div className="flex items-center">
+      <div>
         <button
           onClick={() => router.back()}
           className="p-2 -full hover:bg-pink-200"
         >
           <Image alt="image" width={24} height={24} src="/back-button.svg" />
         </button>
-        <h1 className="text-3xl font-bold">Add Invoice</h1>
+        <h1 className="text-3xl font-bold">
+          {pathname?.includes("/edit-invoice") ? "Edit Invoice" : "Add Invoice"}
+        </h1>
       </div>
       <Label>
         Client Name <span style={{ color: "red" }}>*</span>
@@ -262,6 +382,11 @@ export const AddInvoice = () => {
             </Command>
           </PopoverContent>
         </Popover>
+        {errors ? (
+          <ErrorComponent errors={errors} index={`${0}.client_id`} />
+        ) : (
+          ""
+        )}
       </div>
       <Label>
         Invoice Date <span style={{ color: "red" }}>*</span>
@@ -286,6 +411,11 @@ export const AddInvoice = () => {
           editable={false}
           format="MM/dd/yyyy"
         />
+        {errors ? (
+          <ErrorComponent errors={errors} index={`${0}.invoice_date`} />
+        ) : (
+          ""
+        )}
       </div>
       <Label>Payment Date</Label>
       <div>
@@ -325,7 +455,7 @@ export const AddInvoice = () => {
                 return (
                   <SelectItem
                     key={index}
-                    value={item.value} // Set value as item.value
+                    value={item.value || invoiceDetails?.invoice_status} // Set value as item.value
                   >
                     {item.label}
                   </SelectItem>
@@ -341,20 +471,25 @@ export const AddInvoice = () => {
           name="remarks"
           placeholder="Enter remarks"
           onChange={onFieldsChange}
+          value={invoiceDetails?.remarks}
         />
       </div>
-      <Button
-        onClick={() => {
-          onAddClick();
-        }}
-      >
-        +
-      </Button>
+      {pathname?.includes("/add-invoice") ? (
+        <Button
+          onClick={() => {
+            onAddClick();
+          }}
+        >
+          +
+        </Button>
+      ) : (
+        ""
+      )}
       {selectedServices?.map((item: any, index: number) => {
         return (
           <div>
             <div style={{ display: "flex" }}>
-              <div>
+              <div style={{ marginRight: "100px" }}>
                 <Label>
                   {"Service  " + (index + 1)}
                   <span style={{ color: "red" }}>*</span>
@@ -363,6 +498,7 @@ export const AddInvoice = () => {
                   onValueChange={(value) =>
                     handleServiceNameChange(value, index)
                   }
+                  value={item?.service_id}
                 >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a service" />
@@ -380,23 +516,54 @@ export const AddInvoice = () => {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+                {errors ? (
+                  <ErrorComponent
+                    errors={errors}
+                    index={`${index}.service_id`}
+                  />
+                ) : (
+                  ""
+                )}
               </div>
               <div>
                 <Label>
                   Amount <span style={{ color: "red" }}>*</span>
                 </Label>
-                <Input
-                  type="number"
-                  name="amount"
-                  placeholder="Enter Amount"
-                  onChange={(e) => onServiceDetails(e, index)}
-                  onWheel={(e) => (e.currentTarget as HTMLInputElement).blur()}
-                  step="any"
-                  pattern="\d*" // Allow only digits
-                />
+                <div style={{ display: "flex" }}>
+                  <Input
+                    type="number"
+                    name="amount"
+                    placeholder="Enter Amount"
+                    onChange={(e) => onServiceDetails(e, index)}
+                    onWheel={(e) =>
+                      (e.currentTarget as HTMLInputElement).blur()
+                    }
+                    step="any"
+                    pattern="\d*" // Allow only digits
+                  />
+                  {selectedServices?.length > 1 ? (
+                    <Button
+                      onClick={() => {
+                        onRemoveClick(index);
+                      }}
+                    >
+                      -
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                {errors ? (
+                  <ErrorComponent
+                    errors={errors}
+                    index={`${index}.invoice_amount`}
+                  />
+                ) : (
+                  ""
+                )}
               </div>
               <div>
-                {selectedServices?.length > 1 ? (
+                {/* {selectedServices?.length > 1 ? (
                   <Button
                     onClick={() => {
                       onRemoveClick(index);
@@ -406,22 +573,78 @@ export const AddInvoice = () => {
                   </Button>
                 ) : (
                   ""
-                )}
+                )} */}
               </div>
             </div>
           </div>
         );
       })}
-      <div>
+
+      <div
+        style={{
+          cursor: !uploadFile ? "not-allowed" : "pointer",
+          width: "105px",
+        }}
+      >
         <Button
           onClick={() => {
-            addInvoice();
+            if (pathname?.includes("/edit-invoice")) {
+              updateInvoice();
+            } else {
+              addInvoice();
+            }
           }}
         >
-          Add Invoice
+          {pathname?.includes("/edit-invoice")
+            ? "Update Invoice"
+            : "Add Invoice"}
         </Button>
       </div>
+      <div
+        style={{
+          marginTop: "50px",
+          textAlign: "center",
+          backgroundColor: "black",
+          color: "white",
+          padding: "10px",
+          borderRadius: "10px",
+          cursor: "pointer",
+          height: "45px",
+          width: "150px",
+        }}
+      >
+        {!isRendered && (
+          <>
+            <input
+              disabled={loading}
+              onChange={handleUploadFile}
+              type="file"
+              id="file"
+              style={{ display: "none" }}
+            />
+            <label
+              style={{ cursor: loading ? "not-allowed" : "pointer" }}
+              htmlFor="file"
+            >
+              {" "}
+              Upload a file
+            </label>
+          </>
+        )}
+      </div>
+      <div>
+        {uploadFile ? (
+          <div style={{ display: "flex" }}>
+            <p>{uploadFile.name}</p>
+
+            <X size={16} onClick={() => setUploadFile(null)} />
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
       <LoadingComponent loading={loading} />
+      <Toaster richColors closeButton position="top-right" />
     </div>
   );
 };
