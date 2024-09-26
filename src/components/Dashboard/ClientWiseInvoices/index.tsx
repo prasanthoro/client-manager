@@ -1,5 +1,6 @@
 "use client";
 import { ViewButton } from "@/components/Clients/ViewButton";
+import { DownloadButton } from "@/components/Invoices/DownloadButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -20,7 +21,7 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
           <TableCell>Invoice Date</TableCell>
           <TableCell>Invoice Status</TableCell>
           <TableCell>Invoice Amount</TableCell>
-          <TableCell>Actions</TableCell>
+          {/* <TableCell>Actions</TableCell> */}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -45,9 +46,9 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
                   ? `₹ ${Number(item.invoice_amount).toLocaleString("en-IN")}`
                   : "--"}
               </TableCell>
-              <TableCell>
-                <ViewButton />
-              </TableCell>
+              {/* <TableCell>
+                <DownloadButton />
+              </TableCell> */}
             </TableRow>
           ))
         ) : (
@@ -61,5 +62,4 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
     </Table>
   );
 };
-
 export default ClientWiseInvoicesList;
