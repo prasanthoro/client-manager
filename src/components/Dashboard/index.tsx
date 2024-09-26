@@ -141,7 +141,7 @@ export const Dashboard = () => {
       });
       if (response?.status == 200 || response?.status == 201) {
         let { data } = response?.data;
-        
+
         setClientWiseTotalInvoices(data);
       } else {
         throw response;
@@ -267,24 +267,24 @@ export const Dashboard = () => {
       });
     } else {
       await getClientWiseTotalInvoiceAmount({
-        from_date: '',
-        to_date: '',
+        from_date: "",
+        to_date: "",
       });
       await getAllClientsCount({
-        from_date: '',
-        to_date: '',
+        from_date: "",
+        to_date: "",
       });
       await recurringTypeAmount({
-        from_date: '',
-        to_date: '',
+        from_date: "",
+        to_date: "",
       });
       await getInvoiceAmount({
-        from_date: '',
-        to_date: '',
+        from_date: "",
+        to_date: "",
       });
       await serviceOneTimeInvoiceCount({
-        from_date: '',
-        to_date: '',
+        from_date: "",
+        to_date: "",
       });
     }
   };
@@ -352,7 +352,7 @@ export const Dashboard = () => {
                 <div className="bg-gradient-to-r from-orange-500 to-yellow-600 text-white shadow-lg rounded-lg">
                   <CardHeader className="flex flex-row items-center justify-between pb-1">
                     <CardTitle className="text-lg font-bold">
-                      On Time Amount
+                      One Time Amount
                     </CardTitle>
                   </CardHeader>
                   <CardContent>

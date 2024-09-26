@@ -11,6 +11,7 @@ import { ChangeEvent, useState } from "react";
 import { setSessionTimedOut, setUserDetails } from "@/redux/Modules/userlogin";
 import { loginAPI } from "@/services/auth";
 import { Spinner } from "../ui/spinner";
+import { toast } from "sonner";
 
 export const SignIn = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,7 @@ export const SignIn = () => {
       };
       const response: any = await loginAPI(payload);
       if (response.status == 200 || response.status == 201) {
+        toast.success(response?.message);
         Cookies.set("user", response?.data?.user_details?.user_type);
         dispatch(setUserDetails(response));
         // toast.success("User logged in successfully");
