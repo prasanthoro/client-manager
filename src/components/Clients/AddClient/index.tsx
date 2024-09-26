@@ -5,16 +5,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { checkPhoneNumber } from "@/lib/helpers/core/changeFirstLetterToCap";
-import { addClientAPI, updateClientAPI } from "@/services/clients";
+import {
+  addClientAPI,
+  updateClientAPI,
+  viewClientAPI,
+  viewInvoiceAPI,
+} from "@/services/clients";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const AddClient = () => {
   const router = useRouter();
   const [errorMessages, setErrorMessages] = useState<any>();
   const [clientData, setClientData] = useState<any>({});
+  const [viewDetails, setViewDetails] = useState<any>({});
+  console.log(viewDetails, "view");
   const [loading, setLoading] = useState(false);
   const [label, setLabel] = useState(loading);
   const { client_Id } = useParams();
@@ -44,7 +51,7 @@ const AddClient = () => {
       setLoading(false);
     }
   };
-  const editReview = async (client_Id: any) => {
+  const updateClient = async (client_Id: any) => {
     try {
       setLoading(true);
 
@@ -58,7 +65,7 @@ const AddClient = () => {
       });
       if (response?.status == 200 || response?.status == 201) {
         toast.success(response?.data?.message);
-        router.push('/clients');
+        router.push("/clients");
       } else if (response?.status == 422) {
         setErrorMessages(response?.data?.errors);
       } else if (response?.status == 409) {
@@ -79,6 +86,34 @@ const AddClient = () => {
       [name]: value,
     });
   };
+
+  const getServiceById = async () => {
+    try {
+      const response = await viewClientAPI(client_Id as string);
+      if (response?.status == 200 || response?.status == 201) {
+        setViewDetails(response?.data?.data);
+      } else {
+        throw response;
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "Something went wrong");
+      console.error(err);
+    }
+  };
+
+  const saveButton = () => {
+    if (client_Id) {
+      updateClient({});
+    } else {
+      addClient();
+    }
+  };
+
+  useEffect(() => {
+    if (client_Id) {
+      getServiceById();
+    }
+  }, []);
 
   return (
     <div className="p-8 bg-white rounded-lg shadow-md max-w-4xl mx-auto">

@@ -115,7 +115,7 @@ export const clientColumns = (getAllClients: any) => {
                 className="eachList"
                 style={{ marginRight: "10px", cursor: "pointer" }}
               >
-                {/* <EditButton /> */}
+                <EditButton row={info?.row?.original} />
               </li>
               <li className="eachList">
                 <DeleteButton
