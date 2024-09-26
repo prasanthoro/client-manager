@@ -300,7 +300,7 @@ li {
 
 #clientWiseTable thead td {
   border-right: 1px solid #fff;
-  border-bottom: 1px solid #FFF;
+  border-bottom: 1px solid #fff;
   color: #000;
   font-weight: 500;
 }
@@ -312,15 +312,6 @@ li {
 }
 .button-container {
   position: relative;
-}
-
-button {
-  position: absolute;
-  top: -20px;
-  /* Adjust this value to move the button up */
-  left: calc(100% - 150px);
-  /* Adjust as per requirement */
-  z-index: 1;
 }
 
 /* pagination// */

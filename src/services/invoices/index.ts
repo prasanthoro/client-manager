@@ -40,3 +40,30 @@ export const uploadInvoiceAPI = (payload: any) => {
     console.error();
   }
 };
+export const getSingleInvoicePI = (invoice_id: any) => {
+  try {
+    return $fetch.get(`/invoices/${invoice_id}`);
+  } catch (err) {
+    console.error();
+  }
+};
+export const updateInvoiceAPI = (invoice_id: any, payload: any) => {
+  try {
+    return $fetch.patch(`/invoices/${invoice_id}`, payload);
+  } catch (err) {
+    console.error();
+  }
+};
+
+export const uploadFileToS3 = async (file: any, url: string) => {
+  try {
+    const options = {
+      body: file,
+      method: "PUT",
+    };
+    const response = await fetch(url, options);
+    return response;
+  } catch (err) {
+    throw err;
+  }
+};
