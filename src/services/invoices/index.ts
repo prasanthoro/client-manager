@@ -32,3 +32,11 @@ export const addInvoiceAPI = async (payload: any) => {
     console.error();
   }
 };
+
+export const uploadInvoiceAPI = (payload: any) => {
+  try {
+    return $fetch.post(`/invoices/upload`, payload);
+  } catch (err) {
+    console.error();
+  }
+};
