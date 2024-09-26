@@ -38,8 +38,8 @@ const ServiceDropDown = ({
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-[200px] justify-between"
-              style={{ width: "300px" }}
+              className="w-full justify-between"
+              
             >
               {serviceName?.name
                 ? servicesForDropDown?.find(

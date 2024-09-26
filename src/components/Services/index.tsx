@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { servicesColumns } from "./ServicesColumns";
 import TanStackTableComponent from "../core/TanstackTable";
 import { LoadingComponent } from "../core/LoadingComponent";
+import ServicesFilters from "./ServicesFilters";
 
 const ServicesList = () => {
   const params = useSearchParams();
@@ -23,6 +24,10 @@ const ServicesList = () => {
     limit = (params.get("limit") as string) || 25,
     sort_by = params.get("sort_by") as string,
     sort_type = params.get("sort_type") as string,
+    from_date = params.get("from_date") as string,
+    to_date = params.get("to_date") as string,
+    search_string = params.get("search_string") as string,
+    type = params.get("type") as string,
   }: Partial<servicesListPropTypes>) => {
     try {
       let queryParams: any = {
@@ -30,6 +35,10 @@ const ServicesList = () => {
         limit: limit ? limit : 25,
         sort_by: sort_by,
         sort_type: sort_type,
+        from_date: from_date,
+        to_date: to_date,
+        search_string: search_string,
+        type: type,
       };
 
       setLoading(true);
@@ -53,6 +62,7 @@ const ServicesList = () => {
 
   return (
     <div>
+      <ServicesFilters getAllServices={getAllServices} />
       <TanStackTableComponent
         columns={servicesColumns()}
         getData={getAllServices}
