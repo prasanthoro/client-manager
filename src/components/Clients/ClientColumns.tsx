@@ -80,7 +80,6 @@ export const clientColumns = (getAllClients: any) => {
       id: "address",
       header: () => <span>Address</span>,
       cell: (info: any) => {
-        console.log("Row in cell:", info.row.original); // Log the row for debugging
         return <span className="eachCell">{info.getValue()}</span>;
       },
       footer: (props: any) => props.columns.id,

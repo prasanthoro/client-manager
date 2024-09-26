@@ -125,11 +125,7 @@ const ViewClient = () => {
       </Card>
 
       <Card className="mb-4">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-blue-800">
-            Other Information
-          </CardTitle>
-        </CardHeader>
+        <CardHeader></CardHeader>
         <CardContent className="grid grid-cols-3 gap-4 text-gray-600">
           <div className="grid grid-cols-3 gap-4 text-gray-600">
             <div className="flex flex-col">
@@ -140,53 +136,58 @@ const ViewClient = () => {
         </CardContent>
       </Card>
       <div>
-        <h5>Client Invoices</h5>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableCell>Company Name</TableCell>
-              <TableCell>Client Name</TableCell>
-              <TableCell>Service Type</TableCell>
-              <TableCell>Invoice Date</TableCell>
-              <TableCell>Invoice Status</TableCell>
-              <TableCell>Invoice Amount</TableCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {invoiceData.length > 0 ? (
-              invoiceData.map((item: any) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    {item.company_name ? item.company_name : "--"}
-                  </TableCell>
-                  <TableCell>
-                    {item.client_name ? item.client_name : "--"}
-                  </TableCell>
-                  <TableCell>{item.type ? item.type : "--"}</TableCell>
-                  <TableCell>
-                    {item.invoice_date ? item.invoice_date : "--"}
-                  </TableCell>
-                  <TableCell>
-                    {item.invoice_status ? item.invoice_status : "--"}
-                  </TableCell>
-                  <TableCell>
-                    {item.invoice_amount
-                      ? `₹ ${Number(item.invoice_amount).toLocaleString(
-                          "en-IN"
-                        )}`
-                      : "--"}
+        <div>
+          <h5>Client Invoices</h5>
+        </div>
+
+        <div id="clientWiseTable" className="relative">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableCell>Company Name</TableCell>
+                <TableCell>Client Name</TableCell>
+                <TableCell>Service Type</TableCell>
+                <TableCell>Invoice Date</TableCell>
+                <TableCell>Invoice Status</TableCell>
+                <TableCell>Invoice Amount</TableCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {invoiceData.length > 0 ? (
+                invoiceData.map((item: any) => (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      {item.company_name ? item.company_name : "--"}
+                    </TableCell>
+                    <TableCell>
+                      {item.client_name ? item.client_name : "--"}
+                    </TableCell>
+                    <TableCell>{item.type ? item.type : "--"}</TableCell>
+                    <TableCell>
+                      {item.invoice_date ? item.invoice_date : "--"}
+                    </TableCell>
+                    <TableCell>
+                      {item.invoice_status ? item.invoice_status : "--"}
+                    </TableCell>
+                    <TableCell>
+                      {item.invoice_amount
+                        ? `₹ ${Number(item.invoice_amount).toLocaleString(
+                            "en-IN"
+                          )}`
+                        : "--"}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={7} style={{ textAlign: "center" }}>
+                    No Invoices
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={7} style={{ textAlign: "center" }}>
-                  No Invoices
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       <LoadingComponent loading={loading} label={""} />
