@@ -277,6 +277,52 @@ li {
   border-right: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
 }
+#clientWiseTable {
+  background: #fff;
+  overflow: auto;
+  width: 100%;
+}
+
+#clientWiseTable .overflow-auto {
+  height: calc(100vh - 200px);
+}
+
+#clientWiseTable thead {
+  position: sticky;
+  top: 0;
+  background-color: #ade0f8;
+  z-index: 1;
+}
+
+#clientWiseTable thead tr:hover {
+  background-color: #ade0f8;
+}
+
+#clientWiseTable thead td {
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #FFF;
+  color: #000;
+  font-weight: 500;
+}
+
+#clientWiseTable tbody td {
+  padding: 0.5rem 1rem;
+  border-right: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+.button-container {
+  position: relative;
+}
+
+button {
+  position: absolute;
+  top: -20px;
+  /* Adjust this value to move the button up */
+  left: calc(100% - 150px);
+  /* Adjust as per requirement */
+  z-index: 1;
+}
+
 /* pagination// */
 .listingPagination {
   padding: 0.625rem 0.625rem 0.625rem 0.9375rem !important;
