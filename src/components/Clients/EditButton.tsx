@@ -9,13 +9,7 @@ export const EditButton = ({ insurance_id }: any) => {
   const pathname = usePathname();
   const lab_id = params?.get("lab_id" as string);
   const router = useRouter();
-  const onEditClick = () => {
-    if (pathname.includes("/insurances")) {
-      router.push(`/edit-payer/${lab_id}/${insurance_id}`);
-    } else if (pathname.includes("state-license")) {
-      router.push(`/state-license/edit-licence/${lab_id}/${insurance_id}`);
-    }
-  };
+  const onEditClick = () => {};
 
   return (
     <div className="eachAction">
