@@ -474,13 +474,17 @@ export const AddInvoice = () => {
           value={invoiceDetails?.remarks}
         />
       </div>
-      <Button
-        onClick={() => {
-          onAddClick();
-        }}
-      >
-        +
-      </Button>
+      {pathname?.includes("/add-invoice") ? (
+        <Button
+          onClick={() => {
+            onAddClick();
+          }}
+        >
+          +
+        </Button>
+      ) : (
+        ""
+      )}
       {selectedServices?.map((item: any, index: number) => {
         return (
           <div>
