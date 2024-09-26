@@ -32,3 +32,17 @@ export const getClientWiseTotalInvoiceAmountAPI = async (params: any) => {
     console.error();
   }
 };
+export const getServiceOneTimeInvoiceAmountAPI = async (params: any) => {
+  try {
+    return await $fetch.get(`/services/one-time-type/invoice-count`, params);
+  } catch (err) {
+    console.error();
+  }
+};
+export const getRecuringTypeAmountAPI = async (params: any) => {
+  try {
+    return await $fetch.get(`/services/recurring-type/invoice-count`, params);
+  } catch (err) {
+    console.error();
+  }
+};
