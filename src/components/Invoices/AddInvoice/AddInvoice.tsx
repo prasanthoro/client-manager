@@ -659,39 +659,44 @@ export const AddInvoice = () => {
         );
       })}
 
-      <div
-        style={{
-          marginTop: "50px",
-          textAlign: "center",
-          backgroundColor: "black",
-          color: "white",
-          padding: "10px",
-          borderRadius: "10px",
-          cursor: "pointer",
-          height: "45px",
-          width: "150px",
-          marginBottom: uploadFile ? "0px" : "50px",
-        }}
-      >
-        {!isRendered && (
-          <>
-            <input
-              disabled={loading}
-              onChange={handleUploadFile}
-              type="file"
-              id="file"
-              style={{ display: "none" }}
-            />
-            <label
-              style={{ cursor: loading ? "not-allowed" : "pointer" }}
-              htmlFor="file"
-            >
-              {" "}
-              Upload a file
-            </label>
-          </>
-        )}
-      </div>
+      {(pathname?.includes("/edit-invoice") && invoiceDetails?.url === null) ||
+      pathname?.includes("/add-invoice") ? (
+        <div
+          style={{
+            marginTop: "50px",
+            textAlign: "center",
+            backgroundColor: "black",
+            color: "white",
+            padding: "10px",
+            borderRadius: "10px",
+            cursor: "pointer",
+            height: "45px",
+            width: "150px",
+            marginBottom: uploadFile ? "0px" : "50px",
+          }}
+        >
+          {!isRendered && (
+            <>
+              <input
+                disabled={loading}
+                onChange={handleUploadFile}
+                type="file"
+                id="file"
+                style={{ display: "none" }}
+              />
+              <label
+                style={{ cursor: loading ? "not-allowed" : "pointer" }}
+                htmlFor="file"
+              >
+                {" "}
+                Upload a file
+              </label>
+            </>
+          )}
+        </div>
+      ) : (
+        ""
+      )}
       <div>
         {uploadFile ? (
           <div style={{ display: "flex", marginBottom: "50px" }}>
@@ -700,27 +705,29 @@ export const AddInvoice = () => {
             <X size={16} onClick={() => setUploadFile(null)} />
           </div>
         ) : (
-          invoiceDetails?.key && (
-            <div style={{ display: "flex", marginBottom: "50px" }}>
-              <p>{invoiceDetails?.key}</p>
-              <X
-                size={16}
-                onClick={() => {
-                  setInvoiceDetails({
-                    ...invoiceDetails,
-                    key: null,
-                    url: null,
-                  });
-                }}
-              />
-            </div>
-          )
+          pathname?.includes("/edit-invoice") && invoiceDetails?.key && ""
+          // <div style={{ display: "flex", marginBottom: "50px" }}>
+          //   <p>{invoiceDetails?.key}</p>
+          //   <X
+          //     size={16}
+          //     onClick={() => {
+          //       setInvoiceDetails({
+          //         ...invoiceDetails,
+          //         key: null,
+          //         url: null,
+          //       });
+          //     }}
+          //   />
+          // </div>
         )}
       </div>
       <div
         style={{
           cursor: !uploadFile ? "not-allowed" : "pointer",
           width: "105px",
+          height: "30px",
+          borderRadius: "10px",
+          marginTop: "50px",
         }}
       >
         <Button
