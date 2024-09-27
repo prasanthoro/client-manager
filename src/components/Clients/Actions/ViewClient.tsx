@@ -2,7 +2,7 @@
 import DatePickerWithRange from "@/components/core/DatePickerWithRange";
 import { LoadingComponent } from "@/components/core/LoadingComponent";
 import SelectServiceDropDown from "@/components/core/SelectServiceDropDown";
-import ServiceDropDown from "@/components/core/ServicesDropDown";
+import { DownloadButton } from "@/components/Invoices/DownloadButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -24,10 +24,7 @@ import { changeInputFormats } from "@/lib/helpers/core/changeFirstLetterToCap";
 import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
 import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
 import { viewClientAPI, viewInvoiceAPI } from "@/services/clients";
-import {
-  selectServiceDropDownAPI,
-  servicesDropDownAPI,
-} from "@/services/invoices";
+import { selectServiceDropDownAPI } from "@/services/invoices";
 import dayjs from "dayjs";
 import Image from "next/image";
 import {
@@ -37,17 +34,14 @@ import {
   useSearchParams,
 } from "next/navigation";
 import { useEffect, useState } from "react";
-
 const ViewClient = () => {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-
   const { client_Id } = useParams();
   const [clientData, setClientData] = useState<any>();
   const [invoiceData, setInvoiceData] = useState<any>([]);
   const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
-  console.log(servicesForDropDown, "services");
   const [serviceName, setServiceName] = useState<any>({});
   const [openService, setOpenService] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -327,6 +321,7 @@ const ViewClient = () => {
                 <TableCell>Service Type</TableCell>
                 <TableCell>Invoice Status</TableCell>
                 <TableCell>Invoice Amount</TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -352,6 +347,18 @@ const ViewClient = () => {
                             "en-IN"
                           )}`
                         : "--"}
+                    </TableCell>
+                    <TableCell>
+                      {item?.url ? (
+                        <li
+                          className="eachList"
+                          style={{ marginRight: "10px", cursor: "pointer" }}
+                        >
+                          <DownloadButton download={item?.url} />
+                        </li>
+                      ) : (
+                        "--"
+                      )}
                     </TableCell>
                   </TableRow>
                 ))

@@ -336,3 +336,11 @@ li {
   width: 100% !important;
   box-shadow: none;
 }
+/* delete dialog */
+
+#alert-dialog-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}

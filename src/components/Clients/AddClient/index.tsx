@@ -14,30 +14,30 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
+import { Spinner } from "@/components/ui/spinner";
+import { Loader2 } from "lucide-react";
 
 const AddClient = () => {
   const router = useRouter();
-  const [errorMessages, setErrorMessages] = useState<any>();
+  const [errorMessages, setErrorMessages] = useState<any>({});
   const [clientData, setClientData] = useState<any>({});
-  const [viewDetails, setViewDetails] = useState<any>({});
   const [loading, setLoading] = useState(false);
-  const [label, setLabel] = useState(loading);
+  const [phone, setPhone] = useState("");
   const { client_Id } = useParams();
+
   const addClient = async () => {
     setLoading(true);
-
     try {
-      const { createdAt, updatedAt, ...restData }: any = { ...clientData };
-      let payload = {
-        ...restData,
-      };
+      const { createdAt, updatedAt, ...restData } = clientData;
+      const payload = { ...restData, phone };
       const response = await addClientAPI(payload);
-      if (response?.status == 200 || response?.status == 201) {
-        toast.success(response?.data?.message || "Client Added succesfully");
+
+      if (response?.status === 200 || response?.status === 201) {
+        toast.success(response?.data?.message || "Client Added successfully");
         router.back();
-      } else if (response?.status == 422) {
-        setErrorMessages(response?.data?.errors);
-      } else if (response?.status == 409) {
+      } else if (response?.status === 422 || response?.status === 409) {
         setErrorMessages(response?.data?.errors);
       } else {
         throw response;
@@ -49,24 +49,31 @@ const AddClient = () => {
       setLoading(false);
     }
   };
-  const updateClient = async (client_Id: any) => {
-    try {
-      setLoading(true);
 
-      const { createdAt, updatedAt, ...restData }: any = { ...clientData };
-      let payload = {
-        ...restData,
+  const updateClient = async () => {
+    setLoading(true);
+    try {
+      const { createdAt, updatedAt, ...restData } = clientData;
+      const payload = {
+        client_name: clientData?.client_name,
+        client_phone: clientData?.client_phone,
+        client_email: clientData?.client_email,
+        company_name: clientData?.company_name,
+        poc: clientData?.poc,
+        email: clientData?.email,
+        phone: clientData?.phone,
+        remarks: clientData?.remarks,
+        address: clientData?.address,
+        state: clientData?.state,
+        city: clientData?.city,
+        country: clientData?.country,
       };
-      const response = await updateClientAPI({
-        clientId: client_Id as string,
-        payload,
-      });
-      if (response?.status == 200 || response?.status == 201) {
+
+      const response = await updateClientAPI(client_Id, payload);
+      if (response?.status === 200 || response?.status === 201) {
         toast.success(response?.data?.message);
         router.push("/clients");
-      } else if (response?.status == 422) {
-        setErrorMessages(response?.data?.errors);
-      } else if (response?.status == 409) {
+      } else if (response?.status === 422 || response?.status === 409) {
         setErrorMessages(response?.data?.errors);
       } else {
         throw response;
@@ -77,34 +84,26 @@ const AddClient = () => {
       setLoading(false);
     }
   };
-  const handleInputChange = (e: any) => {
-    let { name, value } = e.target;
 
-    setClientData({
-      ...clientData,
-      [name]: value,
-    });
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setClientData((prev: any) => ({ ...prev, [name]: value }));
   };
 
   const getServiceById = async () => {
     try {
       const response = await viewClientAPI(client_Id as string);
-      if (response?.status == 200 || response?.status == 201) {
-        setViewDetails(response?.data?.data);
+      if (response?.status === 200 || response?.status === 201) {
+        setClientData(response?.data?.data);
+        setPhone(response?.data?.data?.phone || "");
       } else {
         throw response;
       }
     } catch (err: any) {
       toast.error(err?.message || "Something went wrong");
       console.error(err);
-    }
-  };
-
-  const saveButton = () => {
-    if (client_Id) {
-      updateClient({});
-    } else {
-      addClient();
     }
   };
 
@@ -112,7 +111,15 @@ const AddClient = () => {
     if (client_Id) {
       getServiceById();
     }
-  }, []);
+  }, [client_Id]);
+
+  const handleSubmit = () => {
+    if (client_Id) {
+      updateClient();
+    } else {
+      addClient();
+    }
+  };
 
   return (
     <div className="p-8 bg-white rounded-lg shadow-md max-w-4xl mx-auto">
@@ -120,11 +127,13 @@ const AddClient = () => {
         <div className="flex items-center">
           <button
             onClick={() => router.back()}
-            className="p-2 -full hover:bg-pink-200"
+            className="p-2 rounded-full hover:bg-pink-200"
           >
             <Image alt="image" width={24} height={24} src="/back-button.svg" />
           </button>
-          <h1 className="text-2xl font-bold text-red-600 ml-2">Add Client</h1>
+          <h1 className="text-2xl font-bold text-red-600 ml-2">
+            {client_Id ? "Update Client" : "Add Client"}
+          </h1>
         </div>
       </div>
 
@@ -141,8 +150,8 @@ const AddClient = () => {
               name="company_name"
               onChange={handleInputChange}
             />
-            {errorMessages?.company_name && (
-              <p style={{ color: "red" }}>{errorMessages.company_name[0]}</p>
+            {errorMessages.company_name && (
+              <p className="text-red-500">{errorMessages.company_name[0]}</p>
             )}
           </div>
           <div>
@@ -155,29 +164,29 @@ const AddClient = () => {
               name="client_name"
               onChange={handleInputChange}
             />
-            {errorMessages?.client_name && (
-              <p style={{ color: "red" }}>{errorMessages.client_name[0]}</p>
+            {errorMessages.client_name && (
+              <p className="text-red-500">{errorMessages.client_name[0]}</p>
             )}
           </div>
-
           <div className="flex items-end gap-2">
             <div className="flex-grow">
               <label className="block text-sm font-medium text-gray-700">
-                Poc<span className="text-red-500">*</span>
+                PoC<span className="text-red-500">*</span>
               </label>
               <Input
-                placeholder="Enter Poc"
-                value={clientData["poc"]}
+                placeholder="Enter PoC"
+                value={clientData.poc}
                 name="poc"
                 onChange={handleInputChange}
               />
-              {errorMessages?.poc && (
-                <p style={{ color: "red" }}>{errorMessages.poc[0]}</p>
+              {errorMessages.poc && (
+                <p className="text-red-500">{errorMessages.poc[0]}</p>
               )}
             </div>
           </div>
         </div>
       </section>
+
       <section className="mt-8">
         <h2 className="text-lg font-semibold">Address Information</h2>
         <div className="grid grid-cols-2 gap-6 mt-4">
@@ -187,7 +196,7 @@ const AddClient = () => {
             </label>
             <Input
               placeholder="Enter Address"
-              value={clientData["address"]}
+              value={clientData.address}
               name="address"
               onChange={handleInputChange}
             />
@@ -198,31 +207,29 @@ const AddClient = () => {
             </label>
             <Input
               placeholder="Enter Country"
-              value={clientData["country"]}
+              value={clientData.country}
               name="country"
               onChange={handleInputChange}
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               City/Location
             </label>
             <Input
               placeholder="Enter City/Location"
-              value={clientData["city"]}
+              value={clientData.city}
               name="city"
               onChange={handleInputChange}
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               State
             </label>
             <Input
               placeholder="Enter State"
-              value={clientData["state"]}
+              value={clientData.state}
               name="state"
               onChange={handleInputChange}
             />
@@ -230,28 +237,23 @@ const AddClient = () => {
         </div>
       </section>
 
-      {/* Contact Information Section */}
       <section className="mt-8">
         <h2 className="text-lg font-semibold">Contact Information</h2>
         <div className="grid grid-cols-3 gap-6 mt-4">
-          {/* Phone No. */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Phone No.<span className="text-red-500">*</span>
             </label>
-            <Input
-              placeholder="Enter Phone No."
-              value={clientData["phone"]}
-              onInput={checkPhoneNumber}
-              name="phone"
-              onChange={handleInputChange}
+            <PhoneInput
+              defaultCountry="ua"
+              value={phone}
+              onChange={(phone) => setPhone(phone)}
             />
-            {errorMessages?.phone && (
-              <p style={{ color: "red" }}>{errorMessages.phone[0]}</p>
+            {errorMessages.phone && (
+              <p className="text-red-500">{errorMessages.phone[0]}</p>
             )}
           </div>
 
-          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email<span className="text-red-500">*</span>
@@ -262,32 +264,32 @@ const AddClient = () => {
               name="email"
               onChange={handleInputChange}
             />
-            {errorMessages?.email && Array.isArray(errorMessages.email) && (
-              <p style={{ color: "red" }}>{errorMessages.email[0]}</p>
+            {errorMessages.email && (
+              <p className="text-red-500">
+                {Array.isArray(errorMessages.email)
+                  ? errorMessages.email[0]
+                  : errorMessages.email}
+              </p>
             )}
-            {errorMessages?.email &&
-              typeof errorMessages.email === "string" && (
-                <p style={{ color: "red" }}>{errorMessages.email}</p>
-              )}
           </div>
         </div>
       </section>
+
       <section className="mt-8">
         <h2 className="text-lg font-semibold">Other Information</h2>
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Remarks
           </label>
-
           <Textarea
             placeholder="Enter Remarks"
-            value={clientData["remarks"]}
+            value={clientData.remarks}
             name="remarks"
             onChange={handleInputChange}
           />
         </div>
       </section>
-      {/* Submit and Reset Buttons */}
+
       <div className="flex justify-end space-x-4 mt-6">
         <Button
           className="px-4 py-2 bg-red-500 text-white rounded-md shadow hover:bg-red-600"
@@ -298,13 +300,18 @@ const AddClient = () => {
         <Button
           className="px-4 py-2 bg-gray-500 text-white rounded-md shadow hover:bg-gray-600"
           type="submit"
-          onClick={addClient}
+          onClick={handleSubmit}
         >
-          Submit
+          {loading ? (
+            <Spinner></Spinner>
+          ) : (
+            `${client_Id ? "Update" : "Add"} Client`
+          )}
         </Button>
       </div>
       <LoadingComponent loading={loading} />
     </div>
   );
 };
+
 export default AddClient;
