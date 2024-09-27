@@ -10,7 +10,7 @@ export const EditButton = ({ row }: any) => {
   const lab_id = params?.get("lab_id" as string);
   const router = useRouter();
   const onEditClick = () => {};
-  router.push(`/clients/${row?.id}/editclient`);
+  // router.push(`/clients/${row?.id}/editclient`);
   return (
     <div className="eachAction">
       <Image
