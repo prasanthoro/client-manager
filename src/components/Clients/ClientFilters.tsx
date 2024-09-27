@@ -64,6 +64,18 @@ const ClientFilters = ({
       setClientName(null);
     }
   };
+
+  const onDataChange = (date: any) => {
+    if (date) {
+      let fromDate = dayjs(date[0]).format("YYYY-MM-DD");
+      let toDate = dayjs(date[1]).format("YYYY-MM-DD");
+
+      getAllClients({ from_date: fromDate, to_date: toDate, page: 1 });
+    } else {
+      getAllClients({ from_date: "", to_date: "" });
+    }
+  };
+
   useEffect(() => {
     const clientId = params.get("client_id");
     if (clientId) {
@@ -82,15 +94,8 @@ const ClientFilters = ({
 
   return (
     <div className="flex items-center gap-2 p-5">
-      <div style={{ width: "250px" }}>
-        <DateRangePicker
-          placeholder="Select Date Range"
-          value={dateInfo}
-          onChange={handleDateChange}
-          format="dd-MM-yyyy"
-          disabledDate={disableFutureDates}
-          style={{ width: "100%" }}
-        />
+      <div className="w-full">
+        <DatePickerWithRange onDataChange={onDataChange} />
       </div>
 
       <div style={{ width: "300px" }}>
