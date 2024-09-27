@@ -215,10 +215,16 @@ export const AddInvoice = () => {
         // ...invoiceDetails,
         client_id: invoiceDetails?.client_id,
         service_id: invoiceDetails?.service_id,
-        invoice_status: invoiceDetails?.invoice_status,
-        invoice_amount: +invoiceDetails?.invoice_amount,
-        remarks: invoiceDetails?.remarks,
-        payment_date: invoiceDetails?.payment_date,
+        invoice_status: invoiceDetails?.invoice_status
+          ? invoiceDetails?.invoice_status
+          : "",
+        invoice_amount: invoiceDetails?.invoice_amount
+          ? +invoiceDetails?.invoice_amount
+          : null,
+        remarks: invoiceDetails?.remarks ? invoiceDetails?.remarks : "",
+        payment_date: invoiceDetails?.payment_date
+          ? invoiceDetails?.payment_date
+          : "",
         invoice_date: invoiceDetails?.invoice_date,
         // created_at: null,
       };
@@ -335,13 +341,12 @@ export const AddInvoice = () => {
     clientNameDropDown();
     servicesDropDown();
   }, []);
+  console.log(selectedServices, "invoiceDetails");
+  console.log(invoiceDetails, "invoiceDetails");
 
   const editClientName = clientNameForDropDown?.find(
     (item: any) => item.id == invoiceDetails?.client_id
   )?.client_name;
-  const status = invoiceStatus?.find(
-    (item: any) => item.value == invoiceDetails?.invoice_status
-  );
   return (
     <div className="p-8 bg-white rounded-lg shadow-md max-w-4xl mx-auto">
       {/* <div>
@@ -604,7 +609,11 @@ export const AddInvoice = () => {
                     }
                     step="any"
                     pattern="\d*" // Allow only digits
-                    value={invoiceDetails?.invoice_amount}
+                    value={
+                      pathname?.includes("/add-invoice")
+                        ? String(selectedServices[index]?.invoice_amount)
+                        : invoiceDetails?.invoice_amount
+                    }
                   />
                   {selectedServices?.length > 1 ? (
                     <Button
@@ -729,7 +738,6 @@ export const AddInvoice = () => {
         </Button>
       </div>
       <LoadingComponent loading={loading} />
-      <Toaster richColors closeButton position="top-right" />
     </div>
   );
 };
