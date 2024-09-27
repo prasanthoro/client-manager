@@ -13,7 +13,7 @@ export const servicesColumns = () => {
     {
       accessorFn: (row: any) => row?.service_name,
       id: "service_name",
-      header: () => <span>Name</span>,
+      header: () => <span> Service Name</span>,
       cell: (info: any) => {
         return (
           <span className="eachCell">
@@ -27,7 +27,7 @@ export const servicesColumns = () => {
     {
       accessorFn: (row: any) => row?.type,
       id: "type",
-      header: () => <span>Type</span>,
+      header: () => <span> Service Type</span>,
       cell: (info: any) => {
         return (
           <span className="eachCell">
@@ -60,7 +60,7 @@ export const servicesColumns = () => {
         return (
           <span className="eachCell">
             {info.getValue()
-              ? dayjs(info.getValue()).format("YYYY-MM-DD")
+              ? dayjs(info.getValue()).format("DD-MM-YYYY")
               : "--"}
           </span>
         );
@@ -130,9 +130,8 @@ export const servicesColumns = () => {
                 className="eachList"
                 style={{ marginRight: "10px", cursor: "pointer" }}
               >
-                <EditButton id={info?.row?.original?.id}/>
+                <EditButton id={info?.row?.original?.id} />
               </li>
-              
             </ul>
           </div>
         );

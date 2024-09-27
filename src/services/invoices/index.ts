@@ -67,3 +67,11 @@ export const uploadFileToS3 = async (file: any, url: string) => {
     throw err;
   }
 };
+
+export const selectServiceDropDownAPI = async (client_Id: any) => {
+  try {
+    return await $fetch.get(`/clients/${client_Id}/services`);
+  } catch (err) {
+    console.error();
+  }
+};

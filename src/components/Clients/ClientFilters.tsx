@@ -76,6 +76,10 @@ const ClientFilters = ({
     }
   }, [params, dropDownClientsData, setClientName]);
 
+  const disableFutureDates = (date: Date) => {
+    return date.getTime() > new Date().getTime();
+  };
+
   return (
     <div className="flex items-center gap-2 p-5">
       <div style={{ width: "250px" }}>
@@ -83,7 +87,8 @@ const ClientFilters = ({
           placeholder="Select Date Range"
           value={dateInfo}
           onChange={handleDateChange}
-          format="yyyy-MM-dd"
+          format="dd-MM-yyyy"
+          disabledDate={disableFutureDates}
           style={{ width: "100%" }}
         />
       </div>

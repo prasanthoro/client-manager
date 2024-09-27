@@ -2,9 +2,26 @@ import { formatAmount } from "@/lib/helpers/core/formatAmount";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
 import { ViewButton } from "./ViewButton";
+import { changeInputFormats } from "@/lib/helpers/core/changeFirstLetterToCap";
 
 export const clientColumns = (getAllClients: any) => {
   return [
+    // {
+    //   accessorFn: (row: any) => row?.updated_at,
+    //   id: "updated_at",
+    //   header: () => <span>Date</span>,
+    //   cell: (info: any) => {
+    //     return (
+    //       <span className="eachCell">
+    //         {info.getValue()
+    //           ? dayjs(info.getValue()).format("DD-MM-YYYY")
+    //           : "--"}
+    //       </span>
+    //     );
+    //   },
+    //   footer: (props: any) => props.columns.id,
+    //   width: "100px",
+    // },
     {
       accessorFn: (row: any) => row.serial,
       id: "serial",
@@ -19,7 +36,13 @@ export const clientColumns = (getAllClients: any) => {
       header: () => <span>Company Name</span>,
       id: "company_name",
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {changeInputFormats(info.getValue())
+              ? changeInputFormats(info.getValue())
+              : "--"}
+          </span>
+        );
       },
       width: "150px",
       maxWidth: "150px",
@@ -31,7 +54,14 @@ export const clientColumns = (getAllClients: any) => {
       header: () => <span> Client Name</span>,
       id: "client_name",
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {" "}
+            {changeInputFormats(info.getValue())
+              ? changeInputFormats(info.getValue())
+              : "--"}
+          </span>
+        );
       },
       width: "100px",
     },
@@ -40,7 +70,13 @@ export const clientColumns = (getAllClients: any) => {
       header: () => <span>Poc</span>,
       id: "poc",
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {changeInputFormats(info.getValue())
+              ? changeInputFormats(info.getValue())
+              : "--"}
+          </span>
+        );
       },
       width: "150px",
       maxWidth: "150px",
@@ -52,7 +88,11 @@ export const clientColumns = (getAllClients: any) => {
       header: () => <span>Email</span>,
       id: "email",
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {info.getValue() ? info.getValue() : "--"}
+          </span>
+        );
       },
       width: "100px",
     },
@@ -61,7 +101,11 @@ export const clientColumns = (getAllClients: any) => {
       header: () => <span>Phone</span>,
       id: "phone",
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {info.getValue() ? info.getValue() : "--"}
+          </span>
+        );
       },
       width: "100px",
     },
@@ -80,7 +124,14 @@ export const clientColumns = (getAllClients: any) => {
       id: "address",
       header: () => <span>Address</span>,
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {" "}
+            {changeInputFormats(info.getValue())
+              ? changeInputFormats(info.getValue())
+              : "--"}
+          </span>
+        );
       },
       footer: (props: any) => props.columns.id,
       width: "100px",
@@ -91,7 +142,11 @@ export const clientColumns = (getAllClients: any) => {
       id: "total_invoice_amount",
       header: () => <span>Total Invoice Amount</span>,
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {info.getValue() ? info.getValue() : "--"}
+          </span>
+        );
       },
       footer: (props: any) => props.columns.id,
       width: "100px",

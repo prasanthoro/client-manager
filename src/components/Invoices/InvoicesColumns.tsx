@@ -1,6 +1,7 @@
 import { formatAmount } from "@/lib/helpers/core/formatAmount";
 import { EditButton } from "./EditButton";
 import { DownloadButton } from "./DownloadButton";
+import { formatInvoiceDate } from "@/lib/helpers/constants";
 
 export const invoicesColumns = () => {
   return [
@@ -9,7 +10,11 @@ export const invoicesColumns = () => {
       id: "client_name",
       header: () => <span>Client Name</span>,
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {info.getValue() ? info.getValue() : "--"}
+          </span>
+        );
       },
       footer: (props: any) => props.columns.id,
       width: "100px",
@@ -19,7 +24,11 @@ export const invoicesColumns = () => {
       id: "type",
       header: () => <span>Service Type</span>,
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {info.getValue() ? info.getValue() : "--"}
+          </span>
+        );
       },
       footer: (props: any) => props.columns.id,
       width: "100px",
@@ -29,7 +38,13 @@ export const invoicesColumns = () => {
       id: "invoice_date",
       header: () => <span>Invoice Date</span>,
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {formatInvoiceDate(info.getValue())
+              ? formatInvoiceDate(info.getValue())
+              : "--"}
+          </span>
+        );
       },
       footer: (props: any) => props.columns.id,
       width: "100px",
@@ -40,7 +55,11 @@ export const invoicesColumns = () => {
       header: () => <span>Invoice Amount</span>,
       cell: (info: any) => {
         return (
-          <span className="eachCell">{formatAmount(info.getValue())}</span>
+          <span className="eachCell">
+            {formatAmount(info.getValue())
+              ? formatAmount(info.getValue())
+              : "--"}
+          </span>
         );
       },
       footer: (props: any) => props.columns.id,
@@ -51,7 +70,11 @@ export const invoicesColumns = () => {
       id: "invoice_status",
       header: () => <span>Status</span>,
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {info.getValue() ? info.getValue() : "--"}
+          </span>
+        );
       },
       footer: (props: any) => props.columns.id,
       width: "100px",
@@ -61,7 +84,11 @@ export const invoicesColumns = () => {
       id: "remarks",
       header: () => <span>Remarks</span>,
       cell: (info: any) => {
-        return <span className="eachCell">{info.getValue()}</span>;
+        return (
+          <span className="eachCell">
+            {info.getValue() ? info.getValue() : "--"}
+          </span>
+        );
       },
       footer: (props: any) => props.columns.id,
       width: "100px",

@@ -1,28 +1,25 @@
+import { deleteClientAPI } from "@/services/clients";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { deleteClientAPI } from "@/services/clients";
-import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 export const DeleteButton = ({ getAllClients, clientId }: any) => {
   const [open, setOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-
   const clientDelete = async () => {
     try {
       setDeleteLoading(true);
       const response = await deleteClientAPI(clientId);
-      if (response?.status == 200 || response?.status == 201) {
+      if (response?.status === 200 || response?.status === 201) {
         toast.success("Client Deleted Successfully");
         getAllClients({});
         handleClose();
@@ -38,51 +35,46 @@ export const DeleteButton = ({ getAllClients, clientId }: any) => {
   const handleOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <div className="eachAction">
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Image
-            title="Delete"
-            onClick={handleOpen}
-            src={"/delete.svg"}
-            height={40}
-            width={40}
-            alt="Delete Icon"
-          />
-        </DialogTrigger>
-
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Delete Client</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this client?
-            </DialogDescription>
-          </DialogHeader>
-
-          <DialogFooter>
-            <Button
-              type="submit"
+      <Image
+        title="Delete"
+        onClick={handleOpen}
+        src={"/delete.svg"}
+        height={40}
+        width={40}
+        alt="Delete Icon"
+      />
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogContent className="bg-white">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Client</AlertDialogTitle>
+          </AlertDialogHeader>
+          <div className="px-4">
+            Are you sure you want to delete this client?
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleClose}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-500 text-white"
               onClick={() => {
                 if (!deleteLoading) {
                   clientDelete();
                 }
               }}
             >
-              {deleteLoading ? <Spinner /> : "YES"}
-            </Button>
-
-            <Button variant="outline" onClick={handleClose}>
-              No
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+              {deleteLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Yes! Delete"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

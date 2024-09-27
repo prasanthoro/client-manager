@@ -9,7 +9,6 @@ import {
   addClientAPI,
   updateClientAPI,
   viewClientAPI,
-  viewInvoiceAPI,
 } from "@/services/clients";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -21,7 +20,6 @@ const AddClient = () => {
   const [errorMessages, setErrorMessages] = useState<any>();
   const [clientData, setClientData] = useState<any>({});
   const [viewDetails, setViewDetails] = useState<any>({});
-  console.log(viewDetails, "view");
   const [loading, setLoading] = useState(false);
   const [label, setLabel] = useState(loading);
   const { client_Id } = useParams();
@@ -81,6 +79,7 @@ const AddClient = () => {
   };
   const handleInputChange = (e: any) => {
     let { name, value } = e.target;
+
     setClientData({
       ...clientData,
       [name]: value,

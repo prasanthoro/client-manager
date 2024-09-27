@@ -1,6 +1,7 @@
 "use client";
 import DatePickerWithRange from "@/components/core/DatePickerWithRange";
 import { LoadingComponent } from "@/components/core/LoadingComponent";
+import SelectServiceDropDown from "@/components/core/SelectServiceDropDown";
 import ServiceDropDown from "@/components/core/ServicesDropDown";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -18,11 +19,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatInvoiceDate } from "@/lib/helpers/constants";
+import { changeInputFormats } from "@/lib/helpers/core/changeFirstLetterToCap";
 import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
 import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
 import { viewClientAPI, viewInvoiceAPI } from "@/services/clients";
 import {
-  servicesDropDownAPI
+  selectServiceDropDownAPI,
+  servicesDropDownAPI,
 } from "@/services/invoices";
 import dayjs from "dayjs";
 import Image from "next/image";
@@ -35,7 +39,6 @@ import {
 import { useEffect, useState } from "react";
 
 const ViewClient = () => {
-  
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -44,6 +47,7 @@ const ViewClient = () => {
   const [clientData, setClientData] = useState<any>();
   const [invoiceData, setInvoiceData] = useState<any>([]);
   const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
+  console.log(servicesForDropDown, "services");
   const [serviceName, setServiceName] = useState<any>({});
   const [openService, setOpenService] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -102,7 +106,9 @@ const ViewClient = () => {
   const servicesDropDown = async () => {
     // setLoading(true);
     try {
-      const reponse = await servicesDropDownAPI();
+      const reponse = await selectServiceDropDownAPI(client_Id as string);
+      console.log(reponse);
+
       if (reponse?.status == 200 || reponse?.status == 201) {
         setServicesForDropDown(reponse?.data?.data);
       }
@@ -162,6 +168,17 @@ const ViewClient = () => {
       }
     }
   }, [params, servicesForDropDown, setServiceName]);
+  const formattedAddress =
+    changeInputFormats(
+      [
+        clientData?.address,
+        clientData?.city,
+        clientData?.state,
+        clientData?.country,
+      ]
+        .filter(Boolean)
+        .join(", ")
+    ) || "--";
 
   useEffect(() => {
     getSingleClientView();
@@ -197,22 +214,34 @@ const ViewClient = () => {
             <div className="flex flex-col">
               <span className="font-bold">Company Name </span>
               <span>
-                {clientData?.company_name ? clientData?.company_name : "--"}
+                {changeInputFormats(clientData?.company_name)
+                  ? changeInputFormats(clientData?.company_name)
+                  : "--"}
               </span>
             </div>
             <div className="flex flex-col">
               <span className="font-bold">Name </span>
               <span>
-                {clientData?.client_name ? clientData?.client_name : "--"}
+                {changeInputFormats(clientData?.client_name)
+                  ? changeInputFormats(clientData?.client_name)
+                  : "--"}
               </span>
             </div>
             <div className="flex flex-col">
               <span className="font-bold"> Poc </span>
-              <span>{clientData?.poc ? clientData?.poc : "--"}</span>
+              <span>
+                {changeInputFormats(clientData?.poc)
+                  ? changeInputFormats(clientData?.poc)
+                  : "--"}
+              </span>
             </div>
             <div className="flex flex-col">
               <span className="font-bold">Email </span>
-              <span>{clientData?.email ? clientData?.email : "--"}</span>
+              <span>
+                {changeInputFormats(clientData?.email)
+                  ? changeInputFormats(clientData?.email)
+                  : "--"}
+              </span>
             </div>
             <div className="flex flex-col">
               <span className="font-bold">Phone </span>
@@ -220,16 +249,8 @@ const ViewClient = () => {
             </div>
             <div className="flex flex-col">
               <span className="font-bold">Address</span>
-              <span>
-                {[
-                  clientData?.address,
-                  clientData?.city,
-                  clientData?.state,
-                  clientData?.country,
-                ]
-                  .filter(Boolean)
-                  .join(", ") || "--"}
-              </span>
+
+              <span>{formattedAddress}</span>
             </div>
           </div>
         </CardContent>
@@ -241,7 +262,11 @@ const ViewClient = () => {
             <div className="grid grid-cols-3 gap-4 text-gray-600">
               <div className="flex flex-col">
                 <span className="font-bold">Remarks</span>
-                <span>{clientData?.remarks ? clientData?.remarks : "--"}</span>
+                <span>
+                  {changeInputFormats(clientData?.remarks)
+                    ? changeInputFormats(clientData?.remarks)
+                    : "--"}
+                </span>
               </div>
             </div>
           </CardContent>
@@ -255,7 +280,7 @@ const ViewClient = () => {
               <DatePickerWithRange onDataChange={onDataChange} />
             </div>
             <div className="w-full">
-              <ServiceDropDown
+              <SelectServiceDropDown
                 open={openService}
                 setOpen={setOpenService}
                 servicesForDropDown={servicesForDropDown}
@@ -297,9 +322,9 @@ const ViewClient = () => {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableCell>Invoice Date</TableCell>
                 <TableCell>Service Name</TableCell>
                 <TableCell>Service Type</TableCell>
-                <TableCell>Invoice Date</TableCell>
                 <TableCell>Invoice Status</TableCell>
                 <TableCell>Invoice Amount</TableCell>
               </TableRow>
@@ -309,12 +334,15 @@ const ViewClient = () => {
                 invoiceData.map((item: any) => (
                   <TableRow key={item.id}>
                     <TableCell>
+                      {item.invoice_date
+                        ? formatInvoiceDate(item.invoice_date)
+                        : "--"}
+                    </TableCell>
+                    <TableCell>
                       {item.service_name ? item.service_name : "--"}
                     </TableCell>
                     <TableCell>{item.type ? item.type : "--"}</TableCell>
-                    <TableCell>
-                      {item.invoice_date ? item.invoice_date : "--"}
-                    </TableCell>
+
                     <TableCell>
                       {item.invoice_status ? item.invoice_status : "--"}
                     </TableCell>
