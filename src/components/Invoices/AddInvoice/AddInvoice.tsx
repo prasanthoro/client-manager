@@ -341,8 +341,6 @@ export const AddInvoice = () => {
     clientNameDropDown();
     servicesDropDown();
   }, []);
-  console.log(selectedServices, "invoiceDetails");
-  console.log(invoiceDetails, "invoiceDetails");
 
   const editClientName = clientNameForDropDown?.find(
     (item: any) => item.id == invoiceDetails?.client_id
