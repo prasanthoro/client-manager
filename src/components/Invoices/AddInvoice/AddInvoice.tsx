@@ -47,6 +47,7 @@ import Image from "next/image";
 import ErrorComponent from "./ErrorMessage";
 import { toast, Toaster } from "sonner";
 import path from "path";
+import { fi } from "date-fns/locale";
 
 const invoiceStatus = [
   // {
@@ -152,7 +153,16 @@ export const AddInvoice = () => {
         };
       });
 
-      const response: any = await uploadInvoiceAPI(payload);
+      const payloadData = pathname?.includes("edit")
+        ? {
+            client_id: data?.client_id,
+            file_name: uploadFile?.name,
+            size: uploadFile?.size,
+            invoice_id: data?.id,
+          }
+        : payload;
+
+      const response: any = await uploadInvoiceAPI(payloadData);
       if (response.status == 200 || response.status == 201) {
         const { upload_url } = response?.data?.data;
         await uploadToS3(uploadFile, upload_url);
@@ -198,22 +208,33 @@ export const AddInvoice = () => {
     setLoading(true);
     try {
       let payload = {
-        // name: "sai group",
-        // service_id: 42,
-        // client_id: 501,
-        // invoice_status: "PENDING",
-        // remarks: "Payment partially paid",
-        // invoice_date: "2024-09-20",
-        // payment_date: "2024-10-20",
-        // invoice_amount: 4500.0,
+        // ...invoiceDetails,
+        client_id: invoiceDetails?.client_id,
+        service_id: invoiceDetails?.service_id,
+        invoice_status: invoiceDetails?.invoice_status,
+        invoice_amount: +invoiceDetails?.invoice_amount,
+        remarks: invoiceDetails?.remarks,
+        payment_date: invoiceDetails?.payment_date,
+        invoice_date: invoiceDetails?.invoice_date,
+        // created_at: null,
       };
 
       const response: any = await updateInvoiceAPI(invoice_id, payload);
       if (response.status == 200 || response.status == 201) {
-        toast.success("Invoice Updated Successfully");
-        setTimeout(() => {
-          router.push("/invoices");
-        }, 1000);
+        // toast.success("Invoice Updated Successfully");
+        const { data } = response?.data;
+        if (uploadFile) {
+          await uploadInvoice(data);
+        } else {
+          toast.success("Invoice Updated Successfully");
+          setTimeout(() => {
+            router.push("/invoices");
+          }, 1000);
+        }
+      } else {
+        if (response.status == 422) {
+          setErrors(response?.data?.errors);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -221,7 +242,6 @@ export const AddInvoice = () => {
       setLoading(false);
     }
   };
-
   const onFieldsChange = (event?: any) => {
     const { name, value } = event.target;
     if (value && checkAllowedValidText(value)) {
@@ -235,8 +255,6 @@ export const AddInvoice = () => {
       setInvoiceDetails(temp);
     }
   };
-
-  console.log(selectedServices, "selectedServices");
 
   const handleClearClient = (e: any) => {
     e.stopPropagation();
@@ -277,10 +295,11 @@ export const AddInvoice = () => {
     if (!updatedServices[index]) {
       updatedServices[index] = {
         service_id: "",
-        invoice_amount: parseInt(e.target.value, 10) || 0,
+        invoice_amount: parseInt(e.target.value, 10) || null,
       };
     } else {
-      updatedServices[index].invoice_amount = parseInt(e.target.value, 10) || 0;
+      updatedServices[index].invoice_amount =
+        parseInt(e.target.value, 10) || null;
     }
     setSelectedServices(updatedServices);
   };
@@ -298,6 +317,13 @@ export const AddInvoice = () => {
     }, 1);
   };
 
+  const handleEditInvoice: any = (name: any, value: any) => {
+    setInvoiceDetails((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   useEffect(() => {
     if (pathname?.includes("/edit-invoice")) {
       getSingleInvoice();
@@ -306,6 +332,12 @@ export const AddInvoice = () => {
     servicesDropDown();
   }, []);
 
+  const editClientName = clientNameForDropDown?.find(
+    (item: any) => item.id == invoiceDetails?.client_id
+  )?.client_name;
+  const status = invoiceStatus?.find(
+    (item: any) => item.value == invoiceDetails?.invoice_status
+  );
   return (
     <div className="p-8 bg-white rounded-lg shadow-md max-w-4xl mx-auto">
       {/* <div>
@@ -335,11 +367,14 @@ export const AddInvoice = () => {
               aria-expanded={open}
               className="w-[200px] justify-between"
               style={{ width: "300px" }}
+              disabled={pathname?.includes("/edit-invoice") ? true : false}
             >
               {clientName
                 ? clientNameForDropDown.find(
                     (client: any) => client.id === clientName?.id
                   )?.client_name
+                : pathname?.includes("/edit-invoice")
+                ? editClientName
                 : "Select Client"}
               {clientName ? (
                 <X
@@ -363,6 +398,7 @@ export const AddInvoice = () => {
                       value={client.client_name}
                       onSelect={() => {
                         setClientName(client);
+                        handleEditInvoice("client_id", client?.id);
                         setOpen(false);
                       }}
                     >
@@ -416,6 +452,7 @@ export const AddInvoice = () => {
         ) : (
           ""
         )}
+        {errors ? <p style={{ color: "red" }}>{errors?.invoice_date}</p> : ""}
       </div>
       <Label>Payment Date</Label>
       <div>
@@ -443,8 +480,16 @@ export const AddInvoice = () => {
       <div>
         <Select
           onValueChange={(value) => {
-            handleInvoiceStatusChange(value);
+            {
+              handleInvoiceStatusChange(value);
+              handleEditInvoice("invoice_status", value);
+            }
           }}
+          value={
+            invoiceStatus?.find(
+              (item: any) => item?.value == invoiceDetails?.invoice_status
+            )?.value
+          }
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select Status" />
@@ -455,7 +500,7 @@ export const AddInvoice = () => {
                 return (
                   <SelectItem
                     key={index}
-                    value={item.value || invoiceDetails?.invoice_status} // Set value as item.value
+                    value={item.value ? item.value : ""} // Set value as item.value
                   >
                     {item.label}
                   </SelectItem>
@@ -495,10 +540,19 @@ export const AddInvoice = () => {
                   <span style={{ color: "red" }}>*</span>
                 </Label>
                 <Select
-                  onValueChange={(value) =>
-                    handleServiceNameChange(value, index)
+                  disabled={pathname?.includes("/edit-invoice") ? true : false}
+                  onValueChange={(value) => {
+                    if (pathname?.includes("/edit-invoice")) {
+                      handleEditInvoice("service_id", value);
+                    } else {
+                      handleServiceNameChange(value, index);
+                    }
+                  }}
+                  value={
+                    item?.service_id
+                      ? item?.service_id
+                      : invoiceDetails?.service_id
                   }
-                  value={item?.service_id}
                 >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a service" />
@@ -534,12 +588,19 @@ export const AddInvoice = () => {
                     type="number"
                     name="amount"
                     placeholder="Enter Amount"
-                    onChange={(e) => onServiceDetails(e, index)}
+                    onChange={(e) => {
+                      if (pathname?.includes("/edit-invoice")) {
+                        handleEditInvoice("invoice_amount", e.target.value);
+                      } else {
+                        onServiceDetails(e, index);
+                      }
+                    }}
                     onWheel={(e) =>
                       (e.currentTarget as HTMLInputElement).blur()
                     }
                     step="any"
                     pattern="\d*" // Allow only digits
+                    value={invoiceDetails?.invoice_amount}
                   />
                   {selectedServices?.length > 1 ? (
                     <Button
@@ -558,6 +619,11 @@ export const AddInvoice = () => {
                     errors={errors}
                     index={`${index}.invoice_amount`}
                   />
+                ) : (
+                  ""
+                )}
+                {errors ? (
+                  <p style={{ color: "red" }}>{errors?.invoice_amount}</p>
                 ) : (
                   ""
                 )}
@@ -582,26 +648,6 @@ export const AddInvoice = () => {
 
       <div
         style={{
-          cursor: !uploadFile ? "not-allowed" : "pointer",
-          width: "105px",
-        }}
-      >
-        <Button
-          onClick={() => {
-            if (pathname?.includes("/edit-invoice")) {
-              updateInvoice();
-            } else {
-              addInvoice();
-            }
-          }}
-        >
-          {pathname?.includes("/edit-invoice")
-            ? "Update Invoice"
-            : "Add Invoice"}
-        </Button>
-      </div>
-      <div
-        style={{
           marginTop: "50px",
           textAlign: "center",
           backgroundColor: "black",
@@ -611,6 +657,7 @@ export const AddInvoice = () => {
           cursor: "pointer",
           height: "45px",
           width: "150px",
+          marginBottom: uploadFile ? "0px" : "50px",
         }}
       >
         {!isRendered && (
@@ -634,14 +681,48 @@ export const AddInvoice = () => {
       </div>
       <div>
         {uploadFile ? (
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex", marginBottom: "50px" }}>
             <p>{uploadFile.name}</p>
 
             <X size={16} onClick={() => setUploadFile(null)} />
           </div>
         ) : (
-          ""
+          invoiceDetails?.key && (
+            <div style={{ display: "flex", marginBottom: "50px" }}>
+              <p>{invoiceDetails?.key}</p>
+              <X
+                size={16}
+                onClick={() => {
+                  setInvoiceDetails({
+                    ...invoiceDetails,
+                    key: null,
+                    url: null,
+                  });
+                }}
+              />
+            </div>
+          )
         )}
+      </div>
+      <div
+        style={{
+          cursor: !uploadFile ? "not-allowed" : "pointer",
+          width: "105px",
+        }}
+      >
+        <Button
+          onClick={() => {
+            if (pathname?.includes("/edit-invoice")) {
+              updateInvoice();
+            } else {
+              addInvoice();
+            }
+          }}
+        >
+          {pathname?.includes("/edit-invoice")
+            ? "Update Invoice"
+            : "Add Invoice"}
+        </Button>
       </div>
       <LoadingComponent loading={loading} />
       <Toaster richColors closeButton position="top-right" />
