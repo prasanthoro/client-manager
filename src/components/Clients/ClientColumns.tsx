@@ -3,25 +3,10 @@ import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
 import { ViewButton } from "./ViewButton";
 import { changeInputFormats } from "@/lib/helpers/core/changeFirstLetterToCap";
+import dayjs from "dayjs";
 
 export const clientColumns = (getAllClients: any) => {
   return [
-    // {
-    //   accessorFn: (row: any) => row?.updated_at,
-    //   id: "updated_at",
-    //   header: () => <span>Date</span>,
-    //   cell: (info: any) => {
-    //     return (
-    //       <span className="eachCell">
-    //         {info.getValue()
-    //           ? dayjs(info.getValue()).format("DD-MM-YYYY")
-    //           : "--"}
-    //       </span>
-    //     );
-    //   },
-    //   footer: (props: any) => props.columns.id,
-    //   width: "100px",
-    // },
     {
       accessorFn: (row: any) => row.serial,
       id: "serial",
@@ -135,6 +120,22 @@ export const clientColumns = (getAllClients: any) => {
       },
       footer: (props: any) => props.columns.id,
       width: "100px",
+    },
+    {
+      accessorFn: (row: any) => row?.created_at,
+      id: "created_at",
+      header: () => <span>Date</span>,
+      cell: (info: any) => {
+        return (
+          <span className="eachCell">
+            {info.getValue()
+              ? dayjs(info.getValue()).format("DD-MM-YYYY")
+              : "--"}
+          </span>
+        );
+      },
+      footer: (props: any) => props.columns.id,
+      width: "150px",
     },
 
     {

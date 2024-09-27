@@ -37,16 +37,19 @@ export const addClientAPI = async (payload: any) => {
     console.error(err);
   }
 };
-export const viewInvoiceAPI = async (client_Id: any, params: Partial<invoicesListPropTypes>) => {
+export const viewInvoiceAPI = async (
+  client_Id: any,
+  params: Partial<invoicesListPropTypes>
+) => {
   try {
     return await $fetch.get(`/invoices/list/${client_Id}`, params);
   } catch (err) {
     console.error(err);
   }
 };
-export const updateClientAPI = async (clientId: any) => {
+export const updateClientAPI = async (client_Id: any, payload: any) => {
   try {
-    return await $fetch.patch(`/clients`, clientId);
+    return await $fetch.patch(`/clients/${client_Id}`, payload);
   } catch (err) {
     console.error(err);
   }

@@ -22,6 +22,9 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
                   Client Name
                 </TableCell>
                 <TableCell className="bg-purple-200 text-black font-bold py-2 px-4">
+                  Service Name
+                </TableCell>
+                <TableCell className="bg-purple-200 text-black font-bold py-2 px-4">
                   Service Type
                 </TableCell>
                 <TableCell className="bg-purple-200 text-black font-bold py-2 px-4">
@@ -44,6 +47,7 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
                   <TableRow key={item.id}>
                     <TableCell>{item.company_name || "--"}</TableCell>
                     <TableCell>{item.client_name || "--"}</TableCell>
+                    <TableCell>{item.service_name}</TableCell>
                     <TableCell>{item.type || "--"}</TableCell>
                     <TableCell>{item.invoice_date || "--"}</TableCell>
                     <TableCell>{item.invoice_status || "--"}</TableCell>

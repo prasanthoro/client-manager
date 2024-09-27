@@ -9,8 +9,10 @@ export const EditButton = ({ row }: any) => {
   const pathname = usePathname();
   const lab_id = params?.get("lab_id" as string);
   const router = useRouter();
-  const onEditClick = () => {};
-  // router.push(`/clients/${row?.id}/editclient`);
+  const onEditClick = () => {
+    const clientId = row?.id;
+    router.push(`/clients/${clientId}/edit_client`);
+  };
   return (
     <div className="eachAction">
       <Image
@@ -20,11 +22,10 @@ export const EditButton = ({ row }: any) => {
           onEditClick();
         }}
         src={"/edit.svg"}
-        height={40}
-        width={40}
+        height={70}
+        width={70}
         alt="Image"
-      ></Image>
-      {/* <LoadingComponent loading={loading} /> */}
+      />
     </div>
   );
 };

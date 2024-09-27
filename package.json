@@ -37,6 +37,7 @@
     "react-calendar": "^5.0.0",
     "react-day-picker": "^9.1.2",
     "react-dom": "^18",
+    "react-international-phone": "^4.3.0",
     "react-redux": "^9.1.2",
     "redux-persist": "^6.0.0",
     "rsuite": "^5.70.3",

@@ -8,7 +8,7 @@ export const ViewButton = ({ row }: any) => {
   const router = useRouter();
   const params = useSearchParams();
   const pathname = usePathname();
-  const lab_id = params?.get("lab_id" as string);
+
   const onViewClick = () => {
     router.push(`/clients/${row?.id}/view`);
   };
@@ -22,8 +22,8 @@ export const ViewButton = ({ row }: any) => {
           onViewClick();
         }}
         src={"/view.svg"}
-        height={40}
-        width={40}
+        height={70}
+        width={70}
         alt="Image"
       />
 

@@ -44,37 +44,43 @@ export const DeleteButton = ({ getAllClients, clientId }: any) => {
         title="Delete"
         onClick={handleOpen}
         src={"/delete.svg"}
-        height={40}
-        width={40}
+        height={70}
+        width={70}
         alt="Delete Icon"
       />
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogContent className="bg-white">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Client</AlertDialogTitle>
-          </AlertDialogHeader>
-          <div className="px-4">
-            Are you sure you want to delete this client?
-          </div>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleClose}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-red-500 text-white"
-              onClick={() => {
-                if (!deleteLoading) {
-                  clientDelete();
-                }
-              }}
-            >
-              {deleteLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                "Yes! Delete"
-              )}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <div className="bg-white">
+        <div id="dialogDelete">
+          <AlertDialog open={open} onOpenChange={setOpen}>
+            <AlertDialogContent id="alert-dialog-content">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Clien</AlertDialogTitle>
+              </AlertDialogHeader>
+              <div className="px-4">
+                Are you sure you want to delete this client?
+              </div>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={handleClose}>
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-red-500 text-white"
+                  onClick={() => {
+                    if (!deleteLoading) {
+                      clientDelete();
+                    }
+                  }}
+                >
+                  {deleteLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    "Yes! Delete"
+                  )}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      </div>
     </div>
   );
 };
