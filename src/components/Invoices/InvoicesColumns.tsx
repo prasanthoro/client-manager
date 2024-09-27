@@ -1,6 +1,8 @@
 import { formatAmount } from "@/lib/helpers/core/formatAmount";
 import { EditButton } from "./EditButton";
 import { DownloadButton } from "./DownloadButton";
+import { ViewButton } from "../Clients/ViewButton";
+import { ViewInvoiceButton } from "./ViewButton";
 
 export const invoicesColumns = () => {
   return [
@@ -83,6 +85,12 @@ export const invoicesColumns = () => {
                 style={{ marginRight: "10px", cursor: "pointer" }}
               >
                 <EditButton invoice_id={info.row?.original?.id} />
+              </li>
+              <li
+                className="eachList"
+                style={{ marginRight: "10px", cursor: "pointer" }}
+              >
+                <ViewInvoiceButton invoice_id={info.row?.original?.id} />
               </li>
               {info?.row?.original?.url ? (
                 <li

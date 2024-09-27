@@ -144,22 +144,26 @@ export const AddInvoice = () => {
   const uploadInvoice = async (data: any) => {
     setLoading(true);
     try {
-      const payload = data?.map((item: any) => {
-        return {
-          client_id: clientName?.id,
-          file_name: uploadFile?.name,
-          size: uploadFile?.size,
-          invoice_id: item?.id,
-        };
-      });
+      const payload = pathname?.includes("add-invoice")
+        ? data?.map((item: any) => {
+            return {
+              client_id: clientName?.id,
+              file_name: uploadFile?.name,
+              size: uploadFile?.size,
+              invoice_id: item?.id,
+            };
+          })
+        : [];
 
       const payloadData = pathname?.includes("edit")
-        ? {
-            client_id: data?.client_id,
-            file_name: uploadFile?.name,
-            size: uploadFile?.size,
-            invoice_id: data?.id,
-          }
+        ? [
+            {
+              client_id: data?.client_id,
+              file_name: uploadFile?.name,
+              size: uploadFile?.size,
+              invoice_id: data?.id,
+            },
+          ]
         : payload;
 
       const response: any = await uploadInvoiceAPI(payloadData);
