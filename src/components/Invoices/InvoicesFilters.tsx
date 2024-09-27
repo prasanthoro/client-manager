@@ -31,6 +31,9 @@ const InvoicesFilters = ({
   const [openService, setOpenService] = useState(false);
   const [clientName, setClientName] = useState<any>({});
   const [serviceName, setServiceName] = useState<any>({});
+  const [selectType, setSelectType] = useState<any>(
+    params.get("type") ? params.get("type") : "ALL"
+  );
 
   const onDataChange = (date: any) => {
     if (date) {
@@ -77,6 +80,15 @@ const InvoicesFilters = ({
       getAllIvoices({ invoice_status: "" });
     } else {
       getAllIvoices({ invoice_status: value, page: 1 });
+    }
+  };
+
+  const onChangeType = (value: string) => {
+    setSelectType(value);
+    if (value === "ALL") {
+      getAllIvoices({ type: "" });
+    } else {
+      getAllIvoices({ type: value, page: 1 });
     }
   };
 
@@ -136,6 +148,19 @@ const InvoicesFilters = ({
           onSelectService={onSelectService}
         />
       </div>
+      <Select onValueChange={onChangeType} value={selectType}>
+        <SelectTrigger className="w-full">
+          {" "}
+          <SelectValue placeholder="All" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="ALL">All</SelectItem>
+            <SelectItem value="RECURRING">Recurring</SelectItem>
+            <SelectItem value="ONE-TIME">On Time</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
       <Select onValueChange={onChangeStatus} value={selectStatus}>
         <SelectTrigger className="w-full">
           {" "}
