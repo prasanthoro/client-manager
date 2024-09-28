@@ -21,7 +21,7 @@ import { Loader2 } from "lucide-react";
 
 const AddClient = () => {
   const router = useRouter();
-  const [errorMessages, setErrorMessages] = useState<any>({});
+  const [errorMessages, setErrorMessages] = useState<any>();
   const [clientData, setClientData] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState("");
@@ -150,8 +150,8 @@ const AddClient = () => {
               name="company_name"
               onChange={handleInputChange}
             />
-            {errorMessages.company_name && (
-              <p className="text-red-500">{errorMessages.company_name[0]}</p>
+            {errorMessages?.company_name && (
+              <p className="text-red-500">{errorMessages?.company_name[0]}</p>
             )}
           </div>
           <div>
@@ -164,8 +164,8 @@ const AddClient = () => {
               name="client_name"
               onChange={handleInputChange}
             />
-            {errorMessages.client_name && (
-              <p className="text-red-500">{errorMessages.client_name[0]}</p>
+            {errorMessages?.client_name && (
+              <p className="text-red-500">{errorMessages?.client_name}</p>
             )}
           </div>
           <div className="flex items-end gap-2">
@@ -179,8 +179,8 @@ const AddClient = () => {
                 name="poc"
                 onChange={handleInputChange}
               />
-              {errorMessages.poc && (
-                <p className="text-red-500">{errorMessages.poc[0]}</p>
+              {errorMessages?.poc && (
+                <p className="text-red-500">{errorMessages?.poc[0]}</p>
               )}
             </div>
           </div>
@@ -249,8 +249,8 @@ const AddClient = () => {
               value={phone}
               onChange={(phone) => setPhone(phone)}
             />
-            {errorMessages.phone && (
-              <p className="text-red-500">{errorMessages.phone[0]}</p>
+            {errorMessages?.phone && (
+              <p className="text-red-500">{errorMessages?.phone[0]}</p>
             )}
           </div>
 
@@ -264,11 +264,11 @@ const AddClient = () => {
               name="email"
               onChange={handleInputChange}
             />
-            {errorMessages.email && (
+            {errorMessages?.email && (
               <p className="text-red-500">
-                {Array.isArray(errorMessages.email)
-                  ? errorMessages.email[0]
-                  : errorMessages.email}
+                {Array.isArray(errorMessages?.email)
+                  ? errorMessages?.email[0]
+                  : errorMessages?.email}
               </p>
             )}
           </div>
