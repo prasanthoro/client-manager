@@ -53,7 +53,7 @@ export const DeleteButton = ({ getAllClients, clientId }: any) => {
           <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogContent id="alert-dialog-content">
               <AlertDialogHeader>
-                <AlertDialogTitle>Delete Clien</AlertDialogTitle>
+                <AlertDialogTitle>Delete Client</AlertDialogTitle>
               </AlertDialogHeader>
               <div className="px-4">
                 Are you sure you want to delete this client?
@@ -71,7 +71,7 @@ export const DeleteButton = ({ getAllClients, clientId }: any) => {
                   }}
                 >
                   {deleteLoading ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   ) : (
                     "Yes! Delete"
                   )}

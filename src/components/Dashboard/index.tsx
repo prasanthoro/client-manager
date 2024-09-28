@@ -41,12 +41,14 @@ export const Dashboard = () => {
   const params = useSearchParams();
   const pathname = usePathname();
   const [clientsCount, setClientsCount] = useState([]);
-  const [serviceAmount, setServicesAmount] = useState([]);
+  const [oneTimeData, setOneTimeData] = useState<any>([]);
+  console.log(oneTimeData, "data");
   const [clientWiseTotallInvoices, setClientWiseTotalInvoices] = useState([]);
   const [invoiceAmount, setInvoiceAmount] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dateInformation, setDateInformation] = useState<any>([]);
-  const [recuringAmount, setRecurringAmount] = useState([]);
+  const [recuringAmount, setRecurringAmount] = useState<any>([]);
+  console.log(recuringAmount, "recuring");
 
   const getAllClientsCount = async ({
     from_date = params.get("from_date") as string,
@@ -176,7 +178,7 @@ export const Dashboard = () => {
       });
       if (response?.status == 200 || response?.status == 201) {
         let { data } = response?.data;
-        setServicesAmount(data);
+        setOneTimeData(data[0]);
       } else {
         throw response;
       }
@@ -211,7 +213,7 @@ export const Dashboard = () => {
       });
       if (response?.status == 200 || response?.status == 201) {
         let { data } = response?.data;
-        setRecurringAmount(data);
+        setRecurringAmount(data[0]);
       } else {
         throw response;
       }
@@ -307,41 +309,43 @@ export const Dashboard = () => {
             </div>
           </header>
           <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <Card
-                style={{ cursor: "pointer" }}
-                className="p-2 max-w-xs mx-auto"
-                onClick={() => router.push("/clients")}
-              >
-                <div className="bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-lg rounded-lg">
-                  <CardHeader className="flex flex-row items-center justify-between pb-1">
-                    <CardTitle className="text-lg font-bold">
-                      Total Clients
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-lg font-bold">{clientsCount}</div>
-                  </CardContent>
-                </div>
-              </Card>
-              <Card
-                style={{ cursor: "pointer" }}
-                className="p-2 max-w-xs mx-auto"
-                onClick={() => router.push("/invoices")}
-              >
-                <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg rounded-lg">
-                  <CardHeader className="flex flex-row items-center justify-between pb-1">
-                    <CardTitle className="text-lg font-bold">
-                      Invoices Amount
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-lg font-bold">
-                      {formatAmount(invoiceAmount)}
-                    </div>
-                  </CardContent>
-                </div>
-              </Card>
+            <div className="grid gap-4 lg:grid-cols-3">
+              <div>
+                <Card
+                  style={{ cursor: "pointer" }}
+                  className="p-2 max-w-xs mx-auto"
+                  onClick={() => router.push("/clients")}
+                >
+                  <div className="bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-lg rounded-lg">
+                    <CardHeader className="flex flex-row items-center justify-between pb-1">
+                      <CardTitle className="text-lg font-bold">
+                        Total Clients
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-lg font-bold">{clientsCount}</div>
+                    </CardContent>
+                  </div>
+                </Card>
+                <Card
+                  style={{ cursor: "pointer" }}
+                  className="p-2 max-w-xs mx-auto"
+                  onClick={() => router.push("/invoices")}
+                >
+                  <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg rounded-lg">
+                    <CardHeader className="flex flex-row items-center justify-between pb-1">
+                      <CardTitle className="text-lg font-bold">
+                        Invoices Amount
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-lg font-bold">
+                        {formatAmount(invoiceAmount)}
+                      </div>
+                    </CardContent>
+                  </div>
+                </Card>
+              </div>
               <Card
                 style={{ cursor: "pointer" }}
                 className="p-2 max-w-xs mx-auto"
@@ -352,12 +356,43 @@ export const Dashboard = () => {
                 <div className="bg-gradient-to-r from-orange-500 to-yellow-600 text-white shadow-lg rounded-lg">
                   <CardHeader className="flex flex-row items-center justify-between pb-1">
                     <CardTitle className="text-lg font-bold">
-                      One Time Amount
+                      One Time
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-lg font-bold">
-                      {formatAmount(serviceAmount)}
+                  <CardContent className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      {/* Client Count */}
+                      <div className="text-left">
+                        <p className="text-sm">Total Clients</p>
+                        <p className="text-lg font-bold">
+                          {oneTimeData?.total_one_time_clients}
+                        </p>
+                      </div>
+
+                      {/* Service Count */}
+                      <div className="text-left">
+                        <p className="text-sm">Total Services</p>
+                        <p className="text-lg font-bold">
+                          {oneTimeData?.total_one_time_services}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Clients Invoice Amount */}
+                      <div className="text-left">
+                        <p className="text-sm">Clients Invoice</p>
+                        <p className="text-lg font-bold">
+                          {oneTimeData?.total_one_time_clients_invoice_amount}
+                        </p>
+                      </div>
+
+                      {/* Services Invoice Amount */}
+                      <div className="text-left">
+                        <p className="text-sm">Services Invoice</p>
+                        <p className="text-lg font-bold">
+                          {oneTimeData?.total_one_time_services_invoice_amount}
+                        </p>
+                      </div>
                     </div>
                   </CardContent>
                 </div>
@@ -369,15 +404,44 @@ export const Dashboard = () => {
                   router.push("/invoices?page=1&limit=25&type=RECURRING")
                 }
               >
-                <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg rounded-lg">
+                <div className="bg-gradient-to-r from-orange-500 to-yellow-600 text-white shadow-lg rounded-lg">
                   <CardHeader className="flex flex-row items-center justify-between pb-1">
                     <CardTitle className="text-lg font-bold">
-                      Recurring Amount
+                      Recurring
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-lg font-bold">
-                      {formatAmount(recuringAmount)}
+                  <CardContent className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="text-left">
+                        <p className="text-sm">Total Clients</p>
+                        <p className="text-lg font-bold">
+                          {recuringAmount?.total_recurring_clients}
+                        </p>
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm">Total Services</p>
+                        <p className="text-lg font-bold">
+                          {recuringAmount?.total_recurring_services}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-left">
+                        <p className="text-sm">Clients Invoice</p>
+                        <p className="text-lg font-bold">
+                          {
+                            recuringAmount?.total_recurring_clients_invoice_amount
+                          }
+                        </p>
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm">Services Invoice</p>
+                        <p className="text-lg font-bold">
+                          {
+                            recuringAmount?.total_recurring_services_invoice_amount
+                          }
+                        </p>
+                      </div>
                     </div>
                   </CardContent>
                 </div>

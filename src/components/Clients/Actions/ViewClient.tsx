@@ -101,12 +101,12 @@ const ViewClient = () => {
     // setLoading(true);
     try {
       const reponse = await selectServiceDropDownAPI(client_Id as string);
-      console.log(reponse);
-
       if (reponse?.status == 200 || reponse?.status == 201) {
         setServicesForDropDown(reponse?.data?.data);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleBackClick = () => {
@@ -329,7 +329,7 @@ const ViewClient = () => {
                 invoiceData.map((item: any) => (
                   <TableRow key={item.id}>
                     <TableCell>
-                      {item.invoice_date
+                      {formatInvoiceDate(item.invoice_date)
                         ? formatInvoiceDate(item.invoice_date)
                         : "--"}
                     </TableCell>

@@ -48,6 +48,7 @@ import ErrorComponent from "./ErrorMessage";
 import { toast, Toaster } from "sonner";
 import path from "path";
 import { fi } from "date-fns/locale";
+import { changeOnlyFirstLetterToCap } from "@/lib/helpers/core/changeFirstLetterToCap";
 
 const invoiceStatus = [
   // {
@@ -402,7 +403,7 @@ export const AddInvoice = () => {
                   {clientNameForDropDown.map((client: any) => (
                     <CommandItem
                       key={client.id}
-                      value={client.client_name}
+                      value={changeOnlyFirstLetterToCap(client.client_name)}
                       onSelect={() => {
                         setClientName(client);
                         handleEditInvoice("client_id", client?.id);
@@ -417,7 +418,7 @@ export const AddInvoice = () => {
                             : "opacity-0"
                         )}
                       />
-                      {client.client_name}
+                      {changeOnlyFirstLetterToCap(client.client_name)}
                     </CommandItem>
                   ))}
                 </CommandGroup>

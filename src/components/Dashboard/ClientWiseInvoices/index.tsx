@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatInvoiceDate } from "@/lib/helpers/constants";
 
 const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
   return (
@@ -49,7 +50,9 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
                     <TableCell>{item.client_name || "--"}</TableCell>
                     <TableCell>{item.service_name}</TableCell>
                     <TableCell>{item.type || "--"}</TableCell>
-                    <TableCell>{item.invoice_date || "--"}</TableCell>
+                    <TableCell>
+                      {formatInvoiceDate(item.invoice_date) || "--"}
+                    </TableCell>
                     <TableCell>{item.invoice_status || "--"}</TableCell>
                     <TableCell>
                       {item.invoice_amount
