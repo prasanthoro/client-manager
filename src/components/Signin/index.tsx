@@ -12,6 +12,7 @@ import { setSessionTimedOut, setUserDetails } from "@/redux/Modules/userlogin";
 import { loginAPI } from "@/services/auth";
 import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 export const SignIn = () => {
   const dispatch = useDispatch();
@@ -127,10 +128,14 @@ export const SignIn = () => {
             </div>
             <Button
               type="submit"
-              className="w-full"
+              className="w-full flex justify-center items-center"
               onClick={() => signInEvent()}
             >
-              {loading ? <Spinner /> : "Log In"}
+              {loading ? (
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              ) : (
+                "Log In"
+              )}
             </Button>
           </div>
         </div>

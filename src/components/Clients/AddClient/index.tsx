@@ -214,10 +214,10 @@ const AddClient = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              City/Location
+              City
             </label>
             <Input
-              placeholder="Enter City/Location"
+              placeholder="Enter City"
               value={clientData.city}
               name="city"
               onChange={handleInputChange}
