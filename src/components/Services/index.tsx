@@ -62,6 +62,7 @@ const ServicesList = () => {
 
   return (
     <div>
+      <h1 className="text-2xl font-bold text-red-600 ml-2">Services</h1>
       <ServicesFilters getAllServices={getAllServices} />
       <TanStackTableComponent
         columns={servicesColumns()}

@@ -105,6 +105,7 @@ const Clients = () => {
   return (
     <>
       <div className="flex">
+      <h1 className="text-2xl font-bold text-red-600 ml-2">Clients</h1>
         <ClientFilters
           getAllClients={getAllClients}
           searchString={searchString}
