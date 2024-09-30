@@ -13,16 +13,6 @@ import { useEffect, useState } from "react";
 import { LoadingComponent } from "../core/LoadingComponent";
 import TanStackTableComponent from "../core/TanstackTable";
 import { invoicesColumns } from "./InvoicesColumns";
-<<<<<<< HEAD
-import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
-import {
-  clientNameDropDownAPI,
-  getAllInvoicesListAPI,
-  servicesDropDownAPI,
-} from "@/services/invoices";
-import { LoadingComponent } from "../core/LoadingComponent";
-=======
->>>>>>> features/view-client
 import InvoicesFilters from "./InvoicesFilters";
 const InvoicesList = () => {
   const params = useSearchParams();
@@ -36,11 +26,7 @@ const InvoicesList = () => {
     params.get("search_string") ? params.get("search_string") : ""
   );
   const [selectStatus, setSelectStatus] = useState(
-<<<<<<< HEAD
     params.get("status") ? params.get("status") : ""
-=======
-    params.get("invoice_status") ? params.get("invoice_status") : "ALL"
->>>>>>> features/view-client
   );
   const [loading, setLoading] = useState(true);
   const getAllIvoices = async ({
