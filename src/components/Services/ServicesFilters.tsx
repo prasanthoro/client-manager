@@ -1,29 +1,31 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "../ui/button";
+import { selectTypes } from "@/lib/constants/selectType";
+import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
-import DatePickerWithRange from "../core/DatePickerWithRange";
+import { Check, ChevronDown, X } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useState } from "react";
+import DatePickerWithRange from "../core/DatePickerWithRange";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../ui/popover";
 
 const ServicesFilters = ({ getAllServices }: any) => {
   const router = useRouter();
   const params = useSearchParams();
 
+  const [open, setOpen] = useState(false);
   const [searchString, setSearchString] = useState<any>(
     params.get("search_string") ? params.get("search_string") : ""
   );
   const [selectType, setSelectType] = useState<any>(
     params.get("type") ? params.get("type") : ""
   );
+
 
   const onDataChange = (date: any) => {
     if (date) {
@@ -67,25 +69,65 @@ const ServicesFilters = ({ getAllServices }: any) => {
         onChange={onSearchStringChange}
         className="w-full"
       />
-      <Select onValueChange={onChangeType} value={selectType}>
-        <SelectTrigger className="w-full">
-          {" "}
-          <SelectValue placeholder="Select Type" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value="RECURRING">Recurring</SelectItem>
-            <SelectItem value="ONE-TIME">One Time</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <div>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className="w-[200px] justify-between bg-white-700"
+            >
+              {selectType
+                ? selectTypes.find((type) => type.value === selectType)?.label
+                : "Select Type"}
+              <div className="flex">
+                {selectType && (
+                  <X
+                    className="mr-2 h-4 w-4 shrink-0 opacity-50"
+                    onClick={(e: any) => {
+                      e.stopPropagation();
+                      onChangeType("");
+                      setOpen(false);
+                    }}
+                  />
+                )}
+                <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+              </div>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[200px] p-0">
+            <div className="max-h-[300px] overflow-y-auto">
+              {selectTypes?.map((type) => (
+                <Button
+                  key={type.value}
+                  
+                  onClick={() => {
+                    onChangeType(type.value)
+                    setOpen(false);
+                  }}
+                  className=
+                    "w-full justify-start font-normal bg-white text-violet-600 border border-indigo-600 capitalize mb-2 hover:bg-violet-600  hover:text-white "
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      selectType === type.value ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {type.label}
+                </Button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
       <Button
         className="w-[120px] bg-black text-white"
         onClick={() => {
           router.push("/services/add-service");
         }}
       >
-        {" "}
         Add Service
       </Button>
     </div>

@@ -23,7 +23,7 @@ const InvoicesList = () => {
     params.get("search_string") ? params.get("search_string") : ''
   );
   const [selectStatus, setSelectStatus] = useState(
-    params.get("invoice_status") ? params.get("invoice_status") : 'ALL'
+    params.get("status") ? params.get("status") : ''
   );
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +35,7 @@ const InvoicesList = () => {
     from_date = params.get("from_date") as string,
     to_date = params.get("to_date") as string,
     search_string = params.get("search_string") as string,
-    invoice_status = params.get("invoice_status") as string,
+    invoice_status = params.get("status") as string,
     client_id = params.get("client_id") as string,
     service_id = params.get("service_id") as string,
     type = params.get("type") as string,

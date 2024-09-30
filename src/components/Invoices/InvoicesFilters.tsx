@@ -1,19 +1,16 @@
 "use client";
+import { status } from "@/lib/constants/selectStatus";
+import { selectTypes } from "@/lib/constants/selectType";
+import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
+import { Check, ChevronDown, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import ClientDropDown from "../core/ClientDropDown";
 import DatePickerWithRange from "../core/DatePickerWithRange";
 import ServiceDropDown from "../core/ServicesDropDown";
 import { Button } from "../ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const InvoicesFilters = ({
   getAllIvoices,
@@ -28,11 +25,13 @@ const InvoicesFilters = ({
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
+  const [statusopen, setStatusOpen] = useState(false);
+  const [typeopen, setTypeOpen] = useState(false);
   const [openService, setOpenService] = useState(false);
   const [clientName, setClientName] = useState<any>({});
   const [serviceName, setServiceName] = useState<any>({});
   const [selectType, setSelectType] = useState<any>(
-    params.get("type") ? params.get("type") : "ALL"
+    params.get("type") ? params.get("type") : ""
   );
 
   const onDataChange = (date: any) => {
@@ -76,19 +75,19 @@ const InvoicesFilters = ({
 
   const onChangeStatus = (value: string) => {
     setSelectStatus(value);
-    if (value === "ALL") {
-      getAllIvoices({ invoice_status: "" });
-    } else {
+    if (value) {
       getAllIvoices({ invoice_status: value, page: 1 });
+    } else {
+      getAllIvoices({ invoice_status: "" });
     }
   };
 
   const onChangeType = (value: string) => {
     setSelectType(value);
-    if (value === "ALL") {
-      getAllIvoices({ type: "" });
-    } else {
+    if (value) {
       getAllIvoices({ type: value, page: 1 });
+    } else {
+      getAllIvoices({ type: "" });
     }
   };
 
@@ -148,33 +147,108 @@ const InvoicesFilters = ({
           onSelectService={onSelectService}
         />
       </div>
-      <Select onValueChange={onChangeType} value={selectType}>
-        <SelectTrigger className="w-full">
-          {" "}
-          <SelectValue placeholder="All" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value="ALL">All</SelectItem>
-            <SelectItem value="RECURRING">Recurring</SelectItem>
-            <SelectItem value="ONE-TIME">One Time</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      <Select onValueChange={onChangeStatus} value={selectStatus}>
-        <SelectTrigger className="w-full">
-          {" "}
-          {/* Adjust the width */}
-          <SelectValue placeholder="All" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value="ALL">All</SelectItem>
-            <SelectItem value="COMPLETED">Completed</SelectItem>
-            <SelectItem value="PENDING">Pending</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <div>
+        <Popover open={typeopen} onOpenChange={setTypeOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={typeopen}
+              className="w-[200px] justify-between bg-white-700"
+            >
+              {selectType
+                ? selectTypes.find((type) => type.value === selectType)?.label
+                : "Select Type"}
+              <div className="flex">
+                {selectType && (
+                  <X
+                    className="mr-2 h-4 w-4 shrink-0 opacity-50"
+                    onClick={(e: any) => {
+                      e.stopPropagation();
+                      onChangeType("");
+                      setTypeOpen(false);
+                    }}
+                  />
+                )}
+                <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+              </div>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[200px] p-0">
+            <div className="max-h-[300px] overflow-y-auto">
+              {selectTypes?.map((type) => (
+                <Button
+                  key={type.value}
+                  onClick={() => {
+                    onChangeType(type.value);
+                    setTypeOpen(false);
+                  }}
+                  className="w-full justify-start font-normal bg-white text-violet-600 border border-indigo-600 capitalize mb-2 hover:bg-violet-600  hover:text-white "
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      selectType === type.value ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {type.label}
+                </Button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+      <div>
+        <Popover open={statusopen} onOpenChange={setStatusOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={statusopen}
+              className="w-[200px] justify-between bg-white-700"
+            >
+              {selectStatus
+                ? status.find((type) => type.value === selectStatus)?.label
+                : "Select Status"}
+              <div className="flex">
+                {selectStatus && (
+                  <X
+                    className="mr-2 h-4 w-4 shrink-0 opacity-50"
+                    onClick={(e: any) => {
+                      e.stopPropagation();
+                      onChangeStatus("");
+                      setStatusOpen(false);
+                    }}
+                  />
+                )}
+                <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+              </div>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[200px] p-0">
+            <div className="max-h-[300px] overflow-y-auto">
+              {status?.map((type) => (
+                <Button
+                  key={type.value}
+                  onClick={() => {
+                    onChangeStatus(type.value);
+                    setStatusOpen(false);
+                  }}
+                  className="w-full justify-start font-normal bg-white text-violet-600 border border-indigo-600 capitalize mb-2 hover:bg-violet-600  hover:text-white "
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      selectStatus === type.value ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {type.label}
+                </Button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
       <Button
         className="w-[120px] bg-black text-white"
         onClick={() => {

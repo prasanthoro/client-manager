@@ -45,7 +45,7 @@ const ServiceDropDown = ({
                 ? servicesForDropDown?.find(
                     (service: any) => service?.id === serviceName?.id
                   )?.name
-                : "Select Service Type"}
+                : "Select Service"}
               {serviceName?.name ? (
                 <X
                   className="ml-2 h-4 w-4 cursor-pointer"
