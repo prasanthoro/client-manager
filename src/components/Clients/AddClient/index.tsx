@@ -87,7 +87,7 @@ const AddClient = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setClientData((prev: any) => ({ ...prev, [name]: value }));
+    setClientData((prev: any) => ({ ...prev, [name]: value.trim() }));
   };
 
   const getServiceById = async () => {
