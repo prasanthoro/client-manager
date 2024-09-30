@@ -91,6 +91,7 @@ const AddClient = () => {
   };
 
   const getServiceById = async () => {
+    setLoading(true);
     try {
       const response = await viewClientAPI(client_Id as string);
       if (response?.status === 200 || response?.status === 201) {
@@ -102,6 +103,8 @@ const AddClient = () => {
     } catch (err: any) {
       toast.error(err?.message || "Something went wrong");
       console.error(err);
+    } finally{
+      setLoading(false);
     }
   };
 

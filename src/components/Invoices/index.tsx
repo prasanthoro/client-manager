@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
 import TanStackTableComponent from "../core/TanstackTable";
 import { invoicesColumns } from "./InvoicesColumns";
 import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
-import { clientNameDropDownAPI, getAllInvoicesListAPI, servicesDropDownAPI } from "@/services/invoices";
+import {
+  clientNameDropDownAPI,
+  getAllInvoicesListAPI,
+  servicesDropDownAPI,
+} from "@/services/invoices";
 import { LoadingComponent } from "../core/LoadingComponent";
 import InvoicesFilters from "./InvoicesFilters";
 
@@ -20,10 +24,10 @@ const InvoicesList = () => {
   const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
   const [paginationDetails, setPaginationDetails] = useState({});
   const [searchString, setSearchString] = useState(
-    params.get("search_string") ? params.get("search_string") : ''
+    params.get("search_string") ? params.get("search_string") : ""
   );
   const [selectStatus, setSelectStatus] = useState(
-    params.get("invoice_status") ? params.get("invoice_status") : 'ALL'
+    params.get("status") ? params.get("status") : ""
   );
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +39,7 @@ const InvoicesList = () => {
     from_date = params.get("from_date") as string,
     to_date = params.get("to_date") as string,
     search_string = params.get("search_string") as string,
-    invoice_status = params.get("invoice_status") as string,
+    invoice_status = params.get("status") as string,
     client_id = params.get("client_id") as string,
     service_id = params.get("service_id") as string,
     type = params.get("type") as string,
@@ -77,8 +81,7 @@ const InvoicesList = () => {
       if (reponse?.status == 200 || reponse?.status == 201) {
         setClientNameForDropDown(reponse?.data?.data);
       }
-    } catch (error) {
-    } 
+    } catch (error) {}
   };
 
   const servicesDropDown = async () => {
@@ -88,18 +91,18 @@ const InvoicesList = () => {
       if (reponse?.status == 200 || reponse?.status == 201) {
         setServicesForDropDown(reponse?.data?.data);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
-      getAllIvoices({});
-      clientNameDropDown();
-      servicesDropDown();
+    getAllIvoices({});
+    clientNameDropDown();
+    servicesDropDown();
   }, []);
 
   return (
     <div>
+      <h1 className="text-2xl font-bold text-red-600 ml-2">Invoices</h1>
       <InvoicesFilters
         getAllIvoices={getAllIvoices}
         searchString={searchString}

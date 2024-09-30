@@ -53,8 +53,8 @@ export const servicesColumns = () => {
       width: "100px",
     },
     {
-      accessorFn: (row: any) => row?.updated_at,
-      id: "updated_at",
+      accessorFn: (row: any) => row?.created_at,
+      id: "created_at",
       header: () => <span>Date</span>,
       cell: (info: any) => {
         return (
