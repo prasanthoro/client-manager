@@ -1,10 +1,19 @@
 "use client";
 
+import { addSerial } from "@/lib/helpers/core/formatAmount";
+import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
 import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
+import {
+  clientNameDropDownAPI,
+  getAllInvoicesListAPI,
+  servicesDropDownAPI,
+} from "@/services/invoices";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { LoadingComponent } from "../core/LoadingComponent";
 import TanStackTableComponent from "../core/TanstackTable";
 import { invoicesColumns } from "./InvoicesColumns";
+<<<<<<< HEAD
 import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
 import {
   clientNameDropDownAPI,
@@ -12,13 +21,13 @@ import {
   servicesDropDownAPI,
 } from "@/services/invoices";
 import { LoadingComponent } from "../core/LoadingComponent";
+=======
+>>>>>>> features/view-client
 import InvoicesFilters from "./InvoicesFilters";
-
 const InvoicesList = () => {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-
   const [invoicesData, setInvoicesData] = useState([]);
   const [clientNameForDropDown, setClientNameForDropDown] = useState<any>([]);
   const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
@@ -27,10 +36,13 @@ const InvoicesList = () => {
     params.get("search_string") ? params.get("search_string") : ""
   );
   const [selectStatus, setSelectStatus] = useState(
+<<<<<<< HEAD
     params.get("status") ? params.get("status") : ""
+=======
+    params.get("invoice_status") ? params.get("invoice_status") : "ALL"
+>>>>>>> features/view-client
   );
   const [loading, setLoading] = useState(true);
-
   const getAllIvoices = async ({
     page = (params.get("page") as string) || 1,
     limit = (params.get("limit") as string) || 25,
@@ -58,22 +70,24 @@ const InvoicesList = () => {
         service_id: service_id,
         type: type,
       };
-
       setLoading(true);
       let queryString: any = prepareURLEncodedParams("", queryParams);
-
       router.push(`${pathname}${queryString}`);
       const response = await getAllInvoicesListAPI(queryParams);
       let { data, ...rest } = response?.data;
-      setInvoicesData(data);
-      setPaginationDetails(rest);
+      data = addSerial(data, rest.page, rest.limit);
+      if (!data?.length && rest.page != 1) {
+        await getAllIvoices({ page: +rest.page - 1 });
+      } else {
+        setPaginationDetails(rest);
+        setInvoicesData(data);
+      }
     } catch (err: any) {
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
-
   const clientNameDropDown = async () => {
     // setLoading(true);
     try {
@@ -83,7 +97,6 @@ const InvoicesList = () => {
       }
     } catch (error) {}
   };
-
   const servicesDropDown = async () => {
     // setLoading(true);
     try {
@@ -118,7 +131,7 @@ const InvoicesList = () => {
         data={invoicesData}
         paginationDetails={paginationDetails}
         loading={loading}
-        removeSortingForColumnIds={["actions"]}
+        removeSortingForColumnIds={["actions", "serial"]}
       />
       <LoadingComponent loading={loading} label={"Invoices"} />
     </div>
