@@ -13,7 +13,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { checkAllowedValidText } from "@/lib/helpers/constants";
-import { addServiceAPI, getServiceAPI, updateServiceAPI } from "@/services/services";
+import {
+  addServiceAPI,
+  getServiceAPI,
+  updateServiceAPI,
+} from "@/services/services";
 import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -22,8 +26,8 @@ import { toast } from "sonner";
 const AddService = () => {
   const router = useRouter();
   const params = useParams();
-  const serviceId = params?.id
-  
+  const serviceId = params?.id;
+
   const [serviceDetails, setServiceDetails] = useState<any>({});
   const [errorMessages, setErrorMessages] = useState<any>();
   const [loading, setLoading] = useState(false);
@@ -31,16 +35,16 @@ const AddService = () => {
   const addService = async () => {
     setLoading(true);
     try {
-      let payload = 
-        {
-          ...serviceDetails,
-        }
+      let payload = {
+        ...serviceDetails,
+      };
       const response: any = await addServiceAPI(payload);
-
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.data?.message || "Service Added succesfully");
-        router.push('/services');
+        router.push("/services");
       } else if (response?.status == 422) {
+        setErrorMessages(response?.data?.errors);
+      } else if (response?.status == 409) {
         setErrorMessages(response?.data?.errors);
       }
     } catch (err) {
@@ -53,18 +57,19 @@ const AddService = () => {
   const updateService = async () => {
     setLoading(true);
     try {
-      let payload =
-        {
-          service_name : serviceDetails?.service_name,
-          type:serviceDetails?.type,
-          remarks:serviceDetails?.remarks
-        }
-      const response: any = await updateServiceAPI(payload,serviceId);
+      let payload = {
+        service_name: serviceDetails?.service_name,
+        type: serviceDetails?.type,
+        remarks: serviceDetails?.remarks,
+      };
+      const response: any = await updateServiceAPI(payload, serviceId);
 
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.data?.message || "Service Added succesfully");
-        router.push('/services');
+        router.push("/services");
       } else if (response?.status == 422) {
+        setErrorMessages(response?.data?.errors);
+      } else if (response?.status == 409) {
         setErrorMessages(response?.data?.errors);
       }
     } catch (err) {
@@ -75,6 +80,7 @@ const AddService = () => {
   };
 
   const getServiceById = async () => {
+    setLoading(true);
     try {
       const response = await getServiceAPI(serviceId as string);
       if (response?.status == 200 || response?.status == 201) {
@@ -85,6 +91,8 @@ const AddService = () => {
     } catch (err: any) {
       toast.error(err?.message || "Something went wrong");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,7 +104,7 @@ const AddService = () => {
     });
   };
 
-  const handleSelect = (name: any,value: any) => {
+  const handleSelect = (name: any, value: any) => {
     setServiceDetails({
       ...serviceDetails,
       [name]: value,
@@ -109,11 +117,11 @@ const AddService = () => {
     } else {
       addService();
     }
-  }
+  };
 
   useEffect(() => {
-    if(serviceId) {
-    getServiceById();
+    if (serviceId) {
+      getServiceById();
     }
   }, []);
 
@@ -127,7 +135,9 @@ const AddService = () => {
           >
             <Image alt="image" width={24} height={24} src="/back-button.svg" />
           </button>
-          <h1 className="text-2xl font-bold text-red-600 ml-2">{serviceId ? "Update Service":"Add Service"}</h1>
+          <h1 className="text-2xl font-bold text-red-600 ml-2">
+            {serviceId ? "Update Service" : "Add Service"}
+          </h1>
         </div>
       </div>
       <section className="mb-6">
@@ -142,8 +152,11 @@ const AddService = () => {
               placeholder="Enter Service Name"
               onChange={handleInputChange}
             />
-            {errorMessages?.service_name && (
+            {/* {errorMessages?.service_name && (
               <p style={{ color: "red" }}>{errorMessages.service_name[0]}</p>
+            )} */}
+            {errorMessages?.service_name && (
+              <p style={{ color: "red" }}>{errorMessages.service_name}</p>
             )}
           </div>
           <div>
@@ -153,7 +166,7 @@ const AddService = () => {
             <Select
               name="type"
               value={serviceDetails?.type}
-              onValueChange={(value) => handleSelect("type",value)}
+              onValueChange={(value) => handleSelect("type", value)}
             >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select Type" />
@@ -170,17 +183,17 @@ const AddService = () => {
             )}
           </div>
           <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Remarks
-          </label>
+            <label className="block text-sm font-medium text-gray-700">
+              Remarks
+            </label>
 
-          <Textarea
-            placeholder="Enter Remarks"
-            value={serviceDetails?.remarks}
-            name="remarks"
-            onChange={handleInputChange}
-          />
-        </div>
+            <Textarea
+              placeholder="Enter Remarks"
+              value={serviceDetails?.remarks}
+              name="remarks"
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
       </section>
       <div className="flex justify-end space-x-4 mt-6">
@@ -198,7 +211,7 @@ const AddService = () => {
             setErrorMessages(null);
           }}
         >
-          {serviceId ? "Update": "Add"}
+          {serviceId ? "Update" : "Add"}
         </Button>
       </div>
       <LoadingComponent loading={loading} />

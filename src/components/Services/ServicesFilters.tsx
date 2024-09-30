@@ -22,7 +22,7 @@ const ServicesFilters = ({ getAllServices }: any) => {
     params.get("search_string") ? params.get("search_string") : ""
   );
   const [selectType, setSelectType] = useState<any>(
-    params.get("type") ? params.get("type") : "ALL"
+    params.get("type") ? params.get("type") : ""
   );
 
   const onDataChange = (date: any) => {
@@ -48,10 +48,10 @@ const ServicesFilters = ({ getAllServices }: any) => {
 
   const onChangeType = (value: string) => {
     setSelectType(value);
-    if (value === "ALL") {
-      getAllServices({ type: "" });
-    } else {
+    if (value) {
       getAllServices({ type: value, page: 1 });
+    } else {
+      getAllServices({ type: "" });
     }
   };
 
@@ -70,13 +70,12 @@ const ServicesFilters = ({ getAllServices }: any) => {
       <Select onValueChange={onChangeType} value={selectType}>
         <SelectTrigger className="w-full">
           {" "}
-          <SelectValue placeholder="All" />
+          <SelectValue placeholder="Select Type" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="ALL">All</SelectItem>
             <SelectItem value="RECURRING">Recurring</SelectItem>
-            <SelectItem value="ONE-TIME">On Time</SelectItem>
+            <SelectItem value="ONE-TIME">One Time</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

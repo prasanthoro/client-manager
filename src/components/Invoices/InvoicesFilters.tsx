@@ -157,7 +157,7 @@ const InvoicesFilters = ({
           <SelectGroup>
             <SelectItem value="ALL">All</SelectItem>
             <SelectItem value="RECURRING">Recurring</SelectItem>
-            <SelectItem value="ONE-TIME">On Time</SelectItem>
+            <SelectItem value="ONE-TIME">One Time</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
