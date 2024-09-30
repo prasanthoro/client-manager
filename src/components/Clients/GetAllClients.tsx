@@ -70,12 +70,14 @@ const Clients = () => {
       }
     } catch (err: any) {
       console.error(err);
+      toast.error(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
   const getClientsDropDown = async () => {
     try {
+      setLoading(true);
       const response = await getClientsDropDownAPI();
       if (response?.status == 200 || response?.status == 201) {
         setDropDownClientsData(response?.data?.data);
@@ -85,6 +87,7 @@ const Clients = () => {
     } catch (err: any) {
       toast.error(err?.message || "Something went wrong");
     } finally {
+      setLoading(false);
     }
   };
   const addSerial = (dataArray: any, page: any, limit: any) => {

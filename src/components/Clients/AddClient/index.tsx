@@ -18,6 +18,7 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import { Spinner } from "@/components/ui/spinner";
 import { Loader2 } from "lucide-react";
+import { checkAllowedValidText } from "@/lib/helpers/constants";
 
 const AddClient = () => {
   const router = useRouter();
@@ -83,11 +84,16 @@ const AddClient = () => {
     }
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleInputChange = (e?: any) => {
     const { name, value } = e.target;
-    setClientData((prev: any) => ({ ...prev, [name]: value.trim() }));
+    if (value && checkAllowedValidText(value)) {
+      setClientData((prev: any) => ({
+        ...prev,
+        [name]: value,
+      }));
+    } else {
+      setClientData((prev: any) => ({ ...prev, [name]: value.trim() }));
+    }
   };
 
   const getServiceById = async () => {
@@ -243,7 +249,7 @@ const AddClient = () => {
               Phone No.<span className="text-red-500">*</span>
             </label>
             <PhoneInput
-              defaultCountry="ua"
+              defaultCountry="in"
               value={phone}
               onChange={(phone) => setPhone(phone)}
             />
