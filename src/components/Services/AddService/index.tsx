@@ -27,11 +27,9 @@ const AddService = () => {
   const router = useRouter();
   const params = useParams();
   const serviceId = params?.id;
-
   const [serviceDetails, setServiceDetails] = useState<any>({});
   const [errorMessages, setErrorMessages] = useState<any>();
   const [loading, setLoading] = useState(false);
-
   const addService = async () => {
     setLoading(true);
     try {

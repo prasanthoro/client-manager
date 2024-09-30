@@ -56,8 +56,6 @@ const AddClient = () => {
       const { createdAt, updatedAt, ...restData } = clientData;
       const payload = {
         client_name: clientData?.client_name,
-        client_phone: clientData?.client_phone,
-        client_email: clientData?.client_email,
         company_name: clientData?.company_name,
         poc: clientData?.poc,
         email: clientData?.email,

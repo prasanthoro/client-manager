@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
 import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, X } from "lucide-react"; // Import the X icon
@@ -39,13 +39,12 @@ const ServiceDropDown = ({
               role="combobox"
               aria-expanded={open}
               className="w-full justify-between"
-              
             >
               {serviceName?.name
                 ? servicesForDropDown?.find(
                     (service: any) => service?.id === serviceName?.id
                   )?.name
-                : "Select Service Type"}
+                : "Select Service Name"}
               {serviceName?.name ? (
                 <X
                   className="ml-2 h-4 w-4 cursor-pointer"
