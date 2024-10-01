@@ -407,7 +407,6 @@ const ViewClient = () => {
             Total Invoice Amount: ₹{formattedTotalAmount}
           </h5>{" "}
         </div>
-        {/* Display total amount */}
         <div id="clientWiseTable" className="relative">
           <Table>
             <TableHeader>

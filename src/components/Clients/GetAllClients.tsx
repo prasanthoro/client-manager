@@ -114,12 +114,14 @@ const Clients = () => {
           setDateInformation={setDateInformation}
           dropDownClientsData={dropDownClientsData}
         />
-        <Button
-          className="static ml-auto bg-blue-500 hover:bg-blue-600 text-white"
-          onClick={() => router.push("/clients/addclient")}
-        >
-          Add client
-        </Button>
+        <div className="flex">
+          <Button
+            className="static ml-auto bg-blue-500 hover:bg-blue-600 text-white"
+            onClick={() => router.push("/clients/addclient")}
+          >
+            Add Client
+          </Button>
+        </div>
       </div>
 
       <div>
