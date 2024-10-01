@@ -22,8 +22,8 @@ export const ViewButton = ({ row }: any) => {
           onViewClick();
         }}
         src={"/view.svg"}
-        height={70}
-        width={70}
+        height={120}
+        width={120}
         alt="Image"
       />
 

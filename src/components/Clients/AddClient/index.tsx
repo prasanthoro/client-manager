@@ -34,7 +34,6 @@ const AddClient = () => {
       const { createdAt, updatedAt, ...restData } = clientData;
       const payload = { ...restData, phone };
       const response = await addClientAPI(payload);
-
       if (response?.status === 200 || response?.status === 201) {
         toast.success(response?.data?.message || "Client Added successfully");
         router.back();
