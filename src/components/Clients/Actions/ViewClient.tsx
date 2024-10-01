@@ -196,12 +196,9 @@ const ViewClient = () => {
         </div>
       </div>
 
-      {/* Client Information */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-blue-800">
-            Primary Information
-          </CardTitle>
+          <CardTitle className="text-xl font-semibold text-blue-800"></CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-4 gap-4 text-gray-600">
           <div className="grid grid-cols-4 gap-4 text-gray-600">

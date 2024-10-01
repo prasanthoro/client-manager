@@ -70,7 +70,7 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
                           <DownloadButton download={item?.url} />
                         </li>
                       ) : (
-                        ""
+                        <span>--</span>
                       )}
                     </TableCell>
                   </TableRow>
