@@ -33,9 +33,7 @@ const Clients = () => {
     sort_by = params.get("sort_by") as string,
     sort_type = params.get("sort_type") as string,
   }: Partial<apiPropTypes>) => {
-    if (loading) return;
     try {
-      setLoading(true);
       let queryParams: any = {
         page: page ? page : 1,
         limit: limit ? limit : 25,

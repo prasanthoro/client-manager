@@ -37,6 +37,14 @@ const DatePickerWithRange = ({ onDataChange }: any) => {
     return date.getTime() > new Date().getTime();
   };
 
+  const getFinancialYearRange = (yearOffset: number) => {
+    const currentYear = new Date().getFullYear();
+    const startYear = currentYear + yearOffset;
+    const start = new Date(startYear, 3, 1); 
+    const end = new Date(startYear + 1, 2, 31);
+    return [start, end];
+  };
+
   const predefinedRanges: any = [
     {
       label: "Today",
@@ -101,6 +109,21 @@ const DatePickerWithRange = ({ onDataChange }: any) => {
     {
       label: "This year",
       value: [new Date(new Date().getFullYear(), 0, 1), new Date()],
+      placement: "left",
+    },
+    {
+      label: "Last Financial Year",
+      value: getFinancialYearRange(-1),
+      placement: "left",
+    },
+    {
+      label: "Second Last Financial Year",
+      value: getFinancialYearRange(-2),
+      placement: "left",
+    },
+    {
+      label: "Third Last Financial Year",
+      value: getFinancialYearRange(-3),
       placement: "left",
     },
   ];
