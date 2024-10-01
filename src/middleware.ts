@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const protectedRoutes = ["/dashboard"];
+const protectedRoutes = ["/dashboard","/invoices","/add-invoice","/services","/clients"];
 const unProtectedRoutes = ["/"];
 
 function containSubstring(inputString: string, subStrings: Array<string>) {
