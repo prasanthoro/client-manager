@@ -22,11 +22,11 @@ export const Dashboard = () => {
   const router = useRouter();
   const params = useSearchParams();
   const pathname = usePathname();
-  const [clientsCount, setClientsCount] = useState([]);
+  const [clientsCount, setClientsCount] = useState<any>([]);
   console.log(clientsCount, "count");
   const [oneTimeData, setOneTimeData] = useState<any>([]);
   const [clientWiseTotallInvoices, setClientWiseTotalInvoices] = useState([]);
-  const [invoiceAmount, setInvoiceAmount] = useState([]);
+  const [invoiceAmount, setInvoiceAmount] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [dateInformation, setDateInformation] = useState<any>([]);
   const [recuringAmount, setRecurringAmount] = useState<any>([]);
