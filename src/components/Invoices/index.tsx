@@ -1,6 +1,6 @@
 "use client";
 
-import { addSerial } from "@/lib/helpers/core/formatAmount";
+import { addSerial, formatAmount } from "@/lib/helpers/core/formatAmount";
 import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
 import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
 import {
@@ -14,6 +14,9 @@ import { LoadingComponent } from "../core/LoadingComponent";
 import TanStackTableComponent from "../core/TanstackTable";
 import { invoicesColumns } from "./InvoicesColumns";
 import InvoicesFilters from "./InvoicesFilters";
+import { getInvoiceAmountAPI } from "@/services/dashboard";
+import { format } from "path";
+import CountUp from "react-countup";
 const InvoicesList = () => {
   const params = useSearchParams();
   const pathname = usePathname();
@@ -29,6 +32,7 @@ const InvoicesList = () => {
     params.get("status") ? params.get("status") : ""
   );
   const [loading, setLoading] = useState(true);
+  const [invoiceAmount, setInvoiceAmount] = useState<any>([]);
   const getAllIvoices = async ({
     page = (params.get("page") as string) || 1,
     limit = (params.get("limit") as string) || 25,
@@ -83,6 +87,52 @@ const InvoicesList = () => {
       }
     } catch (error) {}
   };
+
+  const getInvoiceAmount = async ({
+    from_date = params.get("from_date") as string,
+    to_date = params.get("to_date") as string,
+    client_id = params.get("client_id") as string,
+    service_id = params.get("service_id") as string,
+    type = params.get("type") as string,
+    status = params.get("status") as string,
+  }) => {
+    setLoading(true);
+    try {
+      let queryParams: any = {};
+
+      if (from_date) {
+        queryParams["from_date"] = from_date;
+      }
+      if (to_date) {
+        queryParams["to_date"] = to_date;
+      }
+      if (client_id) {
+        queryParams["client_id"] = client_id;
+      }
+      if (service_id) {
+        queryParams["service_id"] = service_id;
+      }
+      if (type) {
+        queryParams["type"] = type;
+      }
+      if (status) {
+        queryParams["status"] = status;
+      }
+
+      const response = await getInvoiceAmountAPI(queryParams);
+      if (response?.status == 200 || response?.status == 201) {
+        let { data } = response?.data;
+        setInvoiceAmount(data[0]?.total_amount);
+      } else {
+        throw response;
+      }
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const servicesDropDown = async () => {
     // setLoading(true);
     try {
@@ -97,7 +147,15 @@ const InvoicesList = () => {
     getAllIvoices({});
     clientNameDropDown();
     servicesDropDown();
+    getInvoiceAmount({});
   }, []);
+
+  const formatToIndianCurrency = (value: any) => {
+    return value.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
 
   return (
     <div>
@@ -110,7 +168,35 @@ const InvoicesList = () => {
         setSelectStatus={setSelectStatus}
         clientNameForDropDown={clientNameForDropDown}
         servicesForDropDown={servicesForDropDown}
+        getInvoiceAmount={getInvoiceAmount}
       />
+      <div
+        style={{
+          width: "20%",
+          backgroundColor: "#78B7FC",
+          color: "black",
+          height: "50px",
+          alignContent: "center",
+          borderRadius: "10px",
+          marginBottom: "20px",
+          justifyItems: "end",
+        }}
+      >
+        <h1 className="text-sm font-bold text-black-600 ml-1">
+          Total Revenue:{" "}
+          {
+            <CountUp
+              start={0}
+              end={invoiceAmount || 0}
+              duration={2}
+              formattingFn={formatToIndianCurrency} // Use custom formatting
+              prefix="₹"
+              separator=","
+              decimals={2}
+            />
+          }
+        </h1>
+      </div>
       <TanStackTableComponent
         columns={invoicesColumns()}
         getData={getAllIvoices}

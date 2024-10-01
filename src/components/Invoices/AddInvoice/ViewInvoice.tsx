@@ -7,11 +7,12 @@ import {
   invoiceStatus,
   serviceTypeConstansts,
 } from "@/lib/helpers/constants";
-import { getSingleInvoicePI } from "@/services/invoices";
+import { deleteUploadedFileAPI, getSingleInvoicePI } from "@/services/invoices";
 import dayjs from "dayjs";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export const ViewInvoice = () => {
   const { invoice_id } = useParams();
@@ -39,6 +40,22 @@ export const ViewInvoice = () => {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+  const deleteUploadFile = async () => {
+    try {
+      const response: any = await deleteUploadedFileAPI(
+        invoiceDetails?.file_id
+      );
+      if (response.status == 200 || response.status == 201) {
+        toast.success("Invoice Deleted Successfully");
+        getSingleInvoice();
+        // setTimeout(() => {
+        //   router.push("/invoices");
+        // }, 1000);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -176,7 +193,7 @@ export const ViewInvoice = () => {
               }, 1000);
             }}
           >
-            {loading ? "Loading..." : "Download"}
+            {loading ? "Loading..." : "Download Invoice"}
           </Button>
         </div>
       ) : (

@@ -75,3 +75,10 @@ export const selectServiceDropDownAPI = async (client_Id: any) => {
     console.error();
   }
 };
+export const deleteUploadedFileAPI = async (invoice_id: any) => {
+  try {
+    return await $fetch.delete(`/invoices/files/${invoice_id}`);
+  } catch (err) {
+    console.error();
+  }
+};
