@@ -22,11 +22,11 @@ export const Dashboard = () => {
   const router = useRouter();
   const params = useSearchParams();
   const pathname = usePathname();
-  const [clientsCount, setClientsCount] = useState<any>([]);
+
+  const [clientsCount, setClientsCount] = useState([]);
   const [oneTimeData, setOneTimeData] = useState<any>([]);
-  const [clientWiseTotallInvoices, setClientWiseTotalInvoices] = useState<any>(
-    []
-  );
+  const [clientWiseTotallInvoices, setClientWiseTotalInvoices] = useState([]);
+
   const [invoiceAmount, setInvoiceAmount] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [dateInformation, setDateInformation] = useState<any>([]);
@@ -288,6 +288,22 @@ export const Dashboard = () => {
             <div>
               <DatePickerWithRange onDataChange={onDataChange} />
             </div>
+            <div>
+              <Button
+                onClick={() => router.push("/clients/addclient")}
+                className="bg-blue-500 hover:bg-blue-600 text-white"
+              >
+                Add Client
+              </Button>
+            </div>
+            <div>
+              <Button
+                onClick={() => router.push("/add-invoice")}
+                className="bg-blue-500 hover:bg-blue-600 text-white"
+              >
+                Add Invoice
+              </Button>
+            </div>
           </header>
           <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
             <div className="grid gap-4 lg:grid-cols-3">
@@ -323,7 +339,7 @@ export const Dashboard = () => {
                   <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg rounded-lg">
                     <CardHeader className="flex flex-row items-center justify-between pb-1">
                       <CardTitle className="text-lg font-bold">
-                        Invoices Amount
+                        Total Revenue
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -332,7 +348,7 @@ export const Dashboard = () => {
                           start={0}
                           end={invoiceAmount || 0}
                           duration={2}
-                          prefix="$"
+                          prefix="₹"
                           separator=","
                           decimals={2}
                         />
@@ -381,7 +397,7 @@ export const Dashboard = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-4 mb-4">
                       <div className="text-left">
-                        <p className="text-sm">Clients Invoice</p>
+                        <p className="text-sm">Clients Wise Revenue</p>
                         <p className="text-lg font-bold">
                           <CountUp
                             start={0}
@@ -390,12 +406,13 @@ export const Dashboard = () => {
                               0
                             }
                             duration={2}
+                            prefix="₹"
                             separator=","
                           />
                         </p>
                       </div>
                       <div className="text-left">
-                        <p className="text-sm">Services Invoice</p>
+                        <p className="text-sm">Services Wise Revenue</p>
                         <p className="text-lg font-bold">
                           <CountUp
                             start={0}
@@ -404,6 +421,7 @@ export const Dashboard = () => {
                               0
                             }
                             duration={2}
+                            prefix="₹"
                             separator=","
                           />
                         </p>
@@ -452,7 +470,7 @@ export const Dashboard = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-4 mb-4">
                       <div className="text-left">
-                        <p className="text-sm">Clients Invoice</p>
+                        <p className="text-sm">Clients Wise Revenue</p>
                         <p className="text-lg font-bold">
                           <CountUp
                             start={0}
@@ -461,12 +479,13 @@ export const Dashboard = () => {
                               0
                             }
                             duration={2}
+                            prefix="₹"
                             separator=","
                           />
                         </p>
                       </div>
                       <div className="text-left">
-                        <p className="text-sm">Services Invoice</p>
+                        <p className="text-sm">Services Wise Revenue</p>
                         <p className="text-lg font-bold">
                           <CountUp
                             start={0}
@@ -475,6 +494,7 @@ export const Dashboard = () => {
                               0
                             }
                             duration={2}
+                            prefix="₹"
                             separator=","
                           />
                         </p>
