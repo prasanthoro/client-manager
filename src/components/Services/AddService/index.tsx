@@ -27,6 +27,7 @@ const AddService = () => {
   const router = useRouter();
   const params = useParams();
   const serviceId = params?.id;
+
   const [serviceDetails, setServiceDetails] = useState<any>({});
   const [errorMessages, setErrorMessages] = useState<any>();
   const [loading, setLoading] = useState(false);
@@ -37,11 +38,12 @@ const AddService = () => {
         ...serviceDetails,
       };
       const response: any = await addServiceAPI(payload);
-
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.data?.message || "Service Added succesfully");
         router.push("/services");
-      } else if (response?.status == 422 || response?.status == 409) {
+      } else if (response?.status == 422) {
+        setErrorMessages(response?.data?.errors);
+      } else if (response?.status == 409) {
         setErrorMessages(response?.data?.errors);
       }
     } catch (err) {
@@ -64,7 +66,9 @@ const AddService = () => {
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.data?.message || "Service Added succesfully");
         router.push("/services");
-      } else if (response?.status == 422 || response?.status == 409) {
+      } else if (response?.status == 422) {
+        setErrorMessages(response?.data?.errors);
+      } else if (response?.status == 409) {
         setErrorMessages(response?.data?.errors);
       }
     } catch (err) {
@@ -75,6 +79,7 @@ const AddService = () => {
   };
 
   const getServiceById = async () => {
+    setLoading(true);
     try {
       const response = await getServiceAPI(serviceId as string);
       if (response?.status == 200 || response?.status == 201) {
@@ -85,6 +90,8 @@ const AddService = () => {
     } catch (err: any) {
       toast.error(err?.message || "Something went wrong");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 

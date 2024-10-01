@@ -14,21 +14,22 @@ import {
 
 const DatePickerWithRange = ({ onDataChange }: any) => {
   const params = useSearchParams();
-  const fromDateParam = params.get("from_date");
-  const toDateParam = params.get("to_date");
+  const fromDateParam: any = params.get("from_date");
+  const toDateParam: any = params.get("to_date");
 
-  const [date, setDate] = useState<any>([
-    fromDateParam ? new Date(fromDateParam) : null,
-    toDateParam ? new Date(toDateParam) : null,
-  ]);
+  const [date, setDate] = useState<any>(
+    fromDateParam && toDateParam
+      ? [new Date(fromDateParam), new Date(toDateParam)]
+      : []
+  );
 
-  const handleSelect = (value: any, event: any) => {
-    if (value) {
+  const handleSelect = (value: any) => {
+    if (value && value.length === 2) {
       setDate(value);
       onDataChange(value);
     } else {
-      setDate(null);
-      onDataChange(null);
+      setDate([]);
+      onDataChange([]);
     }
   };
 
@@ -47,7 +48,6 @@ const DatePickerWithRange = ({ onDataChange }: any) => {
       value: [addDays(new Date(), -1), addDays(new Date(), -1)],
       placement: "left",
     },
-
     {
       label: "Last 30 days",
       value: [subDays(new Date(), 29), new Date()],
@@ -74,7 +74,6 @@ const DatePickerWithRange = ({ onDataChange }: any) => {
       ],
       placement: "left",
     },
-
     {
       label: "Last 6 months",
       value: [
@@ -99,7 +98,6 @@ const DatePickerWithRange = ({ onDataChange }: any) => {
       ],
       placement: "left",
     },
-
     {
       label: "This year",
       value: [new Date(new Date().getFullYear(), 0, 1), new Date()],
@@ -115,12 +113,12 @@ const DatePickerWithRange = ({ onDataChange }: any) => {
           placeholder="Select From Date and To Date"
           ranges={predefinedRanges}
           editable={false}
-          value={date}
+          value={date && date.length === 2 ? date : []}
           onChange={handleSelect}
           format="dd-MM-yyyy"
           style={{ width: "300%" }}
           disabledDate={disableFutureDates}
-          cleanable={date && date[0] && date[1] ? true : false}
+          cleanable={date && date.length === 2}
         />
       </div>
     </div>
