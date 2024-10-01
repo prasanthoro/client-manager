@@ -109,7 +109,7 @@ const AddClient = () => {
     } catch (err: any) {
       toast.error(err?.message || "Something went wrong");
       console.error(err);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -253,7 +253,7 @@ const AddClient = () => {
             </label>
             <PhoneInput
               defaultCountry="in"
-              value={phone}
+              value={clientData?.phone}
               onChange={(phone) => setPhone(phone)}
             />
             {errorMessages?.phone && (

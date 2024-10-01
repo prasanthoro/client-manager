@@ -44,7 +44,9 @@ const ViewClient = () => {
   const { client_Id } = useParams();
   const [clientData, setClientData] = useState<any>();
   const [invoiceData, setInvoiceData] = useState<any>([]);
+  console.log(invoiceData, "data");
   const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
+
   const [serviceName, setServiceName] = useState<any>({});
   const [openService, setOpenService] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -178,6 +180,11 @@ const ViewClient = () => {
         .filter(Boolean)
         .join(", ")
     ) || "--";
+  const totalAmount = invoiceData.reduce(
+    (sum: any, item: any) => sum + +parseFloat(item.invoice_amount || 0),
+    0
+  );
+  const formattedTotalAmount = totalAmount.toFixed(2);
 
   useEffect(() => {
     getSingleClientView();
@@ -190,7 +197,7 @@ const ViewClient = () => {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
           <button
-            onClick={() => router.push('/clients')}
+            onClick={() => router.push("/clients")}
             className="p-2 -full hover:bg-pink-200"
           >
             <Image alt="image" width={24} height={24} src="/back-button.svg" />
@@ -395,6 +402,12 @@ const ViewClient = () => {
             </div>
           </div>
         </div>
+        <div className="flex justify-end	mb-2">
+          <h5 className="font-semibold">
+            Total Invoice Amount: ₹{formattedTotalAmount}
+          </h5>{" "}
+        </div>
+        {/* Display total amount */}
         <div id="clientWiseTable" className="relative">
           <Table>
             <TableHeader>

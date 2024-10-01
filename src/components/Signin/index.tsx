@@ -100,27 +100,30 @@ export const SignIn = () => {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
               </div>
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter Your Password"
-                value={password}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setPassword(e.target.value)
-                }
-                onKeyDown={(e: any) => {
-                  if (e.key === "Enter") {
-                    signInEvent();
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter Your Password"
+                  value={password}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setPassword(e.target.value)
                   }
-                }}
-              />
-              <Image
-                src={!showPassword ? "/eye-off.svg" : "/view.svg"}
-                alt={showPassword ? "Hide Password" : "Show Password"}
-                width={24}
-                height={24}
-                onClick={() => setShowPassword(!showPassword)}
-              />
+                  onKeyDown={(e: any) => {
+                    if (e.key === "Enter") {
+                      signInEvent();
+                    }
+                  }}
+                />
+                <Image
+                  className="absolute right-[10px] top-[10px]"
+                  src={!showPassword ? "/eye-off.svg" : "/view.svg"}
+                  alt={showPassword ? "Hide Password" : "Show Password"}
+                  width={24}
+                  height={24}
+                  onClick={() => setShowPassword(!showPassword)}
+                />
+              </div>
 
               {errorMessages?.password && (
                 <p style={{ color: "red" }}>{errorMessages.password[0]}</p>
