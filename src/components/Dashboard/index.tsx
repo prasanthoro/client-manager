@@ -23,9 +23,11 @@ export const Dashboard = () => {
   const params = useSearchParams();
   const pathname = usePathname();
 
-  const [clientsCount, setClientsCount] = useState([]);
+  const [clientsCount, setClientsCount] = useState<any>([]);
   const [oneTimeData, setOneTimeData] = useState<any>([]);
-  const [clientWiseTotallInvoices, setClientWiseTotalInvoices] = useState([]);
+  const [clientWiseTotallInvoices, setClientWiseTotalInvoices] = useState<any>(
+    []
+  );
 
   const [invoiceAmount, setInvoiceAmount] = useState<any>([]);
   const [loading, setLoading] = useState(false);
