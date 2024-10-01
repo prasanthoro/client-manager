@@ -20,6 +20,7 @@ const InvoicesFilters = ({
   setSelectStatus,
   clientNameForDropDown,
   servicesForDropDown,
+  getInvoiceAmount,
 }: any) => {
   const params = useSearchParams();
   const router = useRouter();
@@ -40,8 +41,10 @@ const InvoicesFilters = ({
       let toDate = dayjs(date[1]).format("YYYY-MM-DD");
 
       getAllIvoices({ from_date: fromDate, to_date: toDate, page: 1 });
+      getInvoiceAmount({ from_date: fromDate, to_date: toDate });
     } else {
       getAllIvoices({ from_date: "", to_date: "" });
+      getInvoiceAmount({ from_date: "", to_date: "" });
     }
   };
 
@@ -50,25 +53,31 @@ const InvoicesFilters = ({
     setSearchString(value);
     if (value) {
       getAllIvoices({ search_string: value, page: 1 });
+      getInvoiceAmount({ search_string: value });
     } else {
       getAllIvoices({ search_string: "" });
+      getInvoiceAmount({ search_string: "" });
     }
   };
 
   const onSelectClient = (value: any) => {
     if (value) {
       getAllIvoices({ client_id: value?.id, page: 1 });
+      getInvoiceAmount({ client_id: value?.id });
     } else {
       getAllIvoices({ client_id: "" });
       setClientName(null);
+      getInvoiceAmount({ client_id: "" });
     }
   };
 
   const onSelectService = (value: any) => {
     if (value) {
       getAllIvoices({ service_id: value?.id, page: 1 });
+      getInvoiceAmount({ service_id: value?.id });
     } else {
       getAllIvoices({ service_id: "" });
+      getInvoiceAmount({ service_id: "" });
       setServiceName(null);
     }
   };
@@ -77,8 +86,10 @@ const InvoicesFilters = ({
     setSelectStatus(value);
     if (value) {
       getAllIvoices({ invoice_status: value, page: 1 });
+      getInvoiceAmount({ status: value });
     } else {
       getAllIvoices({ invoice_status: "" });
+      getInvoiceAmount({ status: "" });
     }
   };
 
@@ -86,8 +97,10 @@ const InvoicesFilters = ({
     setSelectType(value);
     if (value) {
       getAllIvoices({ type: value, page: 1 });
+      getInvoiceAmount({ type: value });
     } else {
       getAllIvoices({ type: "" });
+      getInvoiceAmount({ type: "" });
     }
   };
 

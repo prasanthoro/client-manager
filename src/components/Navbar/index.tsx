@@ -21,11 +21,16 @@ const NavBarComponent = () => {
     router.push("/");
     Cookies.remove("user");
   };
-  const firstName = userDetails?.data?.user_details?.first_name;
-  const lastName = userDetails?.data?.user_details?.last_name;
-  const fullName = `${changeFirstCharToCap(firstName)} ${changeFirstCharToCap(
-    lastName
-  )}`;
+  const firstName = userDetails?.data?.user_details?.first_name
+    ? userDetails?.data?.user_details?.first_name
+    : "";
+  const lastName = userDetails?.data?.user_details?.last_name
+    ? userDetails?.data?.user_details?.last_name
+    : "";
+  const fullName =
+    firstName || lastName
+      ? `${changeFirstCharToCap(firstName)} ${changeFirstCharToCap(lastName)}`
+      : "";
 
   return (
     <div>

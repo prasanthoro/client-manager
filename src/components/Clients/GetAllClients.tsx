@@ -20,7 +20,7 @@ const Clients = () => {
   const [clientsData, setClientsData] = useState([]);
   const [paginationDetails, setPaginationDetails] = useState({});
   const [dropDownClientsData, setDropDownClientsData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [searchString, setSearchString] = useState("");
   const [dateInformation, setDateInformation] = useState<any>([]);
   const getAllClients = async ({
@@ -79,7 +79,6 @@ const Clients = () => {
   };
   const getClientsDropDown = async () => {
     try {
-      setLoading(true);
       const response = await getClientsDropDownAPI();
       if (response?.status == 200 || response?.status == 201) {
         setDropDownClientsData(response?.data?.data);
@@ -88,8 +87,6 @@ const Clients = () => {
       }
     } catch (err: any) {
       toast.error(err?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
     }
   };
   const addSerial = (dataArray: any, page: any, limit: any) => {

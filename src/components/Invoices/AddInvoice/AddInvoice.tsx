@@ -1,24 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import {
-  addInvoiceAPI,
-  clientNameDropDownAPI,
-  getSingleInvoicePI,
-  servicesDropDownAPI,
-  updateInvoiceAPI,
-  uploadFileToS3,
-  uploadInvoiceAPI,
-} from "@/services/invoices";
-import { Input } from "@/components/ui/input";
-import { checkAllowedValidText } from "@/lib/helpers/constants";
-import { DatePicker } from "rsuite";
-import "rsuite/DatePicker/styles/index.css";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Check, ChevronsUpDown, Key, X } from "lucide-react";
+import { LoadingComponent } from "@/components/core/LoadingComponent";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -28,7 +9,12 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -39,22 +25,34 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { LoadingComponent } from "@/components/core/LoadingComponent";
-import { Label } from "@radix-ui/react-label";
-import { set } from "date-fns";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import Image from "next/image";
-import ErrorComponent from "./ErrorMessage";
-import { toast, Toaster } from "sonner";
-import path from "path";
-import { fi } from "date-fns/locale";
+import {
+  checkAllowedValidText,
+  checkAmountInput,
+} from "@/lib/helpers/constants";
 import { changeOnlyFirstLetterToCap } from "@/lib/helpers/core/changeFirstLetterToCap";
+import { cn } from "@/lib/utils";
+import {
+  addInvoiceAPI,
+  clientNameDropDownAPI,
+  deleteUploadedFileAPI,
+  getSingleInvoicePI,
+  servicesDropDownAPI,
+  updateInvoiceAPI,
+  uploadFileToS3,
+  uploadInvoiceAPI,
+} from "@/services/invoices";
+import { Label } from "@radix-ui/react-label";
+import { Check, ChevronsUpDown, X } from "lucide-react";
+import Image from "next/image";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { DatePicker } from "rsuite";
+import "rsuite/DatePicker/styles/index.css";
+import { toast } from "sonner";
+import { DeleteFileDialog } from "./DeleteFileDialog";
+import ErrorComponent from "./ErrorMessage";
 
 const invoiceStatus = [
-  // {
-  //   label: "",
-  //   value: "Clear",
-  // },
   {
     label: "Pending",
     value: "PENDING",
@@ -70,7 +68,7 @@ export const AddInvoice = () => {
   const { invoice_id } = useParams();
   const [clientNameForDropDown, setClientNameForDropDown] = useState<any>([]);
   const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
-  const [invoiceDetails, setInvoiceDetails] = useState<any>({});
+  const [invoiceDetails, setInvoiceDetails] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [clientName, setClientName] = useState<any>();
@@ -81,7 +79,9 @@ export const AddInvoice = () => {
   const [errors, setErrors] = useState<any>();
   const [isRendered, setIsRendered] = useState(false);
   const [uploadFile, setUploadFile] = useState<any>();
-  const [editInvoiceData, setEditInvoiceData] = useState<any>();
+  const [multipleFilesData, setMultipleFilesData] = useState<any>();
+  const [opendeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const clientNameDropDown = async () => {
     setLoading(true);
@@ -213,7 +213,6 @@ export const AddInvoice = () => {
     setLoading(true);
     try {
       let payload = {
-        // ...invoiceDetails,
         client_id: invoiceDetails?.client_id,
         service_id: invoiceDetails?.service_id,
         invoice_status: invoiceDetails?.invoice_status
@@ -225,14 +224,12 @@ export const AddInvoice = () => {
         remarks: invoiceDetails?.remarks ? invoiceDetails?.remarks : "",
         payment_date: invoiceDetails?.payment_date
           ? invoiceDetails?.payment_date
-          : "",
+          : null,
         invoice_date: invoiceDetails?.invoice_date,
-        // created_at: null,
       };
 
       const response: any = await updateInvoiceAPI(invoice_id, payload);
       if (response.status == 200 || response.status == 201) {
-        // toast.success("Invoice Updated Successfully");
         const { data } = response?.data;
         if (uploadFile) {
           await uploadInvoice(data);
@@ -253,6 +250,24 @@ export const AddInvoice = () => {
       setLoading(false);
     }
   };
+  const deleteUploadFile = async () => {
+    setDeleteLoading(true);
+    try {
+      const response: any = await deleteUploadedFileAPI(
+        invoiceDetails?.file_id
+      );
+      if (response.status == 200 || response.status == 201) {
+        toast.success(response?.data?.message);
+        handleCloseDialog();
+        await getSingleInvoice();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   const onFieldsChange = (event?: any) => {
     const { name, value } = event.target;
     if (value && checkAllowedValidText(value)) {
@@ -306,7 +321,7 @@ export const AddInvoice = () => {
     if (!updatedServices[index]) {
       updatedServices[index] = {
         service_id: "",
-        invoice_amount: parseInt(e.target.value, 10) || null,
+        invoice_amount: parseInt(e.target.value) || null,
       };
     } else {
       updatedServices[index].invoice_amount =
@@ -342,6 +357,13 @@ export const AddInvoice = () => {
     clientNameDropDown();
     servicesDropDown();
   }, []);
+
+  const handleOpen = () => {
+    setOpenDeleteDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setOpenDeleteDialog(false);
+  };
 
   const editClientName = clientNameForDropDown?.find(
     (item: any) => item.id == invoiceDetails?.client_id
@@ -593,9 +615,11 @@ export const AddInvoice = () => {
                 </Label>
                 <div style={{ display: "flex" }}>
                   <Input
-                    type="number"
                     name="amount"
                     placeholder="Enter Amount"
+                    onInput={(e) => {
+                      checkAmountInput(e);
+                    }}
                     onChange={(e) => {
                       if (pathname?.includes("/edit-invoice")) {
                         handleEditInvoice("invoice_amount", e.target.value);
@@ -603,14 +627,12 @@ export const AddInvoice = () => {
                         onServiceDetails(e, index);
                       }
                     }}
-                    onWheel={(e) =>
-                      (e.currentTarget as HTMLInputElement).blur()
+                    autoFocus={
+                      selectedServices[index]?.invoice_amount ? true : false
                     }
-                    step="any"
-                    pattern="\d*" // Allow only digits
                     value={
                       pathname?.includes("/add-invoice")
-                        ? String(selectedServices[index]?.invoice_amount)
+                        ? selectedServices[index]?.invoice_amount
                         : invoiceDetails?.invoice_amount
                     }
                   />
@@ -640,19 +662,7 @@ export const AddInvoice = () => {
                   ""
                 )}
               </div>
-              <div>
-                {/* {selectedServices?.length > 1 ? (
-                  <Button
-                    onClick={() => {
-                      onRemoveClick(index);
-                    }}
-                  >
-                    -
-                  </Button>
-                ) : (
-                  ""
-                )} */}
-              </div>
+              <div></div>
             </div>
           </div>
         );
@@ -699,25 +709,34 @@ export const AddInvoice = () => {
       <div>
         {uploadFile ? (
           <div style={{ display: "flex", marginBottom: "50px" }}>
+            <Image
+              alt="Image"
+              src={"/attachment.svg"}
+              height={20}
+              width={20}
+              style={{ marginRight: "10px" }}
+            />
             <p>{uploadFile.name}</p>
 
             <X size={16} onClick={() => setUploadFile(null)} />
           </div>
+        ) : pathname?.includes("/edit-invoice") && invoiceDetails?.key ? (
+          <div
+            style={{ display: "flex", marginBottom: "50px", marginTop: "10px" }}
+          >
+            <p style={{ marginTop: "10px", marginRight: "10px" }}>
+              {invoiceDetails?.key}
+            </p>
+            <Button
+              onClick={() => {
+                handleOpen();
+              }}
+            >
+              Delete File
+            </Button>
+          </div>
         ) : (
-          pathname?.includes("/edit-invoice") && invoiceDetails?.key && ""
-          // <div style={{ display: "flex", marginBottom: "50px" }}>
-          //   <p>{invoiceDetails?.key}</p>
-          //   <X
-          //     size={16}
-          //     onClick={() => {
-          //       setInvoiceDetails({
-          //         ...invoiceDetails,
-          //         key: null,
-          //         url: null,
-          //       });
-          //     }}
-          //   />
-          // </div>
+          ""
         )}
       </div>
       <div
@@ -743,6 +762,14 @@ export const AddInvoice = () => {
             : "Add Invoice"}
         </Button>
       </div>
+      <p>{multipleFilesData ? multipleFilesData[0]?.name : ""}</p>
+      <DeleteFileDialog
+        opendeleteDialog={opendeleteDialog}
+        handleCloseDialog={handleCloseDialog}
+        setOpenDeleteDialog={setOpenDeleteDialog}
+        deleteUploadFile={deleteUploadFile}
+        deleteLoading={deleteLoading}
+      />
       <LoadingComponent loading={loading} />
     </div>
   );

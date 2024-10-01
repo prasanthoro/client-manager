@@ -28,8 +28,8 @@ const DatePickerWithRange = ({ onDataChange }: any) => {
       setDate(value);
       onDataChange(value);
     } else {
-      setDate([]);
-      onDataChange([]);
+      setDate(null);
+      onDataChange(null);
     }
   };
 
