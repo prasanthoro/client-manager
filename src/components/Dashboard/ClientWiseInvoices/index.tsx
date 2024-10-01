@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatInvoiceDate } from "@/lib/helpers/constants";
+import { formatAmount } from "@/lib/helpers/core/formatAmount";
 
 const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
   return (
@@ -56,9 +57,7 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
                     <TableCell>{item.invoice_status || "--"}</TableCell>
                     <TableCell>
                       {item.invoice_amount
-                        ? `₹ ${Number(item.invoice_amount).toLocaleString(
-                            "en-IN"
-                          )}`
+                        ? `₹ ${formatAmount(item.invoice_amount)}`
                         : "--"}
                     </TableCell>
                     <TableCell>
