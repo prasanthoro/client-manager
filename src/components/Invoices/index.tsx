@@ -1,32 +1,34 @@
 "use client";
 
+import { addSerial } from "@/lib/helpers/core/formatAmount";
+import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
 import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
+import {
+  clientNameDropDownAPI,
+  getAllInvoicesListAPI,
+  servicesDropDownAPI,
+} from "@/services/invoices";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { LoadingComponent } from "../core/LoadingComponent";
 import TanStackTableComponent from "../core/TanstackTable";
 import { invoicesColumns } from "./InvoicesColumns";
-import { invoicesListPropTypes } from "@/lib/interfaces/invoicesInterfaces";
-import { clientNameDropDownAPI, getAllInvoicesListAPI, servicesDropDownAPI } from "@/services/invoices";
-import { LoadingComponent } from "../core/LoadingComponent";
 import InvoicesFilters from "./InvoicesFilters";
-
 const InvoicesList = () => {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-
   const [invoicesData, setInvoicesData] = useState([]);
   const [clientNameForDropDown, setClientNameForDropDown] = useState<any>([]);
   const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
   const [paginationDetails, setPaginationDetails] = useState({});
   const [searchString, setSearchString] = useState(
-    params.get("search_string") ? params.get("search_string") : ''
+    params.get("search_string") ? params.get("search_string") : ""
   );
   const [selectStatus, setSelectStatus] = useState(
-    params.get("invoice_status") ? params.get("invoice_status") : 'ALL'
+    params.get("status") ? params.get("status") : ""
   );
   const [loading, setLoading] = useState(true);
-
   const getAllIvoices = async ({
     page = (params.get("page") as string) || 1,
     limit = (params.get("limit") as string) || 25,
@@ -35,7 +37,7 @@ const InvoicesList = () => {
     from_date = params.get("from_date") as string,
     to_date = params.get("to_date") as string,
     search_string = params.get("search_string") as string,
-    invoice_status = params.get("invoice_status") as string,
+    invoice_status = params.get("status") as string,
     client_id = params.get("client_id") as string,
     service_id = params.get("service_id") as string,
     type = params.get("type") as string,
@@ -54,22 +56,24 @@ const InvoicesList = () => {
         service_id: service_id,
         type: type,
       };
-
       setLoading(true);
       let queryString: any = prepareURLEncodedParams("", queryParams);
-
       router.push(`${pathname}${queryString}`);
       const response = await getAllInvoicesListAPI(queryParams);
       let { data, ...rest } = response?.data;
-      setInvoicesData(data);
-      setPaginationDetails(rest);
+      data = addSerial(data, rest.page, rest.limit);
+      if (!data?.length && rest.page != 1) {
+        await getAllIvoices({ page: +rest.page - 1 });
+      } else {
+        setPaginationDetails(rest);
+        setInvoicesData(data);
+      }
     } catch (err: any) {
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
-
   const clientNameDropDown = async () => {
     // setLoading(true);
     try {
@@ -77,10 +81,8 @@ const InvoicesList = () => {
       if (reponse?.status == 200 || reponse?.status == 201) {
         setClientNameForDropDown(reponse?.data?.data);
       }
-    } catch (error) {
-    } 
+    } catch (error) {}
   };
-
   const servicesDropDown = async () => {
     // setLoading(true);
     try {
@@ -88,18 +90,18 @@ const InvoicesList = () => {
       if (reponse?.status == 200 || reponse?.status == 201) {
         setServicesForDropDown(reponse?.data?.data);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
-      getAllIvoices({});
-      clientNameDropDown();
-      servicesDropDown();
+    getAllIvoices({});
+    clientNameDropDown();
+    servicesDropDown();
   }, []);
 
   return (
     <div>
+      <h1 className="text-2xl font-bold text-red-600 ml-2">Invoices</h1>
       <InvoicesFilters
         getAllIvoices={getAllIvoices}
         searchString={searchString}
@@ -115,7 +117,7 @@ const InvoicesList = () => {
         data={invoicesData}
         paginationDetails={paginationDetails}
         loading={loading}
-        removeSortingForColumnIds={["actions"]}
+        removeSortingForColumnIds={["actions", "serial"]}
       />
       <LoadingComponent loading={loading} label={"Invoices"} />
     </div>

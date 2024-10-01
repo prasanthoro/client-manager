@@ -1,55 +1,36 @@
 "use client";
-import { Boxes, DollarSign, ShoppingBag, Users2 } from "lucide-react";
-import Link from "next/link";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
 import {
   getAllClientsCountsAPI,
   getClientWiseTotalInvoiceAmountAPI,
   getInvoiceAmountAPI,
   getRecuringTypeAmountAPI,
   getServiceOneTimeInvoiceAmountAPI,
-  getServicesWiseInvoicesAmountAPI,
 } from "@/services/dashboard";
-import { formatAmount } from "@/lib/helpers/core/formatAmount";
-import ClientWiseServicesList from "./ClientWiseServices";
-import ClientWiseInvoicesList from "./ClientWiseInvoices";
-import { LoadingComponent } from "../core/LoadingComponent";
-import { DateRangePicker } from "rsuite";
-import "rsuite/dist/rsuite.min.css";
 import dayjs from "dayjs";
-import { prepareURLEncodedParams } from "@/lib/prepareUrlEncodedParams";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import CountUp from "react-countup";
+import "rsuite/dist/rsuite.min.css";
 import { toast } from "sonner";
 import DatePickerWithRange from "../core/DatePickerWithRange";
+import { LoadingComponent } from "../core/LoadingComponent";
+import { Button } from "../ui/button";
+import ClientWiseInvoicesList from "./ClientWiseInvoices";
 export const Dashboard = () => {
   const router = useRouter();
   const params = useSearchParams();
   const pathname = usePathname();
-  const [clientsCount, setClientsCount] = useState([]);
+  const [clientsCount, setClientsCount] = useState<any>([]);
   const [oneTimeData, setOneTimeData] = useState<any>([]);
-  console.log(oneTimeData, "data");
-  const [clientWiseTotallInvoices, setClientWiseTotalInvoices] = useState([]);
-  const [invoiceAmount, setInvoiceAmount] = useState([]);
+  const [clientWiseTotallInvoices, setClientWiseTotalInvoices] = useState<any>(
+    []
+  );
+  const [invoiceAmount, setInvoiceAmount] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [dateInformation, setDateInformation] = useState<any>([]);
   const [recuringAmount, setRecurringAmount] = useState<any>([]);
-  console.log(recuringAmount, "recuring");
-
   const getAllClientsCount = async ({
     from_date = params.get("from_date") as string,
     to_date = params.get("to_date") as string,
@@ -323,7 +304,14 @@ export const Dashboard = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-lg font-bold">{clientsCount}</div>
+                      <div className="text-lg font-bold">
+                        <CountUp
+                          start={0}
+                          end={clientsCount || 0}
+                          duration={2}
+                          separator=","
+                        />
+                      </div>
                     </CardContent>
                   </div>
                 </Card>
@@ -340,7 +328,14 @@ export const Dashboard = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="text-lg font-bold">
-                        {formatAmount(invoiceAmount)}
+                        <CountUp
+                          start={0}
+                          end={invoiceAmount || 0}
+                          duration={2}
+                          prefix="$"
+                          separator=","
+                          decimals={2}
+                        />
                       </div>
                     </CardContent>
                   </div>
@@ -361,36 +356,56 @@ export const Dashboard = () => {
                   </CardHeader>
                   <CardContent className="grid grid-cols-2 gap-4">
                     <div className="grid grid-cols-2 gap-4 mb-4">
-                      {/* Client Count */}
                       <div className="text-left">
                         <p className="text-sm">Total Clients</p>
                         <p className="text-lg font-bold">
-                          {oneTimeData?.total_one_time_clients}
+                          <CountUp
+                            start={0}
+                            end={oneTimeData?.total_one_time_clients || 0}
+                            duration={2}
+                            separator=","
+                          />
                         </p>
                       </div>
-
-                      {/* Service Count */}
                       <div className="text-left">
                         <p className="text-sm">Total Services</p>
                         <p className="text-lg font-bold">
-                          {oneTimeData?.total_one_time_services}
+                          <CountUp
+                            start={0}
+                            end={oneTimeData?.total_one_time_services || 0}
+                            duration={2}
+                            separator=","
+                          />
                         </p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      {/* Clients Invoice Amount */}
+                    <div className="grid grid-cols-2 gap-4 mb-4">
                       <div className="text-left">
                         <p className="text-sm">Clients Invoice</p>
                         <p className="text-lg font-bold">
-                          {oneTimeData?.total_one_time_clients_invoice_amount}
+                          <CountUp
+                            start={0}
+                            end={
+                              oneTimeData?.total_one_time_clients_invoice_amount ||
+                              0
+                            }
+                            duration={2}
+                            separator=","
+                          />
                         </p>
                       </div>
-
-                      {/* Services Invoice Amount */}
                       <div className="text-left">
                         <p className="text-sm">Services Invoice</p>
                         <p className="text-lg font-bold">
-                          {oneTimeData?.total_one_time_services_invoice_amount}
+                          <CountUp
+                            start={0}
+                            end={
+                              oneTimeData?.total_one_time_services_invoice_amount ||
+                              0
+                            }
+                            duration={2}
+                            separator=","
+                          />
                         </p>
                       </div>
                     </div>
@@ -415,31 +430,53 @@ export const Dashboard = () => {
                       <div className="text-left">
                         <p className="text-sm">Total Clients</p>
                         <p className="text-lg font-bold">
-                          {recuringAmount?.total_recurring_clients}
+                          <CountUp
+                            start={0}
+                            end={recuringAmount?.total_recurring_clients || 0}
+                            duration={2}
+                            separator=","
+                          />
                         </p>
                       </div>
                       <div className="text-left">
                         <p className="text-sm">Total Services</p>
                         <p className="text-lg font-bold">
-                          {recuringAmount?.total_recurring_services}
+                          <CountUp
+                            start={0}
+                            end={recuringAmount?.total_recurring_services || 0}
+                            duration={2}
+                            separator=","
+                          />
                         </p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 mb-4">
                       <div className="text-left">
                         <p className="text-sm">Clients Invoice</p>
                         <p className="text-lg font-bold">
-                          {
-                            recuringAmount?.total_recurring_clients_invoice_amount
-                          }
+                          <CountUp
+                            start={0}
+                            end={
+                              recuringAmount?.total_recurring_clients_invoice_amount ||
+                              0
+                            }
+                            duration={2}
+                            separator=","
+                          />
                         </p>
                       </div>
                       <div className="text-left">
                         <p className="text-sm">Services Invoice</p>
                         <p className="text-lg font-bold">
-                          {
-                            recuringAmount?.total_recurring_services_invoice_amount
-                          }
+                          <CountUp
+                            start={0}
+                            end={
+                              recuringAmount?.total_recurring_services_invoice_amount ||
+                              0
+                            }
+                            duration={2}
+                            separator=","
+                          />
                         </p>
                       </div>
                     </div>
@@ -454,7 +491,6 @@ export const Dashboard = () => {
               View All Invoices
             </Button>
           </div>
-
           <div className="flex justify-center gap-[20px] mt-6">
             <ClientWiseInvoicesList
               clientWiseTotallInvoices={clientWiseTotallInvoices}

@@ -9,6 +9,7 @@ import { servicesColumns } from "./ServicesColumns";
 import TanStackTableComponent from "../core/TanstackTable";
 import { LoadingComponent } from "../core/LoadingComponent";
 import ServicesFilters from "./ServicesFilters";
+import { addSerial } from "@/lib/helpers/core/formatAmount";
 
 const ServicesList = () => {
   const params = useSearchParams();
@@ -47,8 +48,13 @@ const ServicesList = () => {
       router.push(`${pathname}${queryString}`);
       const response = await getAllServicesListAPI(queryParams);
       let { data, ...rest } = response?.data;
-      setServicesData(data);
-      setPaginationDetails(rest);
+      data = addSerial(data, rest.page, rest.limit);
+      if (!data?.length && rest.page != 1) {
+        await getAllServices({ page: +rest.page - 1 });
+      } else {
+        setPaginationDetails(rest);
+        setServicesData(data);
+      }
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -62,6 +68,7 @@ const ServicesList = () => {
 
   return (
     <div>
+      <h1 className="text-2xl font-bold text-red-600 ml-2">Services</h1>
       <ServicesFilters getAllServices={getAllServices} />
       <TanStackTableComponent
         columns={servicesColumns()}
@@ -69,7 +76,7 @@ const ServicesList = () => {
         data={servicesData}
         paginationDetails={paginationDetails}
         loading={loading}
-        removeSortingForColumnIds={["actions"]}
+        removeSortingForColumnIds={["actions", "serial"]}
       />
       <LoadingComponent loading={loading} label={"Services"} />
     </div>

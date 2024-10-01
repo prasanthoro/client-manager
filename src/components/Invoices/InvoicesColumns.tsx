@@ -7,6 +7,15 @@ import { ViewInvoiceButton } from "./ViewButton";
 export const invoicesColumns = () => {
   return [
     {
+      accessorFn: (row: any) => row.serial,
+      id: "serial",
+      header: () => <span>S.No</span>,
+      footer: (props: any) => props.column.id,
+      width: "60px",
+      maxWidth: "60px",
+      minWidth: "60px",
+    },
+    {
       accessorFn: (row: any) => row?.client_name,
       id: "client_name",
       header: () => <span>Client Name</span>,

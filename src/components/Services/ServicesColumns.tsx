@@ -11,6 +11,15 @@ import { EditButton } from "./EditButton";
 export const servicesColumns = () => {
   return [
     {
+      accessorFn: (row: any) => row.serial,
+      id: "serial",
+      header: () => <span>S.No</span>,
+      footer: (props: any) => props.column.id,
+      width: "60px",
+      maxWidth: "60px",
+      minWidth: "60px",
+    },
+    {
       accessorFn: (row: any) => row?.service_name,
       id: "service_name",
       header: () => <span> Service Name</span>,
@@ -53,8 +62,8 @@ export const servicesColumns = () => {
       width: "100px",
     },
     {
-      accessorFn: (row: any) => row?.updated_at,
-      id: "updated_at",
+      accessorFn: (row: any) => row?.created_at,
+      id: "created_at",
       header: () => <span>Date</span>,
       cell: (info: any) => {
         return (
