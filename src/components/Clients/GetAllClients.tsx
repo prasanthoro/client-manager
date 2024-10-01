@@ -33,7 +33,9 @@ const Clients = () => {
     sort_by = params.get("sort_by") as string,
     sort_type = params.get("sort_type") as string,
   }: Partial<apiPropTypes>) => {
+    if (loading) return;
     try {
+      setLoading(true);
       let queryParams: any = {
         page: page ? page : 1,
         limit: limit ? limit : 25,
@@ -108,7 +110,7 @@ const Clients = () => {
   return (
     <>
       <div className="flex">
-      <h1 className="text-2xl font-bold text-red-600 ml-2">Clients</h1>
+        <h1 className="text-2xl font-bold text-red-600 ml-2">Clients</h1>
         <ClientFilters
           getAllClients={getAllClients}
           searchString={searchString}

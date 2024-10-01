@@ -42,11 +42,9 @@ export const SignIn = () => {
         toast.success(response?.message);
         Cookies.set("user", response?.data?.user_details?.user_type);
         dispatch(setUserDetails(response));
-        // toast.success("User logged in successfully");
         router.replace("/dashboard");
       } else if (response?.type == "VALIDATION_ERROR") {
         setErrorMessages(response?.error_data);
-        // setInvalidMessage(response?.error_data);
       } else if (response?.type == "Invalid_Credentials") {
         setInvalidMessage(response?.message);
       }
