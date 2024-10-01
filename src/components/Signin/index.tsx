@@ -114,6 +114,14 @@ export const SignIn = () => {
                   }
                 }}
               />
+              <Image
+                src={!showPassword ? "/eye-off.svg" : "/view.svg"}
+                alt={showPassword ? "Hide Password" : "Show Password"}
+                width={24}
+                height={24}
+                onClick={() => setShowPassword(!showPassword)}
+              />
+
               {errorMessages?.password && (
                 <p style={{ color: "red" }}>{errorMessages.password[0]}</p>
               )}
