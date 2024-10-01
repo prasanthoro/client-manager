@@ -10,7 +10,11 @@ import {
   uploadInvoiceAPI,
 } from "@/services/invoices";
 import { Input } from "@/components/ui/input";
-import { checkAllowedValidText } from "@/lib/helpers/constants";
+import formatMoney, {
+  checkAllowedValidText,
+  checkAmountInput,
+  checkPhoneNumber,
+} from "@/lib/helpers/constants";
 import { DatePicker } from "rsuite";
 import "rsuite/DatePicker/styles/index.css";
 import {
@@ -70,7 +74,7 @@ export const AddInvoice = () => {
   const { invoice_id } = useParams();
   const [clientNameForDropDown, setClientNameForDropDown] = useState<any>([]);
   const [servicesForDropDown, setServicesForDropDown] = useState<any>([]);
-  const [invoiceDetails, setInvoiceDetails] = useState<any>({});
+  const [invoiceDetails, setInvoiceDetails] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [clientName, setClientName] = useState<any>();
@@ -306,7 +310,7 @@ export const AddInvoice = () => {
     if (!updatedServices[index]) {
       updatedServices[index] = {
         service_id: "",
-        invoice_amount: parseInt(e.target.value, 10) || null,
+        invoice_amount: parseInt(e.target.value) || null,
       };
     } else {
       updatedServices[index].invoice_amount =
@@ -593,9 +597,11 @@ export const AddInvoice = () => {
                 </Label>
                 <div style={{ display: "flex" }}>
                   <Input
-                    type="number"
                     name="amount"
                     placeholder="Enter Amount"
+                    onInput={(e) => {
+                      checkAmountInput(e);
+                    }}
                     onChange={(e) => {
                       if (pathname?.includes("/edit-invoice")) {
                         handleEditInvoice("invoice_amount", e.target.value);
@@ -603,14 +609,12 @@ export const AddInvoice = () => {
                         onServiceDetails(e, index);
                       }
                     }}
-                    onWheel={(e) =>
-                      (e.currentTarget as HTMLInputElement).blur()
+                    autoFocus={
+                      selectedServices[index]?.invoice_amount ? true : false
                     }
-                    step="any"
-                    pattern="\d*" // Allow only digits
                     value={
                       pathname?.includes("/add-invoice")
-                        ? String(selectedServices[index]?.invoice_amount)
+                        ? selectedServices[index]?.invoice_amount
                         : invoiceDetails?.invoice_amount
                     }
                   />
@@ -640,19 +644,7 @@ export const AddInvoice = () => {
                   ""
                 )}
               </div>
-              <div>
-                {/* {selectedServices?.length > 1 ? (
-                  <Button
-                    onClick={() => {
-                      onRemoveClick(index);
-                    }}
-                  >
-                    -
-                  </Button>
-                ) : (
-                  ""
-                )} */}
-              </div>
+              <div></div>
             </div>
           </div>
         );
@@ -699,6 +691,13 @@ export const AddInvoice = () => {
       <div>
         {uploadFile ? (
           <div style={{ display: "flex", marginBottom: "50px" }}>
+            <Image
+              alt="Image"
+              src={"/attachment.svg"}
+              height={20}
+              width={20}
+              style={{ marginRight: "10px" }}
+            />
             <p>{uploadFile.name}</p>
 
             <X size={16} onClick={() => setUploadFile(null)} />
