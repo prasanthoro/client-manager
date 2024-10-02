@@ -78,7 +78,7 @@ const ServicesList = () => {
         loading={loading}
         removeSortingForColumnIds={["actions", "serial"]}
       />
-      <LoadingComponent loading={loading} label={"Services"} />
+      <LoadingComponent loading={loading} label={"Loading Services..."} />
     </div>
   );
 };

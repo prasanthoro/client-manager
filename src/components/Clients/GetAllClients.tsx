@@ -133,7 +133,7 @@ const Clients = () => {
           loading={loading}
           // removeSortingForColumnIds={["volume", "volum"]}
         />
-        <LoadingComponent loading={loading} label={"Clients"} />
+        <LoadingComponent loading={loading} label={"Loading Clients..."} />
       </div>
     </>
   );

@@ -222,7 +222,7 @@ const TanStackTableComponent: FunctionComponent<tanstackTablePropTypes> = ({
                     >
                       <Image
                         alt="no-data"
-                        src={"/core/table/no-data.svg"}
+                        src={"/no-data-image.svg"}
                         width={250}
                         height={250}
                       />

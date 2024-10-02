@@ -15,7 +15,7 @@ export const ViewInvoiceButton = ({ invoice_id }: any) => {
   return (
     <div className="eachAction">
       <Image
-        title="Edit"
+        title="View"
         onClick={() => {
           onEditClick();
         }}

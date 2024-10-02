@@ -4,6 +4,7 @@ import { EditButton } from "./EditButton";
 import { ViewButton } from "./ViewButton";
 import { changeInputFormats } from "@/lib/helpers/core/changeFirstLetterToCap";
 import dayjs from "dayjs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
 export const clientColumns = (getAllClients: any) => {
   return [
@@ -21,12 +22,40 @@ export const clientColumns = (getAllClients: any) => {
       header: () => <span>Company Name</span>,
       id: "company_name",
       cell: (info: any) => {
+        const companyName = changeInputFormats(info.getValue());
+        const shouldShowTooltip = companyName && companyName.length > 10;
+        const truncatedText = shouldShowTooltip
+          ? `${companyName.substring(0, 10)}...`
+          : companyName;
         return (
-          <span className="eachCell">
-            {changeInputFormats(info.getValue())
-              ? changeInputFormats(info.getValue())
-              : "--"}
-          </span>
+          <div className="eachCell">
+            {shouldShowTooltip ? (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>{truncatedText}</span>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    style={{
+                      backgroundColor: "white",
+                      border: "1px solid #e0e0e0",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                      borderRadius: "4px",
+                      padding: "8px",
+                      maxWidth: "300px",
+                      fontSize: "14px",
+                      whiteSpace: "normal",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    <div className="tooltipContent">{companyName}</div>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <span>{truncatedText || "--"}</span>
+            )}
+          </div>
         );
       },
       width: "150px",
@@ -39,20 +68,49 @@ export const clientColumns = (getAllClients: any) => {
       header: () => <span> Client Name</span>,
       id: "client_name",
       cell: (info: any) => {
+        const clientName = changeInputFormats(info.getValue());
+        const shouldShowTooltip = clientName && clientName.length > 10;
+        const truncatedText = shouldShowTooltip
+          ? `${clientName.substring(0, 10)}...`
+          : clientName;
         return (
-          <span className="eachCell">
-            {" "}
-            {changeInputFormats(info.getValue())
-              ? changeInputFormats(info.getValue())
-              : "--"}
-          </span>
+          <div className="eachCell">
+            {shouldShowTooltip ? (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>{truncatedText}</span>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    style={{
+                      backgroundColor: "white",
+                      border: "1px solid #e0e0e0",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                      borderRadius: "4px",
+                      padding: "8px",
+                      maxWidth: "300px",
+                      fontSize: "14px",
+                      whiteSpace: "normal",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    <div className="tooltipContent">{clientName}</div>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <span>{truncatedText || "--"}</span>
+            )}
+          </div>
         );
       },
-      width: "100px",
+      width: "150px",
+      maxWidth: "150px",
+      minWidth: "150px",
     },
     {
       accessorFn: (row: any) => row?.poc,
-      header: () => <span>Poc</span>,
+      header: () => <span>POC</span>,
       id: "poc",
       cell: (info: any) => {
         return (
@@ -109,13 +167,40 @@ export const clientColumns = (getAllClients: any) => {
       id: "address",
       header: () => <span>Address</span>,
       cell: (info: any) => {
+        const adress = changeInputFormats(info.getValue());
+        const shouldShowTooltip = adress && adress.length > 20;
+        const truncatedText = shouldShowTooltip
+          ? `${adress.substring(0, 20)}...`
+          : adress;
         return (
-          <span className="eachCell">
-            {" "}
-            {changeInputFormats(info.getValue())
-              ? changeInputFormats(info.getValue())
-              : "--"}
-          </span>
+          <div className="eachCell">
+            {shouldShowTooltip ? (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>{truncatedText}</span>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    style={{
+                      backgroundColor: "white",
+                      border: "1px solid #e0e0e0",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                      borderRadius: "4px",
+                      padding: "8px",
+                      maxWidth: "300px",
+                      fontSize: "14px",
+                      whiteSpace: "normal",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    <div className="tooltipContent">{adress}</div>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <span>{truncatedText || "--"}</span>
+            )}
+          </div>
         );
       },
       footer: (props: any) => props.columns.id,
@@ -145,7 +230,7 @@ export const clientColumns = (getAllClients: any) => {
       cell: (info: any) => {
         return (
           <span className="eachCell">
-            {info.getValue() ? info.getValue() : "--"}
+            {info.getValue() ? formatAmount(info.getValue()) : "--"}
           </span>
         );
       },
@@ -160,20 +245,22 @@ export const clientColumns = (getAllClients: any) => {
       cell: (info: any) => {
         return (
           <div className="actionIcons">
-            <ul
+           <ul
               className="actionList"
-              style={{ display: "flex", listStyle: "none", padding: 0 }}
+              style={{ display: "flex", listStyle: "none", padding: 0, gap:'0.3rem' }}
             >
-              <li className="eachList" style={{ marginRight: "1px" }}>
+              <li className="eachList"
+                style={{ cursor: "pointer" }}>
                 <ViewButton row={info?.row?.original} />
               </li>
               <li
                 className="eachList"
-                style={{ marginRight: "10px", cursor: "pointer" }}
+                style={{ cursor: "pointer" }}
               >
                 <EditButton row={info?.row?.original} />
               </li>
-              <li className="eachList">
+              <li  className="eachList"
+                  style={{ cursor: "pointer" }}>
                 <DeleteButton
                   getAllClients={getAllClients}
                   clientId={info.row.original.id}

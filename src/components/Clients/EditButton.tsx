@@ -22,8 +22,8 @@ export const EditButton = ({ row }: any) => {
           onEditClick();
         }}
         src={"/edit.svg"}
-        height={70}
-        width={70}
+        height={120}
+        width={120}
         alt="Image"
       />
     </div>

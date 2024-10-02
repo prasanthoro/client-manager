@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { status } from "@/lib/constants/selectStatus";
+import { formatAmount } from "@/lib/helpers/core/formatAmount";
 
 const ViewClient = () => {
   const params = useSearchParams();
@@ -404,7 +405,7 @@ const ViewClient = () => {
         </div>
         <div className="flex justify-end	mb-2">
           <h5 className="font-semibold">
-            Total Invoice Amount: ₹{formattedTotalAmount}
+            Total Invoice Amount: {formatAmount(formattedTotalAmount)}
           </h5>{" "}
         </div>
         <div id="clientWiseTable" className="relative">

@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 export const LoadingComponent = ({
   loading,
-  label = "Loading",
+  label = "Loading...",
 }: {
   loading: boolean;
   label?: string;

@@ -519,7 +519,7 @@ export const Dashboard = () => {
             />
           </div>
         </div>
-        <LoadingComponent loading={loading} label={"Dashboard"} />
+        <LoadingComponent loading={loading} label={"Loading Dashboard..."} />
       </div>
     </>
   );

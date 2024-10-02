@@ -26,17 +26,19 @@ const AddClient = () => {
   const [clientData, setClientData] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
   const { client_Id } = useParams();
 
   const addClient = async () => {
     setLoading(true);
     try {
       const { createdAt, updatedAt, ...restData } = clientData;
-      const payload = { ...restData, phone };
+      const payload = { ...restData, phone, email, address };
       const response = await addClientAPI(payload);
       if (response?.status === 200 || response?.status === 201) {
         toast.success(response?.data?.message || "Client Added successfully");
-        router.back();
+        router.push("/clients");
       } else if (response?.status === 422 || response?.status === 409) {
         setErrorMessages(response?.data?.errors);
       } else {
@@ -70,7 +72,7 @@ const AddClient = () => {
       const response = await updateClientAPI(client_Id, payload);
       if (response?.status === 200 || response?.status === 201) {
         toast.success(response?.data?.message);
-        router.push("/clients");
+        router.back();
       } else if (response?.status === 422 || response?.status === 409) {
         setErrorMessages(response?.data?.errors);
       } else {
@@ -85,10 +87,15 @@ const AddClient = () => {
 
   const handleInputChange = (e?: any) => {
     const { name, value } = e.target;
-    if (value && checkAllowedValidText(value)) {
+    if (value) {
+      const updatedValue = value
+        .replace(/[^a-zA-Z\s]/g, "")
+        .replace(/^\s+/g, "") 
+        .replace(/\s{2,}/g, " ");
+
       setClientData((prev: any) => ({
         ...prev,
-        [name]: value,
+        [name]: updatedValue,
       }));
     } else {
       setClientData((prev: any) => ({ ...prev, [name]: value.trim() }));
@@ -102,6 +109,8 @@ const AddClient = () => {
       if (response?.status === 200 || response?.status === 201) {
         setClientData(response?.data?.data);
         setPhone(response?.data?.data?.phone || "");
+        setEmail(response?.data?.data?.email || "");
+        setAddress(response?.data?.data?.address || "");
       } else {
         throw response;
       }
@@ -177,10 +186,10 @@ const AddClient = () => {
           <div className="flex items-end gap-2">
             <div className="flex-grow">
               <label className="block text-sm font-medium text-gray-700">
-                PoC<span className="text-red-500">*</span>
+                POC<span className="text-red-500">*</span>
               </label>
               <Input
-                placeholder="Enter PoC"
+                placeholder="Enter POC"
                 value={clientData.poc}
                 name="poc"
                 onChange={handleInputChange}
@@ -203,8 +212,7 @@ const AddClient = () => {
             <Input
               placeholder="Enter Address"
               value={clientData.address}
-              name="address"
-              onChange={handleInputChange}
+              onChange={(e) => setAddress(e.target.value)}
             />
           </div>
           <div>
@@ -267,8 +275,7 @@ const AddClient = () => {
             <Input
               placeholder="Enter Email"
               value={clientData.email}
-              name="email"
-              onChange={handleInputChange}
+              onChange={(e) => setEmail(e.target.value)}
             />
             {errorMessages?.email && (
               <p className="text-red-500">
@@ -308,11 +315,7 @@ const AddClient = () => {
           type="submit"
           onClick={handleSubmit}
         >
-          {loading ? (
-            <Spinner></Spinner>
-          ) : (
-            `${client_Id ? "Update" : "Add"} Client`
-          )}
+          {client_Id ? "Update" : "Add"}
         </Button>
       </div>
       <LoadingComponent loading={loading} />

@@ -44,8 +44,8 @@ export const DeleteButton = ({ getAllClients, clientId }: any) => {
         title="Delete"
         onClick={handleOpen}
         src={"/delete.svg"}
-        height={70}
-        width={70}
+        height={120}
+        width={120}
         alt="Delete Icon"
       />
       <div className="bg-white">

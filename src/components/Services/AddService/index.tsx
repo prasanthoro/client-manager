@@ -65,7 +65,7 @@ const AddService = () => {
 
       if (response.status == 200 || response.status == 201) {
         toast.success(response?.data?.message || "Service Added succesfully");
-        router.push("/services");
+        router.back();
       } else if (response?.status == 422) {
         setErrorMessages(response?.data?.errors);
       } else if (response?.status == 409) {
@@ -97,9 +97,13 @@ const AddService = () => {
 
   const handleInputChange = (e: any) => {
     let { name, value } = e.target;
+    const updatedValue = value
+        .replace(/[^a-zA-Z\s]/g, "")
+        .replace(/^\s+/g, "") 
+        .replace(/\s{2,}/g, " ");
     setServiceDetails({
       ...serviceDetails,
-      [name]: value,
+      [name]: updatedValue,
     });
   };
 

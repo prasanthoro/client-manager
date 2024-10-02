@@ -202,7 +202,7 @@ const InvoicesList = () => {
         loading={loading}
         removeSortingForColumnIds={["actions", "serial"]}
       />
-      <LoadingComponent loading={loading} label={"Invoices"} />
+      <LoadingComponent loading={loading} label={"Loading Invoices..."} />
     </div>
   );
 };

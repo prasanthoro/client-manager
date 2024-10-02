@@ -236,7 +236,7 @@ export const AddInvoice = () => {
         } else {
           toast.success("Invoice Updated Successfully");
           setTimeout(() => {
-            router.push("/invoices");
+            router.back();
           }, 1000);
         }
       } else {
