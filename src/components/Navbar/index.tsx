@@ -37,7 +37,7 @@ const NavBarComponent = () => {
       <section className="sticky top-0 z-50 bg-white shadow-sm">
         <div className="flex items-center justify-between p-2 max-w-7xl mx-auto">
           <div className="companyLogo">
-            <Image src="/clients.svg" alt="image" height={40} width={140} />
+            <Image src="/loginImage.svg" alt="image" height={40} width={140} />
           </div>
           <div className="flex items-center space-x-5">
             <div className="flex items-center space-x-2">
