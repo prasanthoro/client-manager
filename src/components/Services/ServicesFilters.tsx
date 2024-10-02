@@ -42,7 +42,7 @@ const ServicesFilters = ({ getAllServices }: any) => {
     const { value } = e.target;
     setSearchString(value);
     if (value) {
-      getAllServices({ search_string: value, page: 1 });
+      getAllServices({ search_string: encodeURIComponent(value), page: 1 });
     } else {
       getAllServices({ search_string: "" });
     }

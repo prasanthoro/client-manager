@@ -96,7 +96,6 @@ const InvoicesList = () => {
     type = params.get("type") as string,
     status = params.get("status") as string,
   }) => {
-    setLoading(true);
     try {
       let queryParams: any = {};
 
@@ -128,8 +127,6 @@ const InvoicesList = () => {
       }
     } catch (err: any) {
       console.error(err);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -151,7 +148,7 @@ const InvoicesList = () => {
   }, []);
 
   const formatToIndianCurrency = (value: any) => {
-    return value.toLocaleString("en-IN", {
+    return `₹`+value.toLocaleString("en-IN", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });

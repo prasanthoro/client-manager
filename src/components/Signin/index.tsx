@@ -58,7 +58,7 @@ export const SignIn = () => {
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="hidden bg-muted lg:block">
         <Image
-          src="/clients.svg"
+          src="/loginImage.svg"
           alt="Image"
           width={1}
           height={1}

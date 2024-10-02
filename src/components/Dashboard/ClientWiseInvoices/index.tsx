@@ -57,7 +57,7 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
                     <TableCell>{item.invoice_status || "--"}</TableCell>
                     <TableCell>
                       {item.invoice_amount
-                        ? `₹ ${formatAmount(item.invoice_amount)}`
+                        ? `${formatAmount(item.invoice_amount)}`
                         : "--"}
                     </TableCell>
                     <TableCell>
