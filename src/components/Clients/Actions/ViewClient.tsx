@@ -460,8 +460,27 @@ const ViewClient = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={7} style={{ textAlign: "center" }}>
-                    No Invoices
+                  <TableCell colSpan={24}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "50vh",
+                      }}
+                    >
+                      <Image
+                        alt="no-data"
+                        src={"/no-data-image.svg"}
+                        width={250}
+                        height={250}
+                      />
+
+                      <p style={{ fontSize: "clamp(20px, 1.04vw, 22px)" }}>
+                        No Data
+                      </p>
+                    </div>
                   </TableCell>
                 </TableRow>
               )}

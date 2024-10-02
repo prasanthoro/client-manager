@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/table";
 import { formatInvoiceDate } from "@/lib/helpers/constants";
 import { formatAmount } from "@/lib/helpers/core/formatAmount";
+import Image from "next/image";
 
 const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
   return (
@@ -76,8 +77,27 @@ const ClientWiseInvoicesList = ({ clientWiseTotallInvoices }: any) => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-2">
-                    No Data
+                  <TableCell colSpan={24}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "50vh",
+                      }}
+                    >
+                      <Image
+                        alt="no-data"
+                        src={"/no-data-image.svg"}
+                        width={250}
+                        height={250}
+                      />
+
+                      <p style={{ fontSize: "clamp(20px, 1.04vw, 22px)" }}>
+                        No Data
+                      </p>
+                    </div>
                   </TableCell>
                 </TableRow>
               )}
