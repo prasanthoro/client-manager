@@ -274,6 +274,13 @@ export const Dashboard = () => {
     }
   };
 
+  const formatToIndianCurrency = (value: any) => {
+    return `₹`+value.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
   useEffect(() => {
     getAllClientsCount({});
     recurringTypeAmount({});
@@ -349,6 +356,7 @@ export const Dashboard = () => {
                         <CountUp
                           start={0}
                           end={invoiceAmount || 0}
+                          formattingFn={formatToIndianCurrency}
                           duration={2}
                           prefix="₹"
                           separator=","
@@ -407,6 +415,7 @@ export const Dashboard = () => {
                               oneTimeData?.total_one_time_clients_invoice_amount ||
                               0
                             }
+                            formattingFn={formatToIndianCurrency}
                             duration={2}
                             prefix="₹"
                             separator=","
@@ -422,6 +431,7 @@ export const Dashboard = () => {
                               oneTimeData?.total_one_time_services_invoice_amount ||
                               0
                             }
+                            formattingFn={formatToIndianCurrency}
                             duration={2}
                             prefix="₹"
                             separator=","
@@ -480,6 +490,7 @@ export const Dashboard = () => {
                               recuringAmount?.total_recurring_clients_invoice_amount ||
                               0
                             }
+                            formattingFn={formatToIndianCurrency}
                             duration={2}
                             prefix="₹"
                             separator=","
@@ -495,6 +506,7 @@ export const Dashboard = () => {
                               recuringAmount?.total_recurring_services_invoice_amount ||
                               0
                             }
+                            formattingFn={formatToIndianCurrency}
                             duration={2}
                             prefix="₹"
                             separator=","

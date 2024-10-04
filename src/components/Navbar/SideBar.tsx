@@ -59,7 +59,7 @@ const SideBar = ({
                 }`}
                 href="/services"
               >
-                <Home className="h-4 w-4" />
+                <Briefcase className="h-4 w-4" />
                 Services
               </Link>
             </nav>

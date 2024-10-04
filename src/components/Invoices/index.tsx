@@ -186,7 +186,7 @@ const InvoicesList = () => {
               start={0}
               end={invoiceAmount || 0}
               duration={2}
-              formattingFn={formatToIndianCurrency} // Use custom formatting
+              formattingFn={formatToIndianCurrency}
               prefix="₹"
               separator=","
               decimals={2}

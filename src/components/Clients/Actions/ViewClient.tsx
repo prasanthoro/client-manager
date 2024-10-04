@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Check, ChevronDown, X } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatInvoiceDate } from "@/lib/helpers/constants";
 import { changeInputFormats } from "@/lib/helpers/core/changeFirstLetterToCap";
@@ -317,7 +317,11 @@ const ViewClient = () => {
                           }}
                         />
                       )}
-                      <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                      {typeopen ? (
+                        <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                      )}
                     </div>
                   </Button>
                 </PopoverTrigger>
@@ -371,7 +375,11 @@ const ViewClient = () => {
                           }}
                         />
                       )}
-                      <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                      {statusopen ? (
+                        <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                      )}
                     </div>
                   </Button>
                 </PopoverTrigger>

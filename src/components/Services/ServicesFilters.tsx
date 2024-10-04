@@ -2,17 +2,13 @@
 import { selectTypes } from "@/lib/constants/selectType";
 import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
-import { Check, ChevronDown, X } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import DatePickerWithRange from "../core/DatePickerWithRange";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const ServicesFilters = ({ getAllServices }: any) => {
   const router = useRouter();
@@ -25,7 +21,6 @@ const ServicesFilters = ({ getAllServices }: any) => {
   const [selectType, setSelectType] = useState<any>(
     params.get("type") ? params.get("type") : ""
   );
-
 
   const onDataChange = (date: any) => {
     if (date) {
@@ -92,7 +87,11 @@ const ServicesFilters = ({ getAllServices }: any) => {
                     }}
                   />
                 )}
-                <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                {open ? (
+                  <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
+                ) : (
+                  <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                )}
               </div>
             </Button>
           </PopoverTrigger>
@@ -101,13 +100,11 @@ const ServicesFilters = ({ getAllServices }: any) => {
               {selectTypes?.map((type) => (
                 <Button
                   key={type.value}
-                  
                   onClick={() => {
-                    onChangeType(type.value)
+                    onChangeType(type.value);
                     setOpen(false);
                   }}
-                  className=
-                    "w-full justify-start font-normal bg-white text-violet-600 border border-indigo-600 capitalize mb-2 hover:bg-violet-600  hover:text-white "
+                  className="w-full justify-start font-normal bg-white text-violet-600 border border-indigo-600 capitalize mb-2 hover:bg-violet-600  hover:text-white "
                 >
                   <Check
                     className={cn(

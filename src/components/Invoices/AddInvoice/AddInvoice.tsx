@@ -42,7 +42,7 @@ import {
   uploadInvoiceAPI,
 } from "@/services/invoices";
 import { Label } from "@radix-ui/react-label";
-import { Check, ChevronsUpDown, X } from "lucide-react";
+import { Check, ChevronDown, ChevronsUpDown, ChevronUp, X } from "lucide-react";
 import Image from "next/image";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -184,7 +184,7 @@ export const AddInvoice = () => {
     try {
       const response = await uploadFileToS3(file, url);
       if (response?.status == 200 || response.status == 201) {
-        toast.success("Invoice Uploaded Successfully");
+        // toast.success("Invoice Uploaded Successfully");
         setTimeout(() => {
           router.push("/invoices");
         }, 1000);
@@ -233,11 +233,12 @@ export const AddInvoice = () => {
         const { data } = response?.data;
         if (uploadFile) {
           await uploadInvoice(data);
+          toast.success("Invoice Updated Successfully");
         } else {
           toast.success("Invoice Updated Successfully");
           setTimeout(() => {
             router.back();
-          }, 1000);
+          }, 500);
         }
       } else {
         if (response.status == 422) {
@@ -374,7 +375,22 @@ export const AddInvoice = () => {
         <Label>Invoice Name</Label>
         <Input name="name" placeholder="Enter Name" onChange={onFieldsChange} />
       </div> */}
-      <div>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <button
+            onClick={() => router.back()}
+            className="p-2 -full hover:bg-pink-200"
+          >
+            <Image alt="image" width={24} height={24} src="/back-button.svg" />
+          </button>
+          <h1 className="text-2xl font-bold text-red-600 ml-2">
+            {pathname?.includes("/edit-invoice")
+              ? "Update Invoice"
+              : "Add Invoice"}
+          </h1>
+        </div>
+      </div>
+      {/* <div>
         <button
           onClick={() => router.back()}
           className="p-2 -full hover:bg-pink-200"
@@ -384,7 +400,7 @@ export const AddInvoice = () => {
         <h1 className="text-3xl font-bold">
           {pathname?.includes("/edit-invoice") ? "Edit Invoice" : "Add Invoice"}
         </h1>
-      </div>
+      </div> */}
       <Label>
         Client Name <span style={{ color: "red" }}>*</span>
       </Label>
@@ -412,7 +428,13 @@ export const AddInvoice = () => {
                   onClick={handleClearClient}
                 />
               ) : (
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                <>
+                  {open ? (
+                    <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                  )}
+                </>
               )}
             </Button>
           </PopoverTrigger>
@@ -683,6 +705,7 @@ export const AddInvoice = () => {
             width: "150px",
             marginBottom: uploadFile ? "0px" : "50px",
           }}
+          onClick={() => document.getElementById('file-upload')?.click()}
         >
           {!isRendered && (
             <>
@@ -690,7 +713,7 @@ export const AddInvoice = () => {
                 disabled={loading}
                 onChange={handleUploadFile}
                 type="file"
-                id="file"
+                id="file-upload"
                 style={{ display: "none" }}
               />
               <label
@@ -739,16 +762,22 @@ export const AddInvoice = () => {
           ""
         )}
       </div>
+
       <div
+        className="flex justify-end space-x-4 mt-6"
         style={{
           cursor: !uploadFile ? "not-allowed" : "pointer",
-          width: "105px",
-          height: "30px",
-          borderRadius: "10px",
-          marginTop: "50px",
         }}
       >
         <Button
+          className="px-4 py-2 bg-red-500 text-white rounded-md shadow hover:bg-red-600"
+          onClick={() => router.back()}
+        >
+          Cancel
+        </Button>
+        <Button
+          className="px-4 py-2 bg-gray-500 text-white rounded-md shadow hover:bg-gray-600"
+          type="submit"
           onClick={() => {
             if (pathname?.includes("/edit-invoice")) {
               updateInvoice();
@@ -757,9 +786,7 @@ export const AddInvoice = () => {
             }
           }}
         >
-          {pathname?.includes("/edit-invoice")
-            ? "Update Invoice"
-            : "Add Invoice"}
+          {pathname?.includes("/edit-invoice") ? "Update" : "Add"}
         </Button>
       </div>
       <p>{multipleFilesData ? multipleFilesData[0]?.name : ""}</p>

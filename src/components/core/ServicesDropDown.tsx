@@ -13,7 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown, X } from "lucide-react"; // Import the X icon
+import { Check, ChevronDown, ChevronsUpDown, ChevronUp, X } from "lucide-react"; // Import the X icon
 
 const ServiceDropDown = ({
   open,
@@ -51,7 +51,13 @@ const ServiceDropDown = ({
                   onClick={handleClearService}
                 />
               ) : (
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                <>
+                  {open ? (
+                    <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                  )}
+                </>
               )}
             </Button>
           </PopoverTrigger>

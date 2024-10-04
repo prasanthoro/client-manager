@@ -38,11 +38,11 @@ const PaginationComponent: React.FC<PaginationProps> = ({
   const [pageValue, setPageValue] = useState<number>(
     paginationDetails?.page || 1
   );
+  const [inputPageValue, setInputPageValue] = useState<string>(
+    pageValue.toString()
+  );
   const [limitOptions, setLimitOptions] = useState<
-    {
-      title: string;
-      value: number;
-    }[]
+    { title: string; value: number }[]
   >([]);
   const [totalPages, setTotalPages] = useState<number>(
     paginationDetails?.total_pages || 1
@@ -65,6 +65,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
 
   const handlePageChange = (page: number) => {
     setPageValue(page);
+    setInputPageValue(page.toString());
     capturePageNum(page);
   };
 
@@ -74,7 +75,10 @@ const PaginationComponent: React.FC<PaginationProps> = ({
 
   const onKeyDownInPageChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      const page = Math.max(1, Math.min(Number(pageValue) || 1, totalPages));
+      const page = Math.max(
+        1,
+        Math.min(Number(inputPageValue) || 1, totalPages)
+      );
       handlePageChange(page);
     }
   };
@@ -172,8 +176,11 @@ const PaginationComponent: React.FC<PaginationProps> = ({
             GoTo
             <Input
               type="number"
-              value={pageValue}
-              onChange={(e) => setPageValue(Number(e.target.value))}
+              value={inputPageValue}
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^0-9]/g, "");
+                setInputPageValue(value);
+              }}
               onKeyDown={onKeyDownInPageChange}
               style={{
                 marginLeft: "10px",

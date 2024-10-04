@@ -3,7 +3,7 @@ import { status } from "@/lib/constants/selectStatus";
 import { selectTypes } from "@/lib/constants/selectType";
 import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
-import { Check, ChevronDown, X } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import ClientDropDown from "../core/ClientDropDown";
@@ -183,7 +183,11 @@ const InvoicesFilters = ({
                     }}
                   />
                 )}
-                <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                {typeopen ? (
+                  <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
+                ) : (
+                  <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                )}
               </div>
             </Button>
           </PopoverTrigger>
@@ -234,7 +238,11 @@ const InvoicesFilters = ({
                     }}
                   />
                 )}
-                <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                {statusopen ? (
+                  <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
+                ) : (
+                  <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                )}
               </div>
             </Button>
           </PopoverTrigger>

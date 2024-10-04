@@ -9,12 +9,11 @@ interface IAPIResponse {
   data: any;
 }
 class FetchService {
-  authStatusCodes: number[] = [401, 403];
+  authStatusCodes: number[] = [401, 403, 400];
   authErrorURLs: string[] = [
     "/signin",
     "/forgot-password",
     "/forgot-password/update-password",
-    "/dashboard",
   ];
 
   private _fetchType: string;
@@ -22,7 +21,7 @@ class FetchService {
   constructor(fetchTypeValue = "json", headerOrNot = true) {
     this._fetchType = fetchTypeValue;
     this._noHeaders = headerOrNot;
-    store.subscribe(() => {});
+    store.subscribe(() => { });
   }
   configureAuthorization(config: any) {
     const state = store.getState();
