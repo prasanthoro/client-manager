@@ -51,13 +51,12 @@ const ServiceDropDown = ({
                   onClick={handleClearService}
                 />
               ) : (
-                <>
-                  {open ? (
-                    <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
-                  )}
-                </>
+                ""
+              )}
+              {open ? (
+                <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
+              ) : (
+                <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
               )}
             </Button>
           </PopoverTrigger>

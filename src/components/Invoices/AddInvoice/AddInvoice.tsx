@@ -51,6 +51,7 @@ import "rsuite/DatePicker/styles/index.css";
 import { toast } from "sonner";
 import { DeleteFileDialog } from "./DeleteFileDialog";
 import ErrorComponent from "./ErrorMessage";
+import { status } from "@/lib/constants/selectStatus";
 
 const invoiceStatus = [
   {
@@ -82,6 +83,7 @@ export const AddInvoice = () => {
   const [multipleFilesData, setMultipleFilesData] = useState<any>();
   const [opendeleteDialog, setOpenDeleteDialog] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [statusopen, setStatusOpen] = useState(false);
 
   const clientNameDropDown = async () => {
     setLoading(true);
@@ -428,13 +430,12 @@ export const AddInvoice = () => {
                   onClick={handleClearClient}
                 />
               ) : (
-                <>
-                  {open ? (
-                    <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
-                  )}
-                </>
+                ""
+              )}
+              {open ? (
+                <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
+              ) : (
+                <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
               )}
             </Button>
           </PopoverTrigger>
@@ -529,38 +530,67 @@ export const AddInvoice = () => {
         />
       </div>
       <Label>Invoice Status</Label>
+      {/* <div> */}
       <div>
-        <Select
-          onValueChange={(value) => {
-            {
-              handleInvoiceStatusChange(value);
-              handleEditInvoice("invoice_status", value);
-            }
-          }}
-          value={
-            invoiceStatus?.find(
-              (item: any) => item?.value == invoiceDetails?.invoice_status
-            )?.value
-          }
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {invoiceStatus?.map((item, index) => {
-                return (
-                  <SelectItem
-                    key={index}
-                    value={item.value ? item.value : ""} // Set value as item.value
-                  >
-                    {item.label}
-                  </SelectItem>
-                );
-              })}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <Popover open={statusopen} onOpenChange={setStatusOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={statusopen}
+              className="w-[200px] justify-between bg-white-700"
+            >
+              {invoiceDetails?.invoice_status
+                ? invoiceStatus.find(
+                    (type) => type.value === invoiceDetails?.invoice_status
+                  )?.label
+                : "Select Status"}
+              <div className="flex">
+                {invoiceDetails?.invoice_status && (
+                  <X
+                    className="mr-2 h-4 w-4 shrink-0 opacity-50"
+                    onClick={(e: any) => {
+                      e.stopPropagation();
+                      handleInvoiceStatusChange("");
+                      handleEditInvoice("invoice_status", "");
+                      setStatusOpen(false);
+                    }}
+                  />
+                )}
+                {statusopen ? (
+                  <ChevronUp className="h-4 w-4 shrink-0 opacity-50" />
+                ) : (
+                  <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                )}
+              </div>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[200px] p-0">
+            <div className="max-h-[300px] overflow-y-auto">
+              {invoiceStatus?.map((type) => (
+                <Button
+                  key={type.value}
+                  onClick={() => {
+                    handleInvoiceStatusChange(type.value);
+                    handleEditInvoice("invoice_status", type.value);
+                    setStatusOpen(false);
+                  }}
+                  className="w-full justify-start font-normal bg-white text-violet-600 border border-indigo-600 capitalize mb-2 hover:bg-violet-600  hover:text-white "
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      invoiceDetails?.invoice_status === type.value
+                        ? "opacity-100"
+                        : "opacity-0"
+                    )}
+                  />
+                  {type.label}
+                </Button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
       <Label>Remarks</Label>
       <div>
@@ -705,7 +735,7 @@ export const AddInvoice = () => {
             width: "150px",
             marginBottom: uploadFile ? "0px" : "50px",
           }}
-          onClick={() => document.getElementById('file-upload')?.click()}
+          onClick={() => document.getElementById("file-upload")?.click()}
         >
           {!isRendered && (
             <>
